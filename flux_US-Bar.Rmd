@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 # load packages
 ```{r}
+# to do: add comments for each one - what is the package used for ... 
 library(amerifluxr) # Provide query, download, and data summary tools.
 library(pander)
 library(REddyProc)
@@ -44,7 +45,7 @@ full.list = amf_data_coverage(data_product = "BASE-BADM", data_policy = "CCBY4.0
 head(full.list)
 print(paste("number of sites included in BASE publish is", nrow(full.list)))
 
-# check variable availability by year
+# check data availability by year (all variables)
 amf_plot_datayear(site_set = "US-Bar", nonfilled_only = FALSE)
 
 # check data coverage for flux data
@@ -80,6 +81,7 @@ base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, '
                       'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
 ```
 # 03 intialize EProc 
+- this ...
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")
@@ -94,3 +96,4 @@ EProc <- sEddyProc$new("US-Bar", EddyDataWithPosix, c('NEE','Rg','Tair','VPD', '
 class(EProc); head(EProc$sTEMP$sDateTime)
 ```
 
+# 04 IQR filtering for flux data
