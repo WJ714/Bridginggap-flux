@@ -11,8 +11,11 @@ Standard and extensible Eddy-Covariance data post-processing (Wutzler et al. (20
 
 # Development version
 The source code is made available at github.com/EarthyScience/REddyProc via the git revisioning system. 
-# FAQ
-- https://www.bgc-jena.mpg.de/5629512/FAQ 
+
+# Other learning resources
+- a comphrehensive guide from Thomas Wutzler: https://www.youtube.com/watch?v=-b0vc4u8kls
+- FAQ: https://www.bgc-jena.mpg.de/5629512/FAQ
+
 # Reference
 The methodology and benchmark of REddyProc 1.1.3 is described in the following paper:
 Wutzler, T., Lucas-Moffat, A., Migliavacca, M., Knauer, J., Sickel, K., Šigut, L., Menzer, O., and Reichstein, M. (2018): Basic and extensible post-processing of eddy covariance flux data with REddyProc, Biogeosciences, 15, 5015-5030, https://doi.org/10.5194/bg-15-5015-2018.
