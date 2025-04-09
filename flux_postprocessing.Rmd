@@ -10,13 +10,15 @@ knitr::opts_chunk$set(echo = TRUE)
 # load packages
 ```{r}
 # to do: add comments for each one - what is the package used for ... 
-library(amerifluxr) # Provide query, download, and data summary tools.
-library(pander)
-library(REddyProc)
-library(lubridate)
-library(tidyverse)
-library(bigleaf)
-library(data.table)
+library(amerifluxr)  # Provide query, download, and data summary tools.
+# # Package for creating formatted reports (tables, etc.)
+# library(pander)  # Generate pretty tables for reports or console outputs.
+
+library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
+library(lubridate)  # Provides tools to work with date and time (e.g., parsing, formatting).
+library(tidyverse)  # A collection of packages for data manipulation, visualization, and more.
+# library(bigleaf)  # Provides functions to calculate leaf area index and other plant trait estimations.
+library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
 ```
 
 # 01: download AmeriFlux BASE data
