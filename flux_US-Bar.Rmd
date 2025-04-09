@@ -1,0 +1,96 @@
+---
+title: "postprocess_US-Bar"
+output: html_document
+date: "2025-04-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# load packages
+```{r}
+library(amerifluxr) # Provide query, download, and data summary tools.
+library(pander)
+library(REddyProc)
+library(lubridate)
+library(tidyverse)
+library(bigleaf)
+library(data.table)
+```
+
+# 01: download AmeriFlux BASE data
+- BASE Publish: After passing the Data QA/QC assessment, AMP formats the submitted flux/met data in the FP Standard format, bundles them with BADM*, and versions and publishes the resulting BASE-BADM data with a DOI (https://ameriflux.lbl.gov/data/flux-data-products/base-publish/)
+- AmeriFlux BASE data pipeline: https://doi.org/10.1038/s41597-023-02531-2
+```{r}
+floc<- amf_download_base(
+    user_id = "...",
+    user_email = "...",
+    site_id = site_name,
+    data_product = "BASE-BADM",
+    data_policy = "CCBY4.0",
+    agree_policy = TRUE,
+    intended_use = "other",
+    intended_use_text = "site comparison",
+    verbose = TRUE,
+    out_dir = project_dir
+  )
+  
+base <- amf_read_base(file = floc,
+                      unzip = TRUE,
+                      parse_timestamp = TRUE) # if additional time-keeping columns, 
+
+# check out data coverage for different sites
+full.list = amf_data_coverage(data_product = "BASE-BADM", data_policy = "CCBY4.0")
+head(full.list)
+print(paste("number of sites included in BASE publish is", nrow(full.list)))
+
+# check variable availability by year
+amf_plot_datayear(site_set = "US-Bar", nonfilled_only = FALSE)
+
+# check data coverage for flux data
+amf_plot_datayear(site_set = "US-Bar",
+                  var_set = c("FC", "H", "LE"),
+                  # year_set = c(2004:2023),
+                  nonfilled_only = TRUE)
+```
+
+# 02: organise input data
+- the naming conventions for different sites are different
+```{r}
+# modify time variables
+base$TIMESTAMP=substr(base$TIMESTAMP_START,1,12)
+base$year=as.character(substr(base$TIMESTAMP_START,1,4))
+base$month=as.character(substr(base$TIMESTAMP_START,5,6))
+base$day= as.character(substr(base$TIMESTAMP_START,7,8))
+base$hour=as.numeric(as.character(substr(base$TIMESTAMP_START,9,10)))+ c(0.5,1)
+base$date=as.Date(with(base, paste(year, month, day, sep="-")), "%Y-%m-%d")
+base$doy=yday(base$date)
+base$min= as.character(substr(base$TIMESTAMP,11,12))
+
+# organise the dataframe to be used as input for REddyProc
+base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, 'Date' = as.Date(base$date),
+                      'Min' = base$min,  'Month' = base$month, 'DoY' = base$doy,
+                      'NEE' = base$FC_1_1_1, 'LE' = base$LE_1_1_1, 'H' = base$H_1_1_1, # flux data
+                      'Rg' = ifelse(base$PPFD_IN_PI_F_1_1_1 < 0, 0, PPFD.to.Rg(base$PPFD_IN_PI_F_1_1_1)), 
+                      'Tair' = base$TA_PI_F_1_1_1,
+                      'Tsoil' = base$TS_PI_F_1_2_1, 'RH' = ifelse(base$RH_PI_F_1_1_1 > 100, 100, base$RH_PI_F_1_1_1),
+                      'VPD' = base$VPD_calculated, 'Ustar' = base$USTAR_1_1_1,
+                      'TIMESTAMP_START' = as.character(base$TIMESTAMP_START),
+                      'TIMESTAMP_END' = as.character(base$TIMESTAMP_END),
+                      'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
+```
+# 03 intialize EProc 
+```{r}
+?filterLongRuns
+EddyData <- filterLongRuns(base_df, "NEE")
+
+EddyData$Year <- as.numeric(EddyData$Year)
+EddyData$Hour <- as.numeric(EddyData$Hour)
+EddyData$DoY <- as.numeric(EddyData$DoY)
+EddyDataWithPosix <- fConvertTimeToPosix(EddyData, 'YDH', Year = 'Year', Day = 'DoY', Hour  = 'Hour') 
+head(EddyDataWithPosix$DateTime)
+  
+EProc <- sEddyProc$new("US-Bar", EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE","Tsoil")) 
+class(EProc); head(EProc$sTEMP$sDateTime)
+```
+
