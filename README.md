@@ -12,6 +12,11 @@ Standard and extensible Eddy-Covariance data post-processing (Wutzler et al. (20
 # Development version
 The source code is made available at github.com/EarthyScience/REddyProc via the git revisioning system. 
 
+# Major steps for post processing flux data
+- step 1
+- step 2
+- ....
+  
 # Other learning resources
 - a comphrehensive guide from Thomas Wutzler: https://www.youtube.com/watch?v=-b0vc4u8kls
 - FAQ: https://www.bgc-jena.mpg.de/5629512/FAQ
