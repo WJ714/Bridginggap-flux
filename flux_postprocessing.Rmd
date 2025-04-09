@@ -83,7 +83,7 @@ base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, '
                       'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
 ```
 # 03 intialize EProc 
-- this ...
+- data will be stored in R5 class
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")
