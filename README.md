@@ -20,6 +20,7 @@ The source code is made available at github.com/EarthyScience/REddyProc via the 
 # Other learning resources
 - a comphrehensive guide from Thomas Wutzler: https://www.youtube.com/watch?v=-b0vc4u8kls
 - FAQ: https://www.bgc-jena.mpg.de/5629512/FAQ
+- Material used for the short course using REddyProc at EGU 2019: https://github.com/bgctw/EGU19EddyCourse/tree/master
 
 # Reference
 The methodology and benchmark of REddyProc 1.1.3 is described in the following paper:
