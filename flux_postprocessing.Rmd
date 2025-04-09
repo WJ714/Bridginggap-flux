@@ -20,8 +20,10 @@ library(data.table)
 ```
 
 # 01: download AmeriFlux BASE data
+- create an account: https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx
 - BASE Publish: After passing the Data QA/QC assessment, AMP formats the submitted flux/met data in the FP Standard format, bundles them with BADM*, and versions and publishes the resulting BASE-BADM data with a DOI (https://ameriflux.lbl.gov/data/flux-data-products/base-publish/)
 - AmeriFlux BASE data pipeline: https://doi.org/10.1038/s41597-023-02531-2
+- We use data from Bartlett Experimental Forest: 
 ```{r}
 floc<- amf_download_base(
     user_id = "...",
@@ -49,10 +51,10 @@ print(paste("number of sites included in BASE publish is", nrow(full.list)))
 amf_plot_datayear(site_set = "US-Bar", nonfilled_only = FALSE)
 
 # check data coverage for flux data
-amf_plot_datayear(site_set = "US-Bar",
-                  var_set = c("FC", "H", "LE"),
-                  # year_set = c(2004:2023),
-                  nonfilled_only = TRUE)
+# amf_plot_datayear(site_set = "US-Bar",
+#                   var_set = c("FC", "H", "LE"),
+#                   # year_set = c(2004:2023),
+#                   nonfilled_only = TRUE)
 ```
 
 # 02: organise input data
