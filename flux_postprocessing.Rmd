@@ -58,9 +58,10 @@ amf_plot_datayear(site_set = "US-Bar",
 # check data availability by year (all variables)
 # amf_plot_datayear(site_set = "US-Bar", nonfilled_only = FALSE)
 ```
+Q: What do you think about the flux data coverage at US-Bar? (we can ask some question to get audience attention)
 
 # 02: organise input data
-- the naming conventions for different sites are different
+- The naming conventions for different sites are different;
 ```{r}
 # modify time variables
 base$TIMESTAMP=substr(base$TIMESTAMP_START,1,12)
@@ -84,12 +85,11 @@ base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, '
                       'TIMESTAMP_END' = as.character(base$TIMESTAMP_END),
                       'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
 ```
-# 03 intialize EProc 
+# 03: intialize EProc 
 - data will be stored in R5 class
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")
-
 EddyData$Year <- as.numeric(EddyData$Year)
 EddyData$Hour <- as.numeric(EddyData$Hour)
 EddyData$DoY <- as.numeric(EddyData$DoY)
