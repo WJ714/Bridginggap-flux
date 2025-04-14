@@ -15,9 +15,6 @@ rm(list = ls())
 # packages and working directory
 ```{r}
 library(amerifluxr)  # Provide query, download, and data summary tools.
-# # Package for creating formatted reports (tables, etc.)
-# library(pander)  # Generate pretty tables for reports or console outputs.
-
 library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
 library(lubridate)  # Provides tools to work with date and time (e.g., parsing, formatting).
 library(tidyverse)  # A collection of packages for data manipulation, visualization, and more.
@@ -51,7 +48,7 @@ site_name = "US-Bar"
 #     data_policy = "CCBY4.0",
 #     agree_policy = TRUE,
 #     intended_use = "other",
-#     intended_use_text = "site comparison",
+#     intended_use_text = "Flux-LSM_workshop",
 #     verbose = TRUE,
 #     out_dir = project_dir
 #   )
@@ -187,6 +184,7 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 # 05: u* filtering
 - what is u*
 - why u* filtering is needed? 
+- What aggregationMode should I use for my site?
 ```{r}
 set.seed(2000)
 uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
@@ -197,7 +195,7 @@ EProc$sGetUstarScenarios() # by default, annual varing u* is used
 # EProc$useSeaonsalUStarThresholds()# seasonal varing u*
 # EProc$useAnnualUStarThresholds() # annual varing u*
   
-# here, we use a single u* value
+# Here, we use a single u* value
 uStar <- uStarTh  %>%
   dplyr::filter( aggregationMode == "single") %>%
   dplyr::select( "uStar", "5%", "50%", "95%")
@@ -285,7 +283,7 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 # 10: optional: 
 Here are some thoughts from Yujie:
 - add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FCO₂.
-- Using different drivers: I am always curious about how to do that.. It is a change to ask Thomas if he would like to help ...
+- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ...
 ```{r}
 
 ```
