@@ -6,13 +6,13 @@ date: "2025-04-09"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
-# Before you get started:
+# Before the workshop:
 - Create an account: https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx
 - The `user_id` and `user_email` will be used later ...
 
-
-# load packages
+# packages and working directory
 ```{r}
 library(amerifluxr)  # Provide query, download, and data summary tools.
 # # Package for creating formatted reports (tables, etc.)
@@ -21,51 +21,62 @@ library(amerifluxr)  # Provide query, download, and data summary tools.
 library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
 library(lubridate)  # Provides tools to work with date and time (e.g., parsing, formatting).
 library(tidyverse)  # A collection of packages for data manipulation, visualization, and more.
-# library(bigleaf)  # Provides functions to calculate leaf area index and other plant trait estimations.
+library(dplyr)
+library(bigleaf)  # Provides functions to calculate leaf area index and other plant trait estimations.
 library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
+library(ggplot2)
+# working directory
+project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/"
 ```
 
 # 01: download AmeriFlux BASE data
 - BASE Publish: After passing the Data QA/QC assessment, AMP formats the submitted flux/met data in the FP Standard format, bundles them with BADM*, and versions and publishes the resulting BASE-BADM data with a DOI (https://ameriflux.lbl.gov/data/flux-data-products/base-publish/)
 - AmeriFlux BASE data pipeline: https://doi.org/10.1038/s41597-023-02531-2
-- We use data from Bartlett Experimental Forest: 
+- R package `amerifluxr`: https://github.com/chuhousen/amerifluxr 
+- The Bartlett Experimental Forest (44°06′N, 71°3′W, US-Bar) is a temperate deciduous forest located in the northeastern United States, in the state of New Hampshire where it lies within the Saco Ranger District of the White Mountain National Forest.
 ```{r}
-floc<- amf_download_base(
-    user_id = "...",
-    user_email = "...",
-    site_id = site_name,
-    data_product = "BASE-BADM",
-    data_policy = "CCBY4.0",
-    agree_policy = TRUE,
-    intended_use = "other",
-    intended_use_text = "site comparison",
-    verbose = TRUE,
-    out_dir = project_dir
-  )
-  
-base <- amf_read_base(file = floc,
-                      unzip = TRUE,
-                      parse_timestamp = TRUE) # if additional time-keeping columns, 
-
 # check out data coverage for different sites
 full.list = amf_data_coverage(data_product = "BASE-BADM", data_policy = "CCBY4.0")
 head(full.list)
 print(paste("number of sites included in BASE publish is", nrow(full.list)))
 
-# check flux data coverage by year 
-amf_plot_datayear(site_set = "US-Bar",
+# download single site flux/met data
+site_name = "US-Bar"
+# floc<- amf_download_base(
+#     user_id = "my_user", # change to your user name
+#     user_email = "my_email@mail.com", # change to your email
+#     site_id = site_name,
+#     data_product = "BASE-BADM",
+#     data_policy = "CCBY4.0",
+#     agree_policy = TRUE,
+#     intended_use = "other",
+#     intended_use_text = "site comparison",
+#     verbose = TRUE,
+#     out_dir = project_dir
+#   )
+
+floc = paste0(project_dir, "AMF_US-Bar_BASE-BADM_7-5.zip" )
+base <- amf_read_base(file = floc,
+                      unzip = TRUE,
+                      parse_timestamp = TRUE) 
+
+
+# check flux data coverage by year for US-Bar
+amf_plot_datayear(site_set = site_name,
                   var_set = c("FC", "H", "LE"),
                   # year_set = c(2004:2023),
                   nonfilled_only = TRUE)
 
 # uncomment to check data availability by year (all variables)
-# amf_plot_datayear(site_set = "US-Bar", nonfilled_only = FALSE)
+# amf_plot_datayear(site_set = site_name, nonfilled_only = FALSE)
 ```
 Q: What do you think about the flux data coverage at US-Bar? (we can ask some question to get audience attention)
 
 # 02: organise input data
 - The naming conventions for different sites are different;
 ```{r}
+# subset data for one year
+base = base[base$YEAR %in% c(2012), ]
 # modify time variables
 base$TIMESTAMP=substr(base$TIMESTAMP_START,1,12)
 base$year=as.character(substr(base$TIMESTAMP_START,1,4))
@@ -83,13 +94,14 @@ base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, '
                       'Rg' = ifelse(base$PPFD_IN_PI_F_1_1_1 < 0, 0, PPFD.to.Rg(base$PPFD_IN_PI_F_1_1_1)), 
                       'Tair' = base$TA_PI_F_1_1_1,
                       'Tsoil' = base$TS_PI_F_1_2_1, 'RH' = ifelse(base$RH_PI_F_1_1_1 > 100, 100, base$RH_PI_F_1_1_1),
-                      'VPD' = base$VPD_calculated, 'Ustar' = base$USTAR_1_1_1,
+                      'VPD' = base$VPD_PI_1_1_1, 'Ustar' = base$USTAR_1_1_1,
                       'TIMESTAMP_START' = as.character(base$TIMESTAMP_START),
                       'TIMESTAMP_END' = as.character(base$TIMESTAMP_END),
                       'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
+head(base_df)
 ```
 # 03: intialize EProc 
-- EProc is the format ...
+- EProc is the format use in REddyProc  to store ...
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")
@@ -99,8 +111,161 @@ EddyData$DoY <- as.numeric(EddyData$DoY)
 EddyDataWithPosix <- fConvertTimeToPosix(EddyData, 'YDH', Year = 'Year', Day = 'DoY', Hour  = 'Hour') 
 head(EddyDataWithPosix$DateTime)
   
-EProc <- sEddyProc$new("US-Bar", EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE","Tsoil")) 
-class(EProc); head(EProc$sTEMP$sDateTime)
+EProc <- sEddyProc$new(site_name, EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE")) 
+class(EProc)
 ```
 
-# 04 IQR filtering for flux data
+# 04: IQR filtering for flux data
+- IQR: interquartile range, which is the difference between the 75th percentile (Q3) and the 25th percentile (Q1) of a dataset;
+- Marginal distribution sampling (MDS, Reichstein et al., 2005) has been adopted as a standard gap-filling method; 
+- Standard implementation of MDS relies on photosynthetic photon flux density (PPFD) (or, alternatively, global shortwave radiation) as the main driver, and air temperature (Tair) and vapor pressure deficit (VPD) as additional factors in the look-up table.
+- We first calculate the IQR of the residuals between MDS gap-filled values (without u* filtering) and measured values.
+- Here, MDS gave us an initial “best guess” of what the true flux was for each specific half hour. The choice of 6 times the IQR is a conservative approach, meaning that only the most extreme values are filtered out (some studies have used a more aggressive threshold of 3 times the IQR). We repeated the filtering process with 6 times of IQR twice to ensure sufficient outliers were removed.
+- More information can be found in Liu et al. (2025): https://doi.org/10.1016/j.agrformet.2025.110438
+```{r}
+# gapfill meterological variables using MDS
+EProc$sMDSGapFill('Tair', FillAll = FALSE,  minNWarnRunLength = NA)
+EProc$sMDSGapFill('Rg', FillAll = FALSE,  minNWarnRunLength = NA)
+EProc$sMDSGapFill('VPD', FillAll = FALSE,  minNWarnRunLength = NA)
+# use MDS to get the "best guess" of true flux
+EProc$sMDSGapFill('NEE') 
+
+# Calculate residuals and identify outliers
+residual <- EProc$sTEMP$NEE_orig - EProc$sTEMP$NEE_fall
+IQR <- IQR(residual, na.rm = TRUE)
+outlier <- ifelse(abs(residual) > (IQR * 6), 1, 0)
+EddieC <- data.frame(
+    sDateTime = EProc$sTEMP$sDateTime,
+    NEE_orig = EProc$sTEMP$NEE_orig,
+    Ustar = EProc$sDATA$Ustar,
+    NEE_fall = EProc$sTEMP$NEE_fall,
+    residual = residual,
+    outlier = outlier
+  )
+  
+# Rename columns
+colnames(EddieC) <- c('sDateTime', 'NEE_orig', 'Ustar', 'NEE_fall', 'residual', 'outlier')
+  
+# Filter out outliers
+EddieC$NEE_filt <- dplyr::if_else(EddieC$outlier > 0, NA_real_, EddieC$NEE_orig)
+EddieC$year <- substr(EddieC$sDateTime, 1, 4)
+EddieC$doy <- strftime(EddieC$sDateTime, format = "%j")
+# Plot the initial outlier detection
+EddieC %>%
+    arrange(as.factor(outlier)) %>%
+    ggplot(aes(y = NEE_orig, x = as.numeric(doy), color = as.factor(outlier))) +
+    geom_point(shape = 20, alpha = 0.4) +
+    theme_minimal() +
+    labs(x = 'Day of year', y = 'NEE') +
+    scale_color_manual(values = c('skyblue', 'red')) +
+    facet_wrap(~year) + 
+    ylim(c(-50, 50)) +
+    ggtitle("IQR filtering")
+  
+# Re-run the outlier test after initial filtering
+EddieC$residual2 <- EddieC$NEE_filt - EddieC$NEE_fall
+EddieC$IQR2 <- IQR(EddieC$residual2, na.rm = TRUE)
+EddieC$outlier2 <- ifelse(abs(EddieC$residual2) > EddieC$IQR2 * 6, 1, 0)
+EddieC$NEE_filt2 <- ifelse(EddieC$outlier2 == 0, EddieC$NEE_filt, NA)
+  
+# Plot the re-run outlier detection
+EddieC %>%
+    arrange(as.factor(outlier2)) %>%
+    ggplot(aes(y = NEE_orig, x = as.numeric(doy), color = as.factor(outlier2))) +
+    geom_point(shape = 20) +
+    theme_minimal() +
+    labs(x = 'Day of year', y = 'NEE') +
+    scale_color_manual(values = c('skyblue', 'red')) +
+    facet_wrap(~year) + 
+    ylim(c(-50, 50)) +
+    ggtitle("re-run outlier detection")
+
+# Remove outliers from the main data
+EProc$sDATA$NEE <- EddieC$NEE_filt2
+```
+# 05: u* filtering
+```{r}
+set.seed(2000)
+uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
+print(uStarTh)
+
+# define aggregation mode
+EProc$sGetUstarScenarios() # by default, annual varing u* is used
+# EProc$useSeaonsalUStarThresholds()# seasonal varing u*
+# EProc$useAnnualUStarThresholds() # annual varing u*
+  
+# here, we use a single u* value
+uStar <- uStarTh  %>%
+  dplyr::filter( aggregationMode == "single") %>%
+  dplyr::select( "uStar", "5%", "50%", "95%")
+uStarDf <- cbind(season=na.omit(unique(uStarTh$season)), uStar)
+EProc$sSetUstarScenarios(uStarDf)
+EProc$sGetUstarScenarios()
+```
+# 06: gapfilling NEE
+```{r}
+EProc$sMDSGapFillUStarScens('NEE') 
+```
+# 07: partitioning NEE into Reco and GPP
+```{r}
+EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
+EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
+EProc$sMRFluxPartitionUStarScens("NEE") # night-time
+# EProc$sGLFluxPartitionUStarScens() # day-time
+# EProc$sTKFluxPartitionUStarScens() # modified day-time
+names(EProc$sTEMP)
+```
+
+# 08: save output
+- What is the difference between FC and NEE: https://ameriflux.lbl.gov/data/aboutdata/data-variables/
+```{r}
+FilledEddyData <- EProc$sExportResults()
+combined.df <- cbind(EddyData, FilledEddyData)
+names(combined.df)
+
+# plot diural pattern of gapfilled FC
+ggplot(combined.df, aes(x = Hour, y = NEE_50._f)) +
+  geom_point(col = "grey") +  
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
+  stat_summary(fun = mean, geom = "line") + 
+  facet_wrap(~ interaction(Month, Year)) +
+  theme_minimal() +
+  ggtitle("FC")
+
+# plot diurnal pattern of GPP
+ggplot(combined.df, aes(x = Hour, y = `GPP_50%_f`)) +
+  geom_point(col = "grey") +  
+  stat_summary(fun = mean, geom = "line") + 
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
+  facet_wrap(~ interaction(Month, Year)) +
+  theme_minimal() +
+  ggtitle("GPP")
+
+# plot diural pattern of Reco
+ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
+  geom_point(col = "grey") +  
+  stat_summary(fun = mean, geom = "line") + 
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
+  facet_wrap(~ interaction(Month, Year)) +
+  theme_minimal() +
+  ggtitle("Reco")
+```
+# 09: compute annual and monthly sums
+```{r}
+molarMass <- 12.011  # Molar mass of CO2 in g/mol
+combined.df %>%
+    group_by(Year) %>%
+    summarize(annual_FC = sum(NEE_50._f * molarMass * 30 * 60 / 1e6),
+              annual_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP???
+              annual_Reco = sum(`Reco_50%` * molarMass * 30 * 60 / 1e6))
+
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
+EProc$sPlotFingerprintY("GPP_50%_f", Year = 2012)
+```
+
+
+
+# References
+- Wutzler, Thomas, et al. "Basic and extensible post-processing of eddy covariance flux data with REddyProc." Biogeosciences 15.16 (2018): 5015-5030.
+- Reichstein, Markus, et al. "On the separation of net ecosystem exchange into assimilation and ecosystem respiration: review and improved algorithm." Global change biology 11.9 (2005): 1424-1439.
+- Liu, Yujie, et al. "Robust filling of extra-long gaps in eddy covariance CO2 flux measurements from a temperate deciduous forest using eXtreme Gradient Boosting." Agricultural and Forest Meteorology 364 (2025): 110438.
