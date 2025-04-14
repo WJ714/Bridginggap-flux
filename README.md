@@ -1,4 +1,4 @@
-# Ultimate guide for REddyProc (suggestions for title and name for this repo)
+# Ultimate guide for REddyProc 
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
