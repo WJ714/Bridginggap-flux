@@ -6,7 +6,7 @@ date: "2025-04-09"
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
+rm(list = ls())
 ```
 # Before the workshop:
 - Create an account: https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx
@@ -34,6 +34,7 @@ project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/"
 - AmeriFlux BASE data pipeline: https://doi.org/10.1038/s41597-023-02531-2
 - R package `amerifluxr`: https://github.com/chuhousen/amerifluxr 
 - The Bartlett Experimental Forest (44°06′N, 71°3′W, US-Bar) is a temperate deciduous forest located in the northeastern United States, in the state of New Hampshire where it lies within the Saco Ranger District of the White Mountain National Forest.
+- How to download FLUXNET data? ...
 ```{r}
 # check out data coverage for different sites
 full.list = amf_data_coverage(data_product = "BASE-BADM", data_policy = "CCBY4.0")
@@ -76,7 +77,7 @@ Q: What do you think about the flux data coverage at US-Bar? (we can ask some qu
 - The naming conventions for different sites are different;
 ```{r}
 # subset data for one year
-base = base[base$YEAR %in% c(2012), ]
+base = base[base$YEAR %in% c(2012, 2013), ]
 # modify time variables
 base$TIMESTAMP=substr(base$TIMESTAMP_START,1,12)
 base$year=as.character(substr(base$TIMESTAMP_START,1,4))
@@ -115,7 +116,7 @@ EProc <- sEddyProc$new(site_name, EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 
 class(EProc)
 ```
 
-# 04: IQR filtering for flux data
+# 04: IQR filtering 
 - IQR: interquartile range, which is the difference between the 75th percentile (Q3) and the 25th percentile (Q1) of a dataset;
 - Marginal distribution sampling (MDS, Reichstein et al., 2005) has been adopted as a standard gap-filling method; 
 - Standard implementation of MDS relies on photosynthetic photon flux density (PPFD) (or, alternatively, global shortwave radiation) as the main driver, and air temperature (Tair) and vapor pressure deficit (VPD) as additional factors in the look-up table.
@@ -184,6 +185,8 @@ EddieC %>%
 EProc$sDATA$NEE <- EddieC$NEE_filt2
 ```
 # 05: u* filtering
+- what is u*
+- why u* filtering is needed? 
 ```{r}
 set.seed(2000)
 uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
@@ -203,6 +206,7 @@ EProc$sSetUstarScenarios(uStarDf)
 EProc$sGetUstarScenarios()
 ```
 # 06: gapfilling NEE
+- more details about MDS here?
 ```{r}
 EProc$sMDSGapFillUStarScens('NEE') 
 ```
@@ -214,6 +218,10 @@ EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 # EProc$sGLFluxPartitionUStarScens() # day-time
 # EProc$sTKFluxPartitionUStarScens() # modified day-time
 names(EProc$sTEMP)
+
+# fingerprint
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
+EProc$sPlotFingerprintY("GPP_50%_f", Year = 2012)
 ```
 
 # 08: save output
@@ -223,14 +231,15 @@ FilledEddyData <- EProc$sExportResults()
 combined.df <- cbind(EddyData, FilledEddyData)
 names(combined.df)
 
-# plot diural pattern of gapfilled FC
+# plot diurnal pattern of FC
 ggplot(combined.df, aes(x = Hour, y = NEE_50._f)) +
   geom_point(col = "grey") +  
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
   stat_summary(fun = mean, geom = "line") + 
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("FC")
+  ggtitle("FC") +  ylab(expression(FCO[2]~'('*gC~m^{-2}~y^{-1}*')'))
+ 
 
 # plot diurnal pattern of GPP
 ggplot(combined.df, aes(x = Hour, y = `GPP_50%_f`)) +
@@ -239,7 +248,7 @@ ggplot(combined.df, aes(x = Hour, y = `GPP_50%_f`)) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("GPP")
+  ggtitle("GPP") + ylab(expression(GPP~'('*gC~m^{-2}~y^{-1}*')'))
 
 # plot diural pattern of Reco
 ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
@@ -248,21 +257,43 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("Reco")
+  ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
 ```
 # 09: compute annual and monthly sums
+- Yujie: here I do not understand why there are NAs in GPP_50%_f. I typically have another workflow to gapfilling FC using XGBoost first and then do partitioning using REddyProc, where I do not see the issue ...
 ```{r}
 molarMass <- 12.011  # Molar mass of CO2 in g/mol
-combined.df %>%
+agg.annual = combined.df %>%
     group_by(Year) %>%
     summarize(annual_FC = sum(NEE_50._f * molarMass * 30 * 60 / 1e6),
               annual_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP???
               annual_Reco = sum(`Reco_50%` * molarMass * 30 * 60 / 1e6))
+agg.annual
+agg.month = combined.df %>%
+    group_by(Year, Month) %>%
+    summarize(month_FC = sum(NEE_50._f * molarMass * 30 * 60 / 1e6),
+              month_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP???
+              month_Reco = sum(`Reco_50%` * molarMass * 30 * 60 / 1e6))
+agg.month
 
-EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
-EProc$sPlotFingerprintY("GPP_50%_f", Year = 2012)
+ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = Year)) +
+  geom_line(size = 1) +
+  geom_point() +
+  theme_minimal() +
+  ylab(expression(FCO[2]~'('*gC~m^{-2}~month^{-1}*')'))
+```
+# 10: optional: 
+Here are some thoughts from Yujie:
+- add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FCO₂.
+- Using different drivers: I am always curious about how to do that.. It is a change to ask Thomas if he would like to help ...
+```{r}
+
 ```
 
+
+# 11: next step
+- format output similar to FLUXNET?
+- download and organise FLUXNET data from our study sites (+ some figures about the annual variation ...?)
 
 
 # References
