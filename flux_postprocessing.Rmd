@@ -228,9 +228,17 @@ EProc$sGetUstarScenarios()
 EProc$sPlotFingerprintY("NEE", Year = 2012)
 EProc$sPlotFingerprintY("NEE", Year = 2013)
 # MDS
-EProc$sMDSGapFillUStarScens('NEE') 
+EProc$sMDSGapFillUStarScens('NEE')
+
+# gaps are filled 
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2013)
 ```
 # 07: partitioning NEE into Reco and GPP
+- NEE = Reco - GPP
+Several methods were developed to partition NEE into Reco and GPP;
+- nighttime partitioning: doi
+- Reco is modelled and GPP is computed as Reco - NEE; 
 ```{r}
 EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
@@ -239,9 +247,7 @@ EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 # EProc$sTKFluxPartitionUStarScens() # modified day-time
 names(EProc$sTEMP)
 
-# gaps are filled 
-EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
-EProc$sPlotFingerprintY("NEE_50._f", Year = 2013)
+
 ```
 
 # 08: save output
@@ -316,6 +322,7 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 Here are some thoughts:
 - add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FC..
 - Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... step by step for MDS: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
+- more about qualify flags 
 
 ```{r}
 
