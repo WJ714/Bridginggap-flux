@@ -23,7 +23,7 @@ library(bigleaf)  # Provides functions to calculate leaf area index and other pl
 library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
 library(ggplot2)
 # working directory
-project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/"
+project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" # Yujie: here I have my path with my personal information here ... I do not know if we can change to a different one when use binder? or the question is how to access data on github repo or binder?
 ```
 
 # 01: download AmeriFlux BASE data
@@ -32,6 +32,7 @@ project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/"
 - R package `amerifluxr`: https://github.com/chuhousen/amerifluxr 
 - The Bartlett Experimental Forest (44°06′N, 71°3′W, US-Bar) is a temperate deciduous forest located in the northeastern United States, in the state of New Hampshire where it lies within the Saco Ranger District of the White Mountain National Forest.
 - How to download FLUXNET data? ...
+
 ```{r}
 # check out data coverage for different sites
 full.list = amf_data_coverage(data_product = "BASE-BADM", data_policy = "CCBY4.0")
@@ -60,7 +61,7 @@ base <- amf_read_base(file = floc,
 
 
 # check flux data coverage by year for US-Bar
-amf_plot_datayear(site_set = site_name,
+amf_plot_datayear(site_set = site_name, # you can change site_name here to your site of interest
                   var_set = c("FC", "H", "LE"),
                   # year_set = c(2004:2023),
                   nonfilled_only = TRUE)
@@ -68,7 +69,7 @@ amf_plot_datayear(site_set = site_name,
 # uncomment to check data availability by year (all variables)
 # amf_plot_datayear(site_set = site_name, nonfilled_only = FALSE)
 ```
-Q: What do you think about the flux data coverage at US-Bar? (we can ask some question to get audience attention)
+Q: Question to audience: why there are a lot of gaps in flux measurements?
 
 # 02: organise input data
 - The naming conventions for different sites are different;
@@ -158,7 +159,7 @@ EddieC %>%
     scale_color_manual(values = c('skyblue', 'red')) +
     facet_wrap(~year) + 
     ylim(c(-50, 50)) +
-    ggtitle("IQR filtering")
+    ggtitle("intial outlier detection")
   
 # Re-run the outlier test after initial filtering
 EddieC$residual2 <- EddieC$NEE_filt - EddieC$NEE_fall
@@ -185,17 +186,32 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 - what is u*
 - why u* filtering is needed? 
 - What aggregationMode should I use for my site?
+u* filtering:
+- Unfavorable conditions could be detected by inspecting the relationship of nighttime NEE vs. u*.
+
+Different treatments of u* thresholds;
+- At low u* values, a negatively biased respiration is measured;
+- u* threshold is the minimum u* above which respriation reachers a plateau; (check out the figure under /plots)
+- user-specific u* threshold
+- Single u* threshold
+- annual varying u*
+- seasonal varing u*
+- read more: https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html 
+
 ```{r}
+??sPlotNEEVersusUStarForSeason
+# EProc$sPlotNEEVersusUStarForSeason(format = "pdf")
+
 set.seed(2000)
 uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
 print(uStarTh)
 
-# define aggregation mode
+# Define aggregation mode
 EProc$sGetUstarScenarios() # by default, annual varing u* is used
 # EProc$useSeaonsalUStarThresholds()# seasonal varing u*
 # EProc$useAnnualUStarThresholds() # annual varing u*
   
-# Here, we use a single u* value
+# Here, we use the single u* threshold
 uStar <- uStarTh  %>%
   dplyr::filter( aggregationMode == "single") %>%
   dplyr::select( "uStar", "5%", "50%", "95%")
@@ -203,9 +219,15 @@ uStarDf <- cbind(season=na.omit(unique(uStarTh$season)), uStar)
 EProc$sSetUstarScenarios(uStarDf)
 EProc$sGetUstarScenarios()
 ```
-# 06: gapfilling NEE
-- more details about MDS here?
+# 06: MDS: gapfil NEE
+- The MDS combines two gap-filling techniques: the “look-up” table and the “mean diurnal course”.
+- The methods are effective for short gaps as the missing values are replaced by the average of response variables under similar weather conditions in a small-time window;
+- Question: can I use more than 3 drivers to gapfill NEE? 
 ```{r}
+# fingerplot: inspect gaps needed to be filled
+EProc$sPlotFingerprintY("NEE", Year = 2012)
+EProc$sPlotFingerprintY("NEE", Year = 2013)
+# MDS
 EProc$sMDSGapFillUStarScens('NEE') 
 ```
 # 07: partitioning NEE into Reco and GPP
@@ -217,9 +239,9 @@ EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 # EProc$sTKFluxPartitionUStarScens() # modified day-time
 names(EProc$sTEMP)
 
-# fingerprint
+# gaps are filled 
 EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
-EProc$sPlotFingerprintY("GPP_50%_f", Year = 2012)
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2013)
 ```
 
 # 08: save output
@@ -257,14 +279,14 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   theme_minimal() +
   ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
 ```
-# 09: compute annual and monthly sums
+# 09: Annual and monthly sums
 - Yujie: here I do not understand why there are NAs in GPP_50%_f. I typically have another workflow to gapfilling FC using XGBoost first and then do partitioning using REddyProc, where I do not see the issue ...
 ```{r}
 molarMass <- 12.011  # Molar mass of CO2 in g/mol
 agg.annual = combined.df %>%
     group_by(Year) %>%
     summarize(annual_FC = sum(NEE_50._f * molarMass * 30 * 60 / 1e6),
-              annual_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP???
+              annual_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP??? is it probably because there are NAs in drivers??? Let me take a close look at it, or use data from a different year ...
               annual_Reco = sum(`Reco_50%` * molarMass * 30 * 60 / 1e6))
 agg.annual
 agg.month = combined.df %>%
@@ -279,19 +301,31 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
   geom_point() +
   theme_minimal() +
   ylab(expression(FCO[2]~'('*gC~m^{-2}~month^{-1}*')'))
+
+# To be updated: uncertainty of annual sums due to choice of u* ...
+# uStarSuffixes <- colnames(EProc$sGetUstarScenarios())[-1]
+# FCAggCO2 <- sapply( uStarSuffixes, function(suffix) {
+#     FCHalfHour <- combined.df[[paste0("NEE_",suffix,"_f")]]
+#     mean(FCHalfHour, na.rm = TRUE)
+# })
+# molarMass <- 12.011
+# FCAgg <- FCAggCO2 * 1e-6 * molarMass * 3600*24*365.25
+# print(FCAgg)
 ```
 # 10: optional: 
 Here are some thoughts from Yujie:
 - add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FCO₂.
-- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ...
+- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... step by step for MDS: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
+
 ```{r}
 
 ```
 
 
-# 11: next step
-- format output similar to FLUXNET?
-- download and organise FLUXNET data from our study sites (+ some figures about the annual variation ...?)
+# 11: Next step
+- download and organise FLUXNET data from all study sites (+ some figures about the annual variation ...?)
+- format output similar to FLUXNET data?
+
 
 
 # References
