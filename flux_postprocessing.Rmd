@@ -313,8 +313,8 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 # print(FCAgg)
 ```
 # 10: optional: 
-Here are some thoughts from Yujie:
-- add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FCO₂.
+Here are some thoughts:
+- add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FC..
 - Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... step by step for MDS: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
 
 ```{r}
