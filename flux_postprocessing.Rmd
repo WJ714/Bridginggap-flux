@@ -314,7 +314,7 @@ agg.annual
 agg.month = combined.df %>%
     group_by(Year, Month) %>%
     summarize(month_FC = sum(NEE_50._f * molarMass * 30 * 60 / 1e6),
-              month_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP??? I do not know why ...
+              month_GPP = sum(`GPP_50%_f` * molarMass * 30 * 60 / 1e6), # there are NAs in GPP??? I do not know why ...of cause we can manually compute GPP, I am just wondering what is wrong???
               month_Reco = sum(`Reco_50%` * molarMass * 30 * 60 / 1e6))
 agg.month
 
@@ -336,15 +336,14 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 ```
 # 10: optional: 
 Here are some thoughts:
-- add LE and H: The differences are that no u filtering is applied, and the calculation of annual sums differs compared to FC..
-- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... step by step for MDS: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
+- add LE and H: The differences are that no u filtering is not generally applied, and the calculation of annual sums would be different.
+- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... Or I guess it might be possible to adapt the codes for step by step for MDS here: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
 - more about qualify flags?
 
 
 # 11: Next step
 - download and organise FLUXNET data from all study sites (+ some figures about the annual variation ...?)
 - format output similar to FLUXNET data?
-
 
 # References
 - Wutzler, Thomas, et al. "Basic and extensible post-processing of eddy covariance flux data with REddyProc." Biogeosciences 15.16 (2018): 5015-5030.
