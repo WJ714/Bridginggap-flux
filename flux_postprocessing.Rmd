@@ -25,6 +25,9 @@ library(ggplot2)
 # working directory
 project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" # Yujie: here I have my path with my personal information here ... I do not know if we can change to a different one when use binder? or the question is how to access data on github repo or binder?
 ```
+# Yujie: For the working directory, I google a bit, it might be possible after we make the repo public??? I have not tested it yet.
+url <- "https://raw.githubusercontent.com/yourusername/yourrepo/main/data/yourfile.csv"
+df <- read.csv(url)
 
 # 01: download AmeriFlux BASE data
 - BASE Publish: After passing the Data QA/QC assessment, AMP formats the submitted flux/met data in the FP Standard format, bundles them with BADM*, and versions and publishes the resulting BASE-BADM data with a DOI (https://ameriflux.lbl.gov/data/flux-data-products/base-publish/)
@@ -54,7 +57,7 @@ site_name = "US-Bar"
 #     out_dir = project_dir
 #   )
 
-floc = paste0(project_dir, "AMF_US-Bar_BASE-BADM_7-5.zip" )
+floc = paste0(project_dir, "AMF_US-Bar_BASE-BADM_7-5.zip") 
 base <- amf_read_base(file = floc,
                       unzip = TRUE,
                       parse_timestamp = TRUE) 
@@ -191,7 +194,7 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 ```
 # 05: u* filtering
 - u*: Friction velocity (m/s) is a measure of turbulent mixing in the atmosphere;
-- u* is defined as a function of the fluctuations of horizontal and vertical wind speeds (Yujie: I am not sure if this is accurate defination)
+- u* is defined as a function of the fluctuations of horizontal and vertical wind speeds (Yujie: I am not sure if this is accurate definition)
 - CO2 transport is heavily influenced by turbulent mixing.
 
 u* filtering:
@@ -204,15 +207,16 @@ Why u* filtering is needed?
 
 Different treatments of u* thresholds;
 - At low u* values, a negatively biased respiration is measured;
-- u* threshold is the minimum u* above which respriation reachers a plateau; (check out the figure under /plots)
+- u* threshold is the minimum u* above which respiration reachers a plateau; (check out the figure under /plots)
 - user-specific u* threshold
 - Single u* threshold
 - annual varying u*
 - seasonal varing u*
 - read more: https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html 
-
+ 
 Open question:
 - What aggregationMode should I use for my site?
+
 ```{r}
 ??sPlotNEEVersusUStarForSeason
 # EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # This line works if run the codes locally, but I am not sure after we use binder ...
@@ -237,7 +241,8 @@ EProc$sGetUstarScenarios()
 # 06: MDS: gapfil NEE
 - The MDS combines two gap-filling techniques: the “look-up” table and the “mean diurnal course”.
 - The methods are effective for short gaps as the missing values are replaced by the average of response variables under similar weather conditions in a small-time window;
-- Question: can I use more than 3 drivers to gapfill NEE? 
+
+Question to audience: can I use more than 3 drivers to gapfill NEE? 
 ```{r}
 # fingerplot: inspect gaps needed to be filled
 EProc$sPlotFingerprintY("NEE", Year = 2011)
@@ -254,6 +259,7 @@ EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
 Several methods were developed to partition NEE into Reco and GPP;
 - nighttime partitioning: doi
 - Reco is modelled and GPP is computed as Reco - NEE; 
+add text: diffeernt partitiong method: 
 ```{r}
 EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
@@ -337,13 +343,19 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 # 10: optional: 
 Here are some thoughts:
 - add LE and H: The differences are that no u filtering is not generally applied, and the calculation of annual sums would be different.
-- Using different drivers: I am always curious about how to do that.. It is a change to have Thomas involved if he would like to help ... Or I guess it might be possible to adapt the codes for step by step for MDS here: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
-- more about qualify flags?
+- Using different drivers: I am always curious about how to do that... It is a change to have Thomas involved if he would like to help ... Or I guess it might be possible to adapt the codes for step by step for MDS here: https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html
+- more about quality flags?
 
 
 # 11: Next step
+- organse this script better
+
+After meeting with other organizers: 
 - download and organise FLUXNET data from all study sites (+ some figures about the annual variation ...?)
 - format output similar to FLUXNET data?
+- LE and H: LSM model output? format of LSM model ... 
+- 
+
 
 # References
 - Wutzler, Thomas, et al. "Basic and extensible post-processing of eddy covariance flux data with REddyProc." Biogeosciences 15.16 (2018): 5015-5030.
