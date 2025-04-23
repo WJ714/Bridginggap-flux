@@ -2,6 +2,7 @@
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
+- suggestions for README ...
 
 
 # What is REddyProc?
