@@ -4,7 +4,7 @@ Authors:
 - add you name and email here ...
 - suggestions for README ...
 
-
+## Structure of the repository
 # What is REddyProc?
 (Yujie: I just copied the text, I guess we need to improve the readability)
 https://cran.r-project.org/web/packages/REddyProc/index.html 
