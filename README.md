@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/HEAD?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/HEAD?urlpath=eg.%2Frstudio)
 # flux turtorials
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
