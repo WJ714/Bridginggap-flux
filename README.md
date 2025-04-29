@@ -1,23 +1,39 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/HEAD?urlpath=rstudio)
-# flux turtorials
-Authors: 
-- Yujie Liu (yujie.liu@nau.edu)
-- add you name and email here ...
-- suggestions for README ...
+# Template for RStudio on Binder / JupyterHub
 
-## Structure of the repository
-# What is REddyProc?
-(Yujie: I just copied the text, I guess we need to improve the readability)
-https://cran.r-project.org/web/packages/REddyProc/index.html 
-Standard and extensible Eddy-Covariance data post-processing (Wutzler et al. (2018) <doi:10.5194/bg-15-5015-2018>) includes uStar-filtering, gap-filling, and flux-partitioning. The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere. It is important for understanding ecosystem dynamics and upscaling exchange fluxes. (Aubinet et al. (2012) <doi:10.1007/978-94-007-2351-1>). This package inputs pre-processed (half-)hourly data and supports further processing. First, a quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al. (2006) <doi:10.5194/bg-3-571-2006>). Second, gaps in the data are filled based on information from environmental conditions (Reichstein et al. (2005) <doi:10.1111/j.1365-2486.2005.001002.x>). Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al. (2010) <doi:10.1111/j.1365-2486.2009.02041.x>).
-- Development version: The source code is made available at github.com/EarthyScience/REddyProc via the git revisioning system. 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/rocker-org/binder/HEAD?urlpath=rstudio)
 
+Generate a Git repository that can run R code with RStudio on
+the browser via [mybinder.org](https://mybinder.org) or any JupyterHub
+from this template repository!
 
-# Other learning resources
-- FLUXNET-ECN workshop: Thomas Wutzler: https://www.youtube.com/watch?v=-b0vc4u8kls
-- FAQ: https://www.bgc-jena.mpg.de/5629512/FAQ
-- Material used for the short course using REddyProc at EGU 2019: https://github.com/bgctw/EGU19EddyCourse/tree/master
+## How to use this repo
 
-# Reference
-The methodology and benchmark of REddyProc 1.1.3 is described in the following paper:
-Wutzler, T., Lucas-Moffat, A., Migliavacca, M., Knauer, J., Sickel, K., Šigut, L., Menzer, O., and Reichstein, M. (2018): Basic and extensible post-processing of eddy covariance flux data with REddyProc, Biogeosciences, 15, 5015-5030, https://doi.org/10.5194/bg-15-5015-2018.
+### 1. Add a Dockerfile to your repo with contents like so:
+
+```
+FROM rocker/binder
+
+COPY install.r install.r
+RUN Rscript install.r
+```
+
+### 2. Install any packages you want
+
+You can create an `install.r` file that will be executed on build.
+Use `install.packages()` to install:
+
+```R
+install.packages("ggplot2")
+```
+
+Binary versions of packages will be quickly installed from [r2u](https://github.com/eddelbuettel/r2u) via [bspm](https://cloud.r-project.org/web/packages/bspm/index.html).  _There is no need to manually manage 'system' dependencies with apt-get, these are handled automatically in the Docker build phase_. 
+
+Commonly used packages in the `tidyverse` and `geospatial` collection are already installed, see [`install.r`](install.r)
+
+### 3. Modify the Binder Badge in the README.md
+
+The 'Launch on Binder' badge in this README points to the template repository.
+You should modify it to point to your own repository. Keep the `urlpath=rstudio`
+parameter intact - that is what makes sure your repo will launch directly into
+RStudio
+
