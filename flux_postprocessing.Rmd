@@ -13,11 +13,13 @@ rm(list = ls())
 ```
 
 # Before the workshop:
+
 -   Create an account:
     <https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx>
 -   The `user_id` and `user_email` will be used later ...
 
-# load packages 
+# load packages
+
 ```{r}
 library(amerifluxr)  # Provide query, download, and data summary tools.
 library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
@@ -28,18 +30,20 @@ library(bigleaf)  # Provides functions to calculate leaf area index and other pl
 library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
 library(ggplot2)
 ```
+
 # working directory???
-Yujie: For the working directory, I google a bit, it might be possible after we make the repo public??? I have not tested it yet.
+
+Yujie: For the working directory, I google a bit, it might be possible
+after we make the repo public??? I have not tested it yet.
+
 ```{r}
 # working directory
-project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" # Yujie: here I have my path with my personal information here ... I do not know if we can change to a different one when use binder? or the question is how to access data on github repo or binder?
-
-# url \<-
-# "<https://raw.githubusercontent.com/yourusername/yourrepo/main/data/yourfile.csv>"
-# df \<- read.csv(url)
+project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" 
+# data_NN = pd.read_csv('../input_data/in_situ_dataset_Harvard_Forest.csv',index_col=0,parse_dates=True)
 ```
 
 # 01: download AmeriFlux BASE data
+
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats
     the submitted flux/met data in the FP Standard format, bundles them
     with BADM\*, and versions and publishes the resulting BASE-BADM data
@@ -97,12 +101,16 @@ amf_plot_datayear(site_set = site_name,
 ```
 
 ## Questions:
+
 -   How many sites are included in the AmeriFlux BASE publish?
 -   Why is the data coverage of flux data lower than that of
     meteorological variables?
 
 # 02: Organise input data
-Please note: The naming conventions for varibles are different for different sites;
+
+Please note: The naming conventions for varibles are different for
+different sites;
+
 ```{r}
 # subset data for one year
 base = base[base$YEAR %in% c(2011,2012), ]
@@ -131,6 +139,7 @@ head(base_df)
 ```
 
 # 03: intialize EProc
+
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")
@@ -144,6 +153,7 @@ class(EProc)
 ```
 
 # 04: IQR filtering
+
 -   IQR: interquartile range, which is the difference between the 75th
     percentile (Q3) and the 25th percentile (Q1) of a dataset;
 -   Marginal distribution sampling (MDS, Reichstein et al., 2005) has
@@ -334,8 +344,9 @@ names(EProc$sTEMP)
 ```
 
 # 08: save output
+
 What is the difference between FC and NEE:
-    <https://ameriflux.lbl.gov/data/aboutdata/data-variables/>
+<https://ameriflux.lbl.gov/data/aboutdata/data-variables/>
 
 ```{r}
 FilledEddyData <- EProc$sExportResults()
@@ -414,6 +425,7 @@ ggplot(agg.month, aes(x = Month, y = month_FC, color = as.factor(Year), group = 
 ```
 
 # 10: optional:
+
 Here are some thoughts: - add LE and H: The differences are that no u
 filtering is not generally applied, and the calculation of annual sums
 would be different. - Using different drivers: I am always curious about
@@ -421,16 +433,10 @@ how to do that... It is a change to have Thomas involved if he would
 like to help ... Or I guess it might be possible to adapt the codes for
 step by step for MDS here:
 <https://cran.r-project.org/web/packages/REddyProc/vignettes/gapFilling.html> -
-more about quality flags?
 
-# 11: Next step
--   organse this script better
-After meeting with other organizers: - download and organise FLUXNET
-data from all study sites (+ some figures about the annual variation
-...?) - format output similar to FLUXNET data? - LE and H: LSM model
-output? format of LSM model ... -
 
 # References
+
 -   Wutzler, Thomas, et al. "Basic and extensible post-processing of
     eddy covariance flux data with REddyProc." Biogeosciences 15.16
     (2018): 5015-5030.
