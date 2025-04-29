@@ -1,5 +1,4 @@
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/blob/main/flux_postprocessing.Rmd/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/HEAD)
 # flux turtorials
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
