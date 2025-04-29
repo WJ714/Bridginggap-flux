@@ -1,4 +1,4 @@
-# Ultimate guide for REddyProc 
+# flux turtorials
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
