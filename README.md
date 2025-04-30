@@ -7,13 +7,15 @@ Authors:
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
 - suggestions for README ...
-
-## Two turtorials are included: 
+# Structure of the repository
+# Two turtorials are included: 
 1. get started with FLUXNET2015 data
 2. REddyProc
    
-## Structure of the repository
-# What is REddyProc?
+# FLUXNEX2015
+The FLUXNET2015 Dataset includes data collected at sites from multiple regional flux networks. https://fluxnet.org/data/fluxnet2015-dataset/
+
+# REddyProc
 Standard and extensible Eddy-Covariance data post-processing (Wutzler et al. (2018) <doi:10.5194/bg-15-5015-2018>) includes uStar-filtering, gap-filling, and flux-partitioning. 
 The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere. 
 It is important for understanding ecosystem dynamics and upscaling exchange fluxes. (Aubinet et al. (2012) <doi:10.1007/978-94-007-2351-1>). 
