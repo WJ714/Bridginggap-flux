@@ -6,6 +6,10 @@ Authors:
 - add you name and email here ...
 - suggestions for README ...
 
+## Two turtorials are included: 
+1. get started with FLUXNET2015 data
+2. REddyProc
+   
 ## Structure of the repository
 # What is REddyProc?
 (I just copied the text, I guess we need to improve the readability)
