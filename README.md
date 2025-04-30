@@ -1,6 +1,6 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/main?urlpath=rstudio)
 
-# flux turtorials
+# Flux turtorials for FCC workshop
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
