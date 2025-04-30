@@ -1,6 +1,0 @@
-if(!require(devtools)) install.packages('devtools')
-devtools::install_github('bnasr/phenocamapi')
-install.packages("data.table")
-install.packages("lubridate")
-install.packages("jpeg")
-install.packages("phenocamr")
