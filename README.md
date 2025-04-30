@@ -1,11 +1,15 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/flux_processing/main?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux/main?urlpath=rstudio)
 
-# flux turtorials
+# Flux turtorials for FCC workshop
 Authors: 
 - Yujie Liu (yujie.liu@nau.edu)
 - add you name and email here ...
 - suggestions for README ...
 
+## Two turtorials are included: 
+1. get started with FLUXNET2015 data
+2. REddyProc
+   
 ## Structure of the repository
 # What is REddyProc?
 (I just copied the text, I guess we need to improve the readability)
