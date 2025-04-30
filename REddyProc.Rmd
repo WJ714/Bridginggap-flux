@@ -18,9 +18,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # load packages
 ```{r}
-if(!require(devtools)){install.packages("devtools")}
-devtools::install_github("chuhousen/amerifluxr")
-library("amerifluxr") # An R programmatic interface for querying, downloading, and handling AmeriFlux data and metadata.
+# if(!require(devtools)){install.packages("devtools")}
+# devtools::install_github("chuhousen/amerifluxr")
+library(amerifluxr) # An R programmatic interface for querying, downloading, and handling AmeriFlux data and metadata.
 library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
 library(lubridate)  # Provides tools to work with date and time (e.g., parsing, formatting).
 library(tidyverse)  # A collection of packages for data manipulation, visualization, and more.
