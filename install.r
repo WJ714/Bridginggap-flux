@@ -1,19 +1,6 @@
-# tidyverse/dev set
-install.packages(c(
-'languageserver',
-'httpgd',
-'quarto',
-'tidyverse',
-'devtools',
-'pak',
-'shiny',
-'duckdbfs',
-'arrow',
-'V8'))
-
-install.packages("IRkernel")
-IRkernel::installspec(user = FALSE, sys_prefix=TRUE)
-
-## Spatial set
-install.packages(c('sf', 'stars', 'gdalcubes', 'terra', 'tmap', 'mapgl'))
-
+if(!require(devtools)) install.packages('devtools')
+devtools::install_github('bnasr/phenocamapi')
+install.packages("data.table")
+install.packages("lubridate")
+install.packages("jpeg")
+install.packages("phenocamr")
