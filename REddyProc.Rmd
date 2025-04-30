@@ -74,9 +74,7 @@ site_name = "US-Bar"
 
 
 # If you do not have an account, you can directly start from here
-# setwd("~/")
-setwd("C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop")
-
+setwd("~/")
 floc =  "AMF_US-Bar_BASE-BADM_7-5.zip"
 base <- amf_read_base(file = floc,
                       unzip = TRUE,
