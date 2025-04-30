@@ -17,7 +17,7 @@ rm(list = ls())
 -   Create an account:
     <https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx>
 -   The `user_id` and `user_email` will be used later ...
-
+- binder example: https://github.com/dbergl1344/PhenoCam-Workshop?tab=readme-ov-file 
 # load packages
 
 ```{r}
@@ -38,8 +38,11 @@ after we make the repo public??? I have not tested it yet.
 
 ```{r}
 # working directory
-project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" 
+# project_dir = "C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/" 
 # data_NN = pd.read_csv('../input_data/in_situ_dataset_Harvard_Forest.csv',index_col=0,parse_dates=True)
+# open a temporary directory
+temp_directory <- tempdir()
+project_dir = tempdir()
 ```
 
 # 01: download AmeriFlux BASE data
@@ -139,7 +142,6 @@ head(base_df)
 ```
 
 # 03: intialize EProc
-
 ```{r}
 ?filterLongRuns
 EddyData <- filterLongRuns(base_df, "NEE")

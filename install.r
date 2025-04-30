@@ -1,6 +1,3 @@
-if(!require(devtools)) install.packages('devtools')
-devtools::install_github('bnasr/phenocamapi')
-install.packages("data.table")
-install.packages("lubridate")
-install.packages("jpeg")
-install.packages("phenocamr")
+# Install necessary R packages
+install.packages(c("amerifluxr", "REddyProc", "lubridate", "tidyverse", "dplyr", "bigleaf", "data.table", "ggplot2"))
+
