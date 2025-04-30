@@ -22,8 +22,8 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 - Second, gaps in the data are filled based on information from environmental conditions (Reichstein et al. (2005) <doi:10.1111/j.1365-2486.2005.001002.x>). 
 - Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al. (2010) <doi:10.1111/j.1365-2486.2009.02041.x>).
 ## Where to download the package?
-https://cran.r-project.org/web/packages/REddyProc/index.html 
-Development version: github.com/EarthyScience/REddyProc
+- https://cran.r-project.org/web/packages/REddyProc/index.html 
+- Development version: github.com/EarthyScience/REddyProc
 
 # Other learning resources
 - FLUXNET-ECN workshop: Thomas Wutzler: https://www.youtube.com/watch?v=-b0vc4u8kls
