@@ -2,10 +2,7 @@
 
 
 # Flux turtorials for FCC workshop
-Authors: 
-- Yujie Liu (yujie.liu@nau.edu)
-- add you name and email here ...
-- suggestions for README ...
+
 # Structure of the repository
 # Two turtorials are included: 
 1. get started with FLUXNET2015 data
