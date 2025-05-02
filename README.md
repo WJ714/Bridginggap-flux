@@ -1,8 +1,6 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
 
-# Flux turtorials for FCC workshop
-
 # Structure of the repository
 # Two turtorials are included: 
 1. get started with FLUXNET2015 data
