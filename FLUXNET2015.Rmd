@@ -1,0 +1,325 @@
+---
+title: "Figures_FLUXNET"
+output: html_document
+date: "2025-04-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  fig.width = 11,  # Set the plot width in inches
+  fig.height = 4,  # Set the plot height in inches
+  warning = FALSE,  # Hide warnings
+  message = FALSE   # Hide messages
+)
+
+library(data.table)
+library(lubridate)
+library(dplyr)
+library(Kendall)
+# working directory
+data_dir = ("C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/data_FLUXNET/AMF_US-Bar_FLUXNET_SUBSET_2004-2022_4-6/")
+```
+
+# FLUXNET 2015
+-   variables quick start guide <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
+-   data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
+- full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
+
+# read in half hourly data
+```{r}
+# Group 1
+setwd(data_dir) 
+df.HH = fread(paste0("AMF_US-Bar_FLUXNET_SUBSET_HH_2004-2022_4-6.csv")) # read in half hourly data
+
+# FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+df.HH <- df.HH %>%
+  mutate(across(everything(), ~na_if(. , -9999)))
+
+# Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
+class(df.HH$TIMESTAMP_END)
+df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
+class(df.HH$TIMESTAMP_END)
+```
+
+# Long term trend at annual scale
+## Figure 1: annual sums of NEE
+- `NEE_VUT_50` is gapfilled using xxx, _50 means xxx;
+- `NEE_VUT_REF_RANDUNC`, the uncertainty of annual sum is computed using xxx .
+```{r}
+setwd(data_dir); df.YY = fread("AMF_US-Bar_FLUXNET_SUBSET_YY_2004-2022_4-6.csv")
+df.YY$year = as.numeric(df.YY$TIMESTAMP )
+
+# variables to use (everyone: please specify the variables to use for each chunk and explain the suffix of the varaible clearly + unit)
+head(df.YY$NEE_VUT_50) # gapfilled annual sums of NEE, unit: 
+head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: 
+
+# create upper and lower bounds
+df.YY$NEE_upper <- df.YY$NEE_VUT_50 + df.YY$NEE_VUT_REF_RANDUNC
+df.YY$NEE_lower <- df.YY$NEE_VUT_50 - df.YY$NEE_VUT_REF_RANDUNC
+
+# plot
+ggplot(df.YY, aes(x = year, y = NEE_VUT_50)) +
+  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +  # uncertainty band
+  geom_line(color = "black", size = 1) +
+  labs(x = "Year", y = expression(NEEVUT_50 ~ '('*μmol ~ m^{-2} ~ s^{-1}*')')) +
+  geom_smooth(method = "lm", color = "red", se = FALSE, size = 1, linetype = "dashed") +  # trend line
+  theme_minimal()
+
+# The Mann-Kendall trend test is used to assess whether there is a significant monotonic trend (either increasing or decreasing) in a time series. 
+MannKendall(df.YY$NEE_VUT_50) # when P < 0.05, you can reject the null hypothesis ("no trend").
+```
+
+# Monthly pattern
+## Computing monthly sums (optional: compare the values in MM dataframe???)
+```{r}
+lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
+sec_per_30min <- 30*60  # Seconds in 30 minutes
+
+# Conversion factor for converting µmol CO2 m-2 s-1 to gC per 30 min
+conversion_factor_C <- (12 * 10^(-3)) * 1800 / 1000  # (mg C per µmol) * (sec per 30 min) / (mg to g)
+
+# Create a year and month column for data summary table
+df.HH <- df.HH %>%
+  mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+
+# Summarize the data by year and month for NEE, GPP, RECO, and additional variables
+## For NEE, GPP, and Reco, converting unit from µmolCO2 mol-1 to g C m-2 month-1
+monthly_data <- df.HH %>%
+  group_by(year, month) %>%
+  summarise(
+    NEE = sum(NEE_VUT_REF * conversion_factor_C, na.rm = TRUE), 
+    GPP = -sum(GPP_DT_VUT_REF * conversion_factor_C, na.rm = TRUE),
+    RECO = sum(RECO_DT_VUT_REF * conversion_factor_C, na.rm = TRUE),
+    P = sum(P_F, na.rm = TRUE),
+    ET = sum(ET, na.rm = TRUE),
+    NETRAD = sum(NETRAD, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    LE = sum(LE_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    H = sum(H_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    SW_IN = sum(SW_IN_F, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    Tair = median(TA_F, na.rm = TRUE),  # Monthly average of air temperature
+    .groups = "drop"
+  ) %>%
+  mutate(
+    month_year = as.Date(paste(year, month, 1, sep = "-")),
+    year_label_pos = as.Date(paste(year, "07", "01", sep = "-")),
+    y_label_pos = max(GPP, RECO, NEE, na.rm = TRUE) * 1.2
+  ) 
+```
+## Figure 2: montly meterological variables
+```{r}
+# Tair -----------------------------------------------------
+monthly_data <- monthly_data %>%
+  mutate(y_label_pos = max(Tair, na.rm = TRUE) * 1.2)
+
+ggplot(monthly_data, aes(x = month_year)) +
+  # Add continuous lines and dots for Tair
+  geom_line(aes(y = Tair, color = "Tair"), size = 1) +
+  geom_point(aes(y = Tair, color = "Tair"), size = 3) +
+  
+  # Add horizontal dashed line at 0°C
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
+  
+  # Add vertical dashed lines at the end of each year
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "gray", size = 0.5) +
+  
+  # Fix year labels position
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, label = year), 
+            y = max(monthly_data$Tair, na.rm = TRUE) * 1.2, 
+            color = "black", size = 5, fontface = "bold") +
+  
+  # Customize the plot
+  labs(x = "Month", y = expression("Air Temperature (°C)"), title = "Monthly Air Temperature Trend") +
+  scale_color_manual(values = c("Tair" = "orange")) +
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  # Continuous months
+  scale_y_continuous(
+    breaks = seq(floor(min(monthly_data$Tair, na.rm = TRUE) / 10) * 10, 
+                 ceiling(max(monthly_data$Tair, na.rm = TRUE) / 10) * 10, 
+                 by = 4),
+    limits = c(floor(min(monthly_data$Tair, na.rm = TRUE)) - 5, 
+               ceiling(max(monthly_data$Tair, na.rm = TRUE)) + 5)
+  ) + theme_minimal(base_size = 14)
+
+# Incoming shortwave radiation -----------------------------------------------------
+monthly_data <- monthly_data %>%
+  mutate(y_label_pos = max(SW_IN, na.rm = TRUE) * 1)
+
+ggplot(monthly_data, aes(x = month_year)) +
+  # Add continuous lines and dots for SW_IN
+  geom_line(aes(y = SW_IN, color = "SW_IN"), size = 1) +
+  geom_point(aes(y = SW_IN, color = "SW_IN"), size = 3) +
+  
+  # Add horizontal dashed line at 0
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
+  
+  # Add vertical dashed lines at the end of each year
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "gray", size = 0.5) +
+  
+  # Fix year labels position
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, label = year), 
+            y = max(monthly_data$SW_IN, na.rm = TRUE) * 1, 
+            color = "black", size = 5, fontface = "bold") +
+  
+  # Customize the plot
+  labs(x = "Month", y = expression("Incoming Shortwave Radiation (W/m²)"), 
+       title = "Monthly Incoming Shortwave Trend") +
+  scale_color_manual(values = c("SW_IN" = "blue")) +
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  
+  scale_y_continuous(
+    breaks = seq(0, 
+                 ceiling(max(monthly_data$SW_IN, na.rm = TRUE) / 10) * 10, 
+                 by = 50),
+    limits = c(0, ceiling(max(monthly_data$SW_IN, na.rm = TRUE)) + 5)
+  ) + 
+  theme_minimal(base_size = 14) 
+```
+Ideas for follow-up analysis:
+- 
+
+## Figure 3: Monthly NEE, GPP, RECO
+```{r}
+monthly_data <- monthly_data %>%
+  mutate(y_label_pos = max(GPP,RECO, NEE, na.rm = TRUE) * 1)
+
+ggplot(monthly_data, aes(x = month_year)) +
+  # Add bars for GPP and RECO
+  geom_bar(aes(y = GPP, fill = "GPP"), stat = "identity", position = "dodge") +
+  geom_bar(aes(y = RECO, fill = "RECO"), stat = "identity", position = "dodge") +
+  
+  # Add continuous line and dots for NEE
+  geom_line(aes(y = NEE, color = "NEE"), size = 1) +
+  geom_point(aes(y = NEE, color = "NEE"), size = 3) +
+  
+  # Add vertical dashed lines at the end of each year
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  
+  # Move year labels higher
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, y = y_label_pos, label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  
+  # Define colors for bars and lines
+  scale_fill_manual(values = c("GPP" = "#00BFC4", "RECO" = "#F8766D")) +
+  scale_color_manual(values = c("NEE" = "purple")) +
+  
+  # Scale for the left y-axis (Carbon fluxes)
+  scale_y_continuous(
+    name = expression("g C per month"^2),
+    breaks = seq(floor(min(monthly_data$NEE, monthly_data$GPP, monthly_data$RECO, na.rm = TRUE) / 50) * 50, 
+                 ceiling(max(monthly_data$NEE, monthly_data$GPP, monthly_data$RECO, na.rm = TRUE) / 50) * 50, 
+                 by = 20),
+    )+
+      # X-axis settings
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  theme_minimal(base_size = 14)
+```
+Ideas for follow-up analysis:
+
+
+# Optional: Ecosystem water budget
+```{r}
+# variables (unit) to use ...
+head(monthly_data$P) # unit: mm
+
+# Question: https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
+df.HH <- df.HH %>%
+  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
+
+# Ecosystem water budget
+monthly_data <- monthly_data %>%
+  mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
+
+ggplot(monthly_data, aes(x = month_year)) +
+  # Add bars for P
+  geom_bar(aes(y = P, fill = "P"), stat = "identity", position = "dodge", alpha = 0.7) +
+  
+  # Add continuous line and dots for ET
+  geom_line(aes(y = ET, color = "ET"), size = 1) +
+  geom_point(aes(y = ET, color = "ET"), size = 3) +
+  
+  # Add vertical dashed lines at the end of each year
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  
+  # Fix year labels
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, 
+                y = max(ET, P, na.rm = TRUE) * 1,  # Adjust label position based on max value
+                label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  
+  # Customize the plot
+  labs(x = "Month", y = expression("mm of water"), title = "Monthly ET and P Trends") +
+  
+  # Define colors for ET (line) and P (bar)
+  scale_fill_manual(values = c("P" = "gray")) +  # P (bars)
+  scale_color_manual(values = c("ET" = "#F8766D")) +  # ET (line)
+  
+  # X-axis: Show months
+  scale_x_date(date_labels = "%m", date_breaks = "1 month", expand = c(0, 0)) +  
+  
+  # Y-axis: Adjust limits and break points
+  scale_y_continuous(
+    breaks = seq(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5), by = 10),
+    limits = c(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5))
+  )  
+
+```
+Ideas for follow-up analysis:
+Seasonal water balance: Which months are water surplus/deficit?
+Annual water balance: Summarize yearly ET, and water balance.
+Trend analysis: Is ET increasing? Is precipitation decreasing?
+Relationship to vegetation: Does low water balance correspond to low productivity (e.g., low GPP)?
+WUE (Water Use Efficiency): How much water is used per unit precipitation?
+
+# Optional: Light use efficiency
+```{r}
+# variables (unit) to use ...
+data_filtered = df.HH[df.HH$month == 7, ]
+data_filtered$PPFD = data_filtered$PPFD_IN
+data_filtered$NEE = data_filtered$NEE_VUT_50
+light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
+  -((Amax * PPFD) / (alpha + PPFD) - Rd)  # NEE is negative when GPP is high
+}
+
+fit_NEE <- nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd), 
+                 data = data_filtered, 
+                 start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE), 
+                              alpha = 200, Rd = 2))
+# Extract model parameter estimates
+params <- coef(fit_NEE)
+Amax_est <- round(params["Amax"], 2)
+alpha_est <- round(params["alpha"], 2)
+Rd_est <- round(params["Rd"], 2)
+A2000 = Amax_est * 2000/(alpha_est + 2000)
+data_filtered$NEE_pred <- predict(fit_NEE, newdata = data_filtered) # Generate predicted values from the fitted model
+ylab = expression(NEE ~ '('* μmol ~ m^{-2} ~ s^{-1}*')')
+ggplot(data_filtered, aes(x = PPFD, y = NEE))  +
+  geom_point() +
+  geom_line(aes(y = NEE_pred), color = "red", size = 1.2) +  # Predicted NEE line
+  geom_hline(yintercept = 0, linetype = "dashed", color = "blue", size = 1) +  
+  geom_vline(xintercept = 1800, linetype = "dashed", color = "blue", size = 1) +
+  labs(x = "PPFD (µmol m⁻² s⁻¹)" ,y = ylab) +
+  ylim(-20,10)  + theme_minimal(base_size = 14)
+```
+Ideas for follow-up analysis:
+- plot A2000 for peak growing season for different years? 
+- Explore light response curve for different seasons?
+
+# Optional: Energy balance closure
+```{r}
+# variables (unit) to use ...
+```
+Ideas for follow-up analysis:
+
+# Qualify flag
+0 = measured; 1 = good quality gapfill; 2 = downscaled from ERA

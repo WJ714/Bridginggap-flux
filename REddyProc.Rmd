@@ -250,8 +250,7 @@ threshold - annual varying u *- seasonal varing u* - read more:
 <https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html>
 
 ```{r}
-# ??sPlotNEEVersusUStarForSeason # This line does not work on binder
-EProc$sPlotNEEVersusUStarForSeason(format = "pdf")
+# EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # keep this line commented, please check the figure under /plots
 set.seed(2000)
 uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
 print(uStarTh)
