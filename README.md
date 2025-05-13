@@ -3,7 +3,7 @@
 
 # Structure of the repository
 # Two turtorials are included: 
-1. get started with FLUXNET2015 data
+1. get started with FLUXNET data
 2. REddyProc
    
 # FLUXNEX2015
