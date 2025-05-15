@@ -19,7 +19,7 @@ library(lubridate)
 library(dplyr)
 library(Kendall)
 # working directory
-data_dir = ("C:/Users/yl763/Documents/GitHub/Flux-LSM_workshop/data_FLUXNET/AMF_US-Bar_FLUXNET_SUBSET_2004-2022_4-6/")
+data_dir = ("C:/Users/yl763/Documents/GitHub/data_FLUXNET/AMF_US-Bar_FLUXNET_SUBSET_2004-2022_4-6/")
 ```
 
 # FLUXNET 2015
@@ -83,7 +83,8 @@ conversion_factor_C <- (12 * 10^(-3)) * 1800 / 1000  # (mg C per µmol) * (sec p
 # Create a year and month column for data summary table
 df.HH <- df.HH %>%
   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-
+df.HH <- df.HH %>%
+  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
 # Summarize the data by year and month for NEE, GPP, RECO, and additional variables
 ## For NEE, GPP, and Reco, converting unit from µmolCO2 mol-1 to g C m-2 month-1
 monthly_data <- df.HH %>%
@@ -230,8 +231,7 @@ Ideas for follow-up analysis:
 head(monthly_data$P) # unit: mm
 
 # Question: https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
-df.HH <- df.HH %>%
-  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
+
 
 # Ecosystem water budget
 monthly_data <- monthly_data %>%
