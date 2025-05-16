@@ -27,9 +27,42 @@ data_dir = ("C:/Users/yl763/Documents/GitHub/data_FLUXNET/AMF_US-Bar_FLUXNET_SUB
 -   data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 - full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
 
-# read in half hourly data
+
+# Working on YY data
+## Figure 1: annual sums of NEE
+- `NEE_VUT_REF` 
+- `NEE_VUT_REF_RANDUNC`
 ```{r}
-# Group 1
+setwd(data_dir); df.YY = fread("AMF_US-Bar_FLUXNET_SUBSET_YY_2004-2022_4-6.csv")
+df.YY$year = as.numeric(df.YY$TIMESTAMP)
+
+# variables to use (everyone: please specify the variables to use for each chunk and explain the suffix of the varaible clearly + unit)
+head(df.YY$NEE_VUT_REF) # gapfilled annual sums of NEE, unit: 
+head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: 
+
+# create upper and lower bounds
+df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
+df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
+
+# plot
+ggplot(df.YY, aes(x = year, y = NEE_VUT_REF)) +
+  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +  # uncertainty band
+  geom_line(color = "black", size = 1) +
+  labs(x = "Year", y = expression(NEE ~ '('*μmol ~ m^{-2} ~ s^{-1}*')')) +
+  geom_smooth(method = "lm", color = "red", se = FALSE, size = 1, linetype = "dashed") +  # trend line
+  theme_minimal()
+
+# The Mann-Kendall trend test is used to assess whether there is a significant monotonic trend (either increasing or decreasing) in a time series. 
+MannKendall(df.YY$NEE_VUT_REF) # when P < 0.05, you can reject the null hypothesis ("no trend").
+
+# How crediable the annual sums are?
+plot(df.YY$year, df.YY$NEE_VUT_REF_QC, las = 1, main = "qualify flag for YY data")
+```
+
+
+# Working on HH data
+## read in half hourly data
+```{r}
 setwd(data_dir) 
 df.HH = fread(paste0("AMF_US-Bar_FLUXNET_SUBSET_HH_2004-2022_4-6.csv")) # read in half hourly data
 
@@ -43,35 +76,7 @@ df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
 class(df.HH$TIMESTAMP_END)
 ```
 
-# Long term trend at annual scale
-## Figure 1: annual sums of NEE
-- `NEE_VUT_50` is gapfilled using xxx, _50 means xxx;
-- `NEE_VUT_REF_RANDUNC`, the uncertainty of annual sum is computed using xxx .
-```{r}
-setwd(data_dir); df.YY = fread("AMF_US-Bar_FLUXNET_SUBSET_YY_2004-2022_4-6.csv")
-df.YY$year = as.numeric(df.YY$TIMESTAMP )
 
-# variables to use (everyone: please specify the variables to use for each chunk and explain the suffix of the varaible clearly + unit)
-head(df.YY$NEE_VUT_50) # gapfilled annual sums of NEE, unit: 
-head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: 
-
-# create upper and lower bounds
-df.YY$NEE_upper <- df.YY$NEE_VUT_50 + df.YY$NEE_VUT_REF_RANDUNC
-df.YY$NEE_lower <- df.YY$NEE_VUT_50 - df.YY$NEE_VUT_REF_RANDUNC
-
-# plot
-ggplot(df.YY, aes(x = year, y = NEE_VUT_50)) +
-  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +  # uncertainty band
-  geom_line(color = "black", size = 1) +
-  labs(x = "Year", y = expression(NEEVUT_50 ~ '('*μmol ~ m^{-2} ~ s^{-1}*')')) +
-  geom_smooth(method = "lm", color = "red", se = FALSE, size = 1, linetype = "dashed") +  # trend line
-  theme_minimal()
-
-# The Mann-Kendall trend test is used to assess whether there is a significant monotonic trend (either increasing or decreasing) in a time series. 
-MannKendall(df.YY$NEE_VUT_50) # when P < 0.05, you can reject the null hypothesis ("no trend").
-```
-
-# Monthly pattern
 ## Computing monthly sums (optional: compare the values in MM dataframe???)
 ```{r}
 lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
@@ -181,8 +186,6 @@ ggplot(monthly_data, aes(x = month_year)) +
   ) + 
   theme_minimal(base_size = 14) 
 ```
-Ideas for follow-up analysis:
-- 
 
 ## Figure 3: Monthly NEE, GPP, RECO
 ```{r}
@@ -219,13 +222,22 @@ ggplot(monthly_data, aes(x = month_year)) +
                  ceiling(max(monthly_data$NEE, monthly_data$GPP, monthly_data$RECO, na.rm = TRUE) / 50) * 50, 
                  by = 20),
     )+
-      # X-axis settings
+  # X-axis settings
   scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  theme_minimal(base_size = 14)
 ```
-Ideas for follow-up analysis:
 
 
-# Optional: Ecosystem water budget
+# Working with daily data (to be updated)
+```{r}
+setwd(data_dir); df.DD = fread("AMF_US-Bar_FLUXNET_SUBSET_DD_2004-2022_4-6.csv")
+names(df.DD)
+```
+
+# Half hourly scale
+
+
+
+## Optional: Ecosystem water budget
 ```{r}
 # variables (unit) to use ...
 head(monthly_data$P) # unit: mm
@@ -283,33 +295,98 @@ WUE (Water Use Efficiency): How much water is used per unit precipitation?
 
 # Optional: Light use efficiency
 ```{r}
-# variables (unit) to use ...
-data_filtered = df.HH[df.HH$month == 7, ]
+data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to focus on
 data_filtered$PPFD = data_filtered$PPFD_IN
-data_filtered$NEE = data_filtered$NEE_VUT_50
+data_filtered$NEE = data_filtered$NEE_VUT_REF
+
+# # Function to calculate light response curve for NEE based on the Michaelis-Menten equation
 light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
-  -((Amax * PPFD) / (alpha + PPFD) - Rd)  # NEE is negative when GPP is high
+  -((Amax * PPFD) / (alpha + PPFD) - Rd)
 }
 
+
 fit_NEE <- nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd), 
-                 data = data_filtered, 
-                 start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE), 
-                              alpha = 200, Rd = 2))
+               data = data_filtered, 
+               start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE), 
+                            alpha = 200, Rd = 2))
+
 # Extract model parameter estimates
 params <- coef(fit_NEE)
 Amax_est <- round(params["Amax"], 2)
 alpha_est <- round(params["alpha"], 2)
 Rd_est <- round(params["Rd"], 2)
+# compute A2000
 A2000 = Amax_est * 2000/(alpha_est + 2000)
-data_filtered$NEE_pred <- predict(fit_NEE, newdata = data_filtered) # Generate predicted values from the fitted model
-ylab = expression(NEE ~ '('* μmol ~ m^{-2} ~ s^{-1}*')')
+
+# Generate predicted values from the fitted model
+data_filtered$NEE_pred <- predict(fit_NEE, newdata = data_filtered)
+
+
 ggplot(data_filtered, aes(x = PPFD, y = NEE))  +
   geom_point() +
-  geom_line(aes(y = NEE_pred), color = "red", size = 1.2) +  # Predicted NEE line
-  geom_hline(yintercept = 0, linetype = "dashed", color = "blue", size = 1) +  
-  geom_vline(xintercept = 1800, linetype = "dashed", color = "blue", size = 1) +
-  labs(x = "PPFD (µmol m⁻² s⁻¹)" ,y = ylab) +
-  ylim(-20,10)  + theme_minimal(base_size = 14)
+  geom_line(aes(y = NEE_pred), color = "red", size = 1.2) +  
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey", size = 1) +  
+  geom_vline(xintercept = 1800, linetype = "dashed", color = "grey", size = 1) +
+  labs(x = expression(PPFD ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")"), 
+       y = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")")) +
+  theme_minimal()
+  
+
+
+# 
+fit_light_response_NEE <- function(data) {
+  # Skip if not enough data
+  if (nrow(data) < 10 || all(is.na(data$NEE))) return(NULL)
+
+  # Michaelis-Menten light response model
+  light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
+    -((Amax * PPFD) / (alpha + PPFD) - Rd)
+  }
+
+  # Try fitting the model, catch failures
+  fit_result <- tryCatch({
+    nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd),
+        data = data,
+        start = list(
+          Amax = max(-data$NEE, na.rm = TRUE),  # guess based on data
+          alpha = 200,
+          Rd = 2
+        ),
+        control = nls.control(maxiter = 100, warnOnly = TRUE)
+    )
+  }, error = function(e) {
+    message("Model failed for one year: ", e$message)
+    return(NULL)
+  })
+
+  # If fitting was successful, extract A2000
+  if (!is.null(fit_result)) {
+    params <- coef(fit_result)
+    Amax <- params["Amax"]
+    alpha <- params["alpha"]
+    A2000 <- Amax * 2000 / (alpha + 2000)
+    return(data.frame(Amax = Amax, alpha = alpha, Rd = params["Rd"], A2000 = A2000))
+  } else {
+    return(NULL)
+  }
+}
+
+print(fit_light_response_NEE(data_filtered))
+
+
+
+# compute A2000 for each year
+data_by_year <- split(data_filtered, data_filtered$year)
+results_by_year <- lapply(data_by_year, fit_light_response_NEE)
+names(results_by_year) <- names(data_by_year)
+results_df <- bind_rows(results_by_year, .id = "Year")
+
+ggplot(results_df, aes(x = as.numeric(Year), y = A2000)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "A2000 over Years", x = "Year", y = "A2000 (µmol m⁻² s⁻¹)") +
+  theme_minimal() +
+  ylim(0,50) # I will double-check with Andrew if this makes sense
 ```
 Ideas for follow-up analysis:
 - plot A2000 for peak growing season for different years? 
