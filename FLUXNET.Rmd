@@ -373,8 +373,6 @@ fit_light_response_NEE <- function(data) {
 
 print(fit_light_response_NEE(data_filtered))
 
-
-
 # compute A2000 for each year
 data_by_year <- split(data_filtered, data_filtered$year)
 results_by_year <- lapply(data_by_year, fit_light_response_NEE)
