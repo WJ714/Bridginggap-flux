@@ -13,6 +13,14 @@ knitr::opts_chunk$set(
   warning = FALSE,  # Hide warnings
   message = FALSE   # Hide messages
 )
+my_theme <- theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(size = 12),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "white", color = "white"),
+    plot.background = element_rect(fill = "white", color = "white")
+  )
 
 library(data.table)
 library(lubridate)
@@ -23,40 +31,46 @@ data_dir = ("C:/Users/yl763/Documents/GitHub/data_FLUXNET/AMF_US-Bar_FLUXNET_SUB
 ```
 
 # FLUXNET 2015
--   variables quick start guide <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
--   data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
+- variables quick start guide <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
+- data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 - full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
-
 
 # Working on YY data
 ## Figure 1: annual sums of NEE
-- `NEE_VUT_REF` 
-- `NEE_VUT_REF_RANDUNC`
 ```{r}
 setwd(data_dir); df.YY = fread("AMF_US-Bar_FLUXNET_SUBSET_YY_2004-2022_4-6.csv")
 df.YY$year = as.numeric(df.YY$TIMESTAMP)
 
-# variables to use (everyone: please specify the variables to use for each chunk and explain the suffix of the varaible clearly + unit)
-head(df.YY$NEE_VUT_REF) # gapfilled annual sums of NEE, unit: 
-head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: 
+head(df.YY$NEE_VUT_REF) # gapfilled annual sums of NEE, unit: ???
+head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: ???
 
 # create upper and lower bounds
 df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
 df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
 
-# plot
-ggplot(df.YY, aes(x = year, y = NEE_VUT_REF)) +
-  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +  # uncertainty band
-  geom_line(color = "black", size = 1) +
-  labs(x = "Year", y = expression(NEE ~ '('*μmol ~ m^{-2} ~ s^{-1}*')')) +
-  geom_smooth(method = "lm", color = "red", se = FALSE, size = 1, linetype = "dashed") +  # trend line
-  theme_minimal()
+# Normalize QC values to match NEE y-axis range
+max_NEE <- max(df.YY$NEE_upper, na.rm = TRUE)
+min_NEE <- min(df.YY$NEE_lower, na.rm = TRUE)
+range_NEE <- max_NEE - min_NEE
 
+df.YY$QC_scaled <- min_NEE + (df.YY$NEE_VUT_REF_QC / max(df.YY$NEE_VUT_REF_QC, na.rm = TRUE)) * range_NEE
+
+ggplot(df.YY, aes(x = year)) +
+  # Uncertainty ribbon
+  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +
+  geom_line(aes(y = NEE_VUT_REF), color = "black", size = 1) +
+  geom_smooth(aes(y = NEE_VUT_REF), method = "lm", color = "red", se = FALSE, linetype = "dashed") + # Trend line
+  geom_col(aes(y = QC_scaled), fill = "orange", width = 0.3, alpha = 0.5) + # QC flag bar plot
+  scale_y_continuous(
+    name = expression(FCO2 ~ '('*μmol ~ m^{-2} ~ s^{-1}*')'),
+    sec.axis = sec_axis(
+      ~ (. - min_NEE) / range_NEE * max(df.YY$NEE_VUT_REF_QC, na.rm = TRUE),
+      name = "QC Flag"
+    )
+  ) + theme_minimal()
+  
 # The Mann-Kendall trend test is used to assess whether there is a significant monotonic trend (either increasing or decreasing) in a time series. 
 MannKendall(df.YY$NEE_VUT_REF) # when P < 0.05, you can reject the null hypothesis ("no trend").
-
-# How crediable the annual sums are?
-plot(df.YY$year, df.YY$NEE_VUT_REF_QC, las = 1, main = "qualify flag for YY data")
 ```
 
 
@@ -65,11 +79,9 @@ plot(df.YY$year, df.YY$NEE_VUT_REF_QC, las = 1, main = "qualify flag for YY data
 ```{r}
 setwd(data_dir) 
 df.HH = fread(paste0("AMF_US-Bar_FLUXNET_SUBSET_HH_2004-2022_4-6.csv")) # read in half hourly data
-
 # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
 df.HH <- df.HH %>%
   mutate(across(everything(), ~na_if(. , -9999)))
-
 # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
 class(df.HH$TIMESTAMP_END)
 df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
@@ -77,7 +89,7 @@ class(df.HH$TIMESTAMP_END)
 ```
 
 
-## Computing monthly sums (optional: compare the values in MM dataframe???)
+## Computing monthly sums 
 ```{r}
 lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
 sec_per_30min <- 30*60  # Seconds in 30 minutes
@@ -227,71 +239,243 @@ ggplot(monthly_data, aes(x = month_year)) +
 ```
 
 
-# Working with daily data (to be updated)
+# Working on DD data (experimental)
 ```{r}
 setwd(data_dir); df.DD = fread("AMF_US-Bar_FLUXNET_SUBSET_DD_2004-2022_4-6.csv")
 names(df.DD)
+# library(dplyr)
+# library(lubridate)
+# library(SPEI)
+# 
+# 
+# # STEP 1: Convert TIMESTAMP to date
+# df.DD <- df.DD %>%
+#   mutate(
+#     TIMESTAMP = ymd_hms(TIMESTAMP),
+#     date = as_date(TIMESTAMP)
+#   )
+# 
+# # STEP 2: Calculate daily Tmin, Tmax, P
+# daily_temp <- df.DD %>%
+#   group_by(date) %>%
+#   summarise(
+#     Tmin = min(TA_F, na.rm = TRUE),
+#     Tmax = max(TA_F, na.rm = TRUE),
+#     P = sum(P_F, na.rm = TRUE)
+#   ) %>%
+#   filter(is.finite(Tmin), is.finite(Tmax)) %>%
+#   ungroup()
+# 
+# # STEP 3: Compute daily PET
+# lat <- 42.5  # change this to your site latitude
+# daily_temp$PET <- hargreaves(Tmin = daily_temp$Tmin, Tmax = daily_temp$Tmax, lat = lat)
+# 
+# # STEP 4: Compute daily water balance
+# daily_temp$bal <- daily_temp$P - daily_temp$PET
+# 
+# # STEP 5: Aggregate to monthly water balance
+# monthly_balance <- daily_temp %>%
+#   mutate(year = year(date), month = month(date)) %>%
+#   group_by(year, month) %>%
+#   summarise(water_bal = sum(bal, na.rm = TRUE)) %>%
+#   ungroup() %>%
+#   filter(!is.na(year), !is.na(month), !is.na(water_bal)) %>%  # NEW: remove NA rows
+#   arrange(year, month)
+# 
+# # STEP 6: Convert to time series (after filtering)
+# bal_ts <- ts(monthly_balance$water_bal,
+#              start = c(min(monthly_balance$year), min(monthly_balance$month)),
+#              frequency = 12)
+# 
+# 
+# # STEP 7: Compute 12-month SPEI
+# spei_12 <- spei(bal_ts, scale = 12)
+# monthly_balance$SPEI_12 <- as.numeric(spei_12$fitted)
+# 
+# # STEP 8: Add date column for plotting
+# monthly_balance$date <- as.Date(paste(monthly_balance$year, monthly_balance$month, "15", sep = "-"))
+# 
+# # STEP 9: Plot the SPEI
+# ggplot(monthly_balance, aes(x = date, y = SPEI_12)) +
+#   geom_line(color = "#2166ac", size = 1) +
+#   geom_hline(yintercept = 0, linetype = "dashed", color = "gray30") +
+#   geom_hline(yintercept = c(-1, -1.5, -2), linetype = "dotted", color = "red") +
+#   geom_hline(yintercept = c(1, 1.5, 2), linetype = "dotted", color = "darkgreen") +
+#   labs(
+#     title = "12-Month SPEI from df.DD",
+#     x = "Date",
+#     y = "SPEI (12-month)"
+#   ) +
+#   theme_minimal(base_size = 14)
 ```
 
-# Half hourly scale
+# Optional: Qualify flags
+```{r, fig.height=5, fig.width=9}
+df.HH <- df.HH %>%
+  mutate(
+    year = year(TIMESTAMP_END),
+    DOY = yday(TIMESTAMP_END) + 
+      (hour(TIMESTAMP_END) + minute(TIMESTAMP_END)/60 + second(TIMESTAMP_END)/3600) / 24,
+    qc_label = factor(
+      NEE_VUT_REF_QC,
+      levels = c(0, 1, 2, 3),
+      labels = c("Measured (0)", "Good (1)", "Medium (2)", "Poor (3)")
+    )
+  )
 
+#calculate the percentage of each flag
+qc_summary <- df.HH %>%
+  group_by(year, qc_label) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(year) %>%
+  mutate(
+    total = sum(count),
+    percent = round(100 * count / total, 1),
+    label = paste0(qc_label, ": ", percent, "%")
+  )
+# View(qc_summary)
 
+# plot qc_summary by year
+qc_summary %>%
+  filter(year >= 2004, year <= 2022) %>%
+  ggplot(aes(x = factor(year), y = percent, fill = qc_label)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(
+    name = "QC Flag",
+    values = c(
+      "Measured (0)" = "black",
+      "Good (1)" = "green4",
+      "Medium (2)" = "orange",
+      "Poor (3)" = "red"
+    )
+  ) +
+  labs(
+    title = "Summary of NEE Quality Flags",
+    x = "Year",
+    y = "Percentage (%)"
+  ) + my_theme
+  
 
-## Optional: Ecosystem water budget
+qc_labels <- qc_summary %>%
+  group_by(year) %>%
+  summarise(
+    qc_text = paste(label, collapse = "\n"),
+    .groups = "drop"
+  )
+
+data_with_labels <- df.HH %>%
+  left_join(qc_labels, by = "year")
+
+# looking into data for one year: plot NEE with QC flags
+data_with_labels %>%
+  filter(year == 2010) %>%
+  ggplot(aes(x = DOY, y = NEE_VUT_REF, color = qc_label)) +
+  geom_point(alpha = 0.6, size = 1) +
+  # facet_wrap(~ year) +
+  scale_color_manual(
+    name = "QC Flag",
+    values = c("Measured (0)" = "black",
+               "Good (1)" = "green4",
+               "Medium (2)" = "orange",
+               "Poor (3)" = "red")
+  ) +
+  geom_text(
+    data = qc_labels,
+    aes(x = 12, y = 20, label = qc_text),
+    inherit.aes = FALSE,
+    hjust = 0,
+    vjust = 1.1,
+    size = 3,
+    color = "gray30"
+  ) +
+  labs(
+    title = "NEE by 30-mins and quality flags",
+    x = "DOY",
+    y = expression(FCO2~(g~C~m^{-2}~d^{-1}))
+  ) + my_theme
+```
+
+# Optional: Ecosystem water budget
+ET = Evapotranspiration = the sum of evaporation from land + transpiration from plants.
+P = Precipitation = all water input from rain/snow.
 ```{r}
-# variables (unit) to use ...
-head(monthly_data$P) # unit: mm
-
-# Question: https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
-
-
-# Ecosystem water budget
+# https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
 monthly_data <- monthly_data %>%
   mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
 
+# Add ET/P ratio to monthly_data
+monthly_data <- monthly_data %>%
+  mutate(ET_P_ratio = ET / P)
+
+# Add GPP/ET ratio to monthly_data for WUE
+monthly_data <- monthly_data %>%
+  mutate(WUE = -(GPP)/ET)
+
+# monthly_data <- monthly_data %>%
+#   mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
+
+# plot: P and ET
 ggplot(monthly_data, aes(x = month_year)) +
-  # Add bars for P
   geom_bar(aes(y = P, fill = "P"), stat = "identity", position = "dodge", alpha = 0.7) +
-  
-  # Add continuous line and dots for ET
   geom_line(aes(y = ET, color = "ET"), size = 1) +
   geom_point(aes(y = ET, color = "ET"), size = 3) +
-  
-  # Add vertical dashed lines at the end of each year
   geom_vline(data = monthly_data %>% filter(month == 12), 
              aes(xintercept = as.numeric(month_year) + 15), 
              linetype = "dashed", color = "black", size = 0.5) +
-  
-  # Fix year labels
   geom_text(data = monthly_data %>% filter(month == 6), 
             aes(x = year_label_pos, 
                 y = max(ET, P, na.rm = TRUE) * 1,  # Adjust label position based on max value
                 label = year), 
             color = "black", size = 5, fontface = "bold") +
-  
-  # Customize the plot
   labs(x = "Month", y = expression("mm of water"), title = "Monthly ET and P Trends") +
-  
-  # Define colors for ET (line) and P (bar)
   scale_fill_manual(values = c("P" = "gray")) +  # P (bars)
   scale_color_manual(values = c("ET" = "#F8766D")) +  # ET (line)
-  
-  # X-axis: Show months
   scale_x_date(date_labels = "%m", date_breaks = "1 month", expand = c(0, 0)) +  
-  
-  # Y-axis: Adjust limits and break points
   scale_y_continuous(
     breaks = seq(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5), by = 10),
     limits = c(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5))
-  )  
+  )  + my_theme
 
+# plot: monthly ET/T Ratio
+ggplot(monthly_data, aes(x = month_year, y = ET_P_ratio)) +
+  geom_bar(stat = "identity", fill = "#619CFF", alpha = 0.8) +
+  labs(x = "Month", y = "ET / P", title = "Monthly ET/P Ratio") +
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "black", size = 0.8) +
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, 
+                y = max(ET/P, na.rm = TRUE) * 1.3,  # Adjust label position based on max value
+                label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +
+  scale_y_continuous(
+    breaks = seq(0, ceiling(max(monthly_data$ET_P_ratio, na.rm = TRUE) + 0.5), by = 0.5),
+    limits = c(0, ceiling(max(monthly_data$ET_P_ratio, na.rm = TRUE) + 0.5))
+  ) + my_theme
+  
+# plot: water use efficiency
+ggplot(monthly_data, aes(x = month_year, y = WUE)) +
+  geom_bar(stat = "identity", fill = "#619CFF", alpha = 0.8) +
+  labs(x = "Month", y = "WUE", title = "Water-use efficiency (GPP/ET)") +
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "black", size = 0.8) +
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, 
+                y = 60,  # Adjust label position based on max value
+                label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +
+  scale_y_continuous(
+    breaks = seq(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 1), by = 10),
+    limits = c(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 0.5))
+  ) + my_theme
+# For winter, snowfall melt is 
+# WUE: only for growing season: focus on peak growing season only ... why 
 ```
-Ideas for follow-up analysis:
-Seasonal water balance: Which months are water surplus/deficit?
-Annual water balance: Summarize yearly ET, and water balance.
-Trend analysis: Is ET increasing? Is precipitation decreasing?
-Relationship to vegetation: Does low water balance correspond to low productivity (e.g., low GPP)?
-WUE (Water Use Efficiency): How much water is used per unit precipitation?
 
 # Optional: Light use efficiency
 ```{r}
@@ -320,8 +504,6 @@ A2000 = Amax_est * 2000/(alpha_est + 2000)
 
 # Generate predicted values from the fitted model
 data_filtered$NEE_pred <- predict(fit_NEE, newdata = data_filtered)
-
-
 ggplot(data_filtered, aes(x = PPFD, y = NEE))  +
   geom_point() +
   geom_line(aes(y = NEE_pred), color = "red", size = 1.2) +  
@@ -331,9 +513,6 @@ ggplot(data_filtered, aes(x = PPFD, y = NEE))  +
        y = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")")) +
   theme_minimal()
   
-
-
-# 
 fit_light_response_NEE <- function(data) {
   # Skip if not enough data
   if (nrow(data) < 10 || all(is.na(data$NEE))) return(NULL)
@@ -392,9 +571,10 @@ Ideas for follow-up analysis:
 
 # Optional: Energy balance closure
 ```{r}
-# variables (unit) to use ...
-```
-Ideas for follow-up analysis:
 
-# Qualify flag
-0 = measured; 1 = good quality gapfill; 2 = downscaled from ERA
+```
+# bigleaf:
+canopy conductance for each month
+pull GCC and integrate with flux data ... 
+
+
