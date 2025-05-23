@@ -6,9 +6,9 @@ savepath = "F:/16 Footprint/"
 # First use neonUtilities to download data for one year
 neonUtilities::zipsByProduct(dpID = "DP4.00200.001", # Bundled eddy covariance product
                              site = "BART", # Site
-                             startdate = "2021-01", # Start month yyyy-mm
-                             enddate = "2021-12", # End month yyyy-mm
-                             package = "basic", # basic or expanded, you can save a lot of storage if you use 'basic' but will do example with 'expanded' for now
+                             startdate = "2021-06", # Start month yyyy-mm
+                             enddate = "2021-07", # End month yyyy-mm
+                             package = "expanded", # basic or expanded
                              release = "RELEASE-2024", # Data version (don't use provisional), use RELEASE-2024 to match with most recent version of AMF release
                              savepath = savepath) # Where to download data to
 
