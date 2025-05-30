@@ -11,11 +11,6 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Before the workshop:
--   Create an account:
-    <https://ameriflux-data.lbl.gov/Pages/RequestAccount.aspx>
--   The `user_id` and `user_email` will be used later ...
-
 # load packages
 ```{r}
 # if(!require(devtools)){install.packages("devtools")}
@@ -59,6 +54,8 @@ print(paste("number of sites included in BASE publish is", nrow(full.list)))
 
 # download single site flux/met data
 site_name = "US-Bar"
+
+# please keep the codes below commented if you do not have an account 
 # floc<- amf_download_base(
 #     user_id = "my_user", # change to your user name
 #     user_email = "my_email@mail.com", # change to your email
@@ -92,14 +89,9 @@ amf_plot_datayear(site_set = site_name,
                   # year_set = c(2004:2023),
                   nonfilled_only = TRUE)
 
-# uncomment to check data availability by year (all variables)
+# you can uncomment the line below to check data availability by year (all variables)
 # amf_plot_datayear(site_set = site_name, nonfilled_only = FALSE)
 ```
-
-## Questions:
--   How many sites are included in the AmeriFlux BASE publish?
--   Why is the data coverage of flux data lower than that of
-    meteorological variables?
 
 # 02: Organise input data
 Please note: The naming conventions for variables are different for
