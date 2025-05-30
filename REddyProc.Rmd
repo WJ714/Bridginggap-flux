@@ -93,9 +93,8 @@ amf_plot_datayear(site_set = site_name,
 # amf_plot_datayear(site_set = site_name, nonfilled_only = FALSE)
 ```
 
-# 02: Organise input data
-Please note: The naming conventions for variables are different for
-different sites;
+# 02: organise input data
+Please note: The _suffix for variables are different for different sites;
 ```{r}
 # subset data for two years
 base = base[base$YEAR %in% c(2011,2012), ]
@@ -244,14 +243,14 @@ threshold - annual varying u *- seasonal varing u* - read more:
 ```{r}
 # EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # keep this line commented, please check the figure under /plots
 set.seed(2000)
-uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) # use nSample = 1000L for true analysis
+
+# we are just using nSample = 10L for here for demonstration
+uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) 
 print(uStarTh)
 
 # Define aggregation mode
 EProc$sGetUstarScenarios() # by default, annual varing u* is used
-# EProc$useSeaonsalUStarThresholds()# seasonal varing u*
-# EProc$useAnnualUStarThresholds() # annual varing u*
-  
+
 # Here, we use the single u* threshold
 uStar <- uStarTh  %>%
   dplyr::filter( aggregationMode == "single") %>%
@@ -259,6 +258,10 @@ uStar <- uStarTh  %>%
 uStarDf <- cbind(season=na.omit(unique(uStarTh$season)), uStar)
 EProc$sSetUstarScenarios(uStarDf)
 EProc$sGetUstarScenarios()
+
+# if you want to use seasonal or annual varing u*:
+# EProc$useSeaonsalUStarThresholds()# seasonal varing u*
+# EProc$useAnnualUStarThresholds() # annual varing u*
 ```
 
 Question: What aggregationMode should I use for my site?
@@ -303,28 +306,31 @@ EProc$sMDSGapFillUStarScens('NEE')
 EProc$sPlotFingerprintY("NEE_50._f", Year = 2011); EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
 ```
 
-Questions: - Can I use more than 3 drivers to gapfill flux data? -\
 
 # 07: partitioning NEE into Reco and GPP
 -   NEE = Reco - GPP
--   Several methods were developed to partition NEE into Reco and GPP;
--   please note: Reco is modeled and GPP is computed as Reco - NEE;
--   night-time partitioning:
--   day-time partitioning:
--   modified daytime partitioning:
+-   Reco is modeled and GPP is computed as Reco - NEE;
+
+There are three approaches to partition FCO₂ available in REddyProc:
+- Night-time partitioning (NT): This approach relies on the assumption that fluxes measured at night consist purely of respiration. It uses nighttime fluxes to estimate a seasonally varying reference respiration rate and its sensitivity to temperature.
+- Day-time partitioning (DT): This method uses a light response curve based on daytime data to estimate the reference respiration rate, and then applies a temperature response function to estimate Reco.
+- Modified day-time partitioning: both NT and DT assume that the same Rref is applicable during daytime as at night; a questionable assumption due to the potential for the inhibition of leaf respiration in the light
 
 ```{r}
-EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
 # TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving
-
+EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
 EProc$sMRFluxPartitionUStarScens("NEE") # night-time
+
+# If you want to use day-time or night-time partitioning
 # EProc$sGLFluxPartitionUStarScens() # day-time
 # EProc$sTKFluxPartitionUStarScens() # modified day-time
 names(EProc$sTEMP)
 ```
+Bonus training: create some figures to compare different partitioning method;
 
-# 08: final output
+
+# 08: visualise the output
 Question: What is the difference between FCO2 and NEE?:
 <https://ameriflux.lbl.gov/data/aboutdata/data-variables/>
 
@@ -361,17 +367,11 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   theme_minimal() +
   ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
 ```
-# To do: 
 
 
 # References
--   Wutzler, Thomas, et al. "Basic and extensible post-processing of
-    eddy covariance flux data with REddyProc." Biogeosciences 15.16
-    (2018): 5015-5030.
--   Reichstein, Markus, et al. "On the separation of net ecosystem
-    exchange into assimilation and ecosystem respiration: review and
-    improved algorithm." Global change biology 11.9 (2005): 1424-1439.
--   Liu, Yujie, et al. "Robust filling of extra-long gaps in eddy
-    covariance CO2 flux measurements from a temperate deciduous forest
-    using eXtreme Gradient Boosting." Agricultural and Forest
-    Meteorology 364 (2025): 110438.
+- Wutzler, Thomas, et al. "Basic and extensible post-processing of eddy covariance flux data with REddyProc." Biogeosciences 15.16 (2018): 5015–5030.
+- Reichstein, Markus, et al. "On the separation of net ecosystem exchange into assimilation and ecosystem respiration: review and improved algorithm." Global Change Biology 11.9 (2005): 1424–1439.
+- Liu, Yujie, et al. "Robust filling of extra-long gaps in eddy covariance CO₂ flux measurements from a temperate deciduous forest using eXtreme Gradient Boosting." Agricultural and Forest Meteorology 364 (2025): 110438.
+- Keenan, Trevor F., et al. "Widespread inhibition of daytime ecosystem respiration." Nature Ecology & Evolution 3.3 (2019): 407–415.
+    
