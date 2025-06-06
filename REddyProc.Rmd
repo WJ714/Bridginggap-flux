@@ -331,9 +331,6 @@ Bonus training: create some figures to compare different partitioning method;
 
 
 # 08: visualise the output
-Question: What is the difference between FCO2 and NEE?:
-<https://ameriflux.lbl.gov/data/aboutdata/data-variables/>
-
 ```{r}
 FilledEddyData <- EProc$sExportResults()
 combined.df <- cbind(EddyData, FilledEddyData)

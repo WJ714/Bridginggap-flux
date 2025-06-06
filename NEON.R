@@ -8,7 +8,7 @@ neonUtilities::zipsByProduct(dpID = "DP4.00200.001", # Bundled eddy covariance p
                              site = "BART", # Site
                              startdate = "2021-06", # Start month yyyy-mm
                              enddate = "2021-07", # End month yyyy-mm
-                             package = "expanded", # basic or expanded
+                             package = "basic", # basic or expanded
                              release = "RELEASE-2024", # Data version (don't use provisional), use RELEASE-2024 to match with most recent version of AMF release
                              savepath = savepath) # Where to download data to
 
@@ -32,12 +32,22 @@ rhdf5::h5closeAll() # Make sure to close h5 file
 
 # Data quality evaluation and QAQC at the analytical stage --------------------------------------------------------------------------------
 library(ggplot2)
-ggplot(data, aes(x = timeEnd, y = data.fluxCo2.nsae.flux, color = as.factor(qfqm.fluxH2o.nsae.qfFinl))) +
+ggplot(data, aes(x = timeEnd, y = data.fluxCo2.nsae.flux, color = as.factor(qfqm.fluxCo2.nsae.qfFinl))) +
   geom_point(alpha = 0.6) +
   scale_color_manual(values = c("0" = "#67a9cf30", "1" = "#b2182b30")) +  # Adjust as needed for your QF codes
   labs(
     x = "Time",
-    y = "CO2 Flux (nsae)",
+    y = "CO2 Flux (NSAE)",
+    color = "Final QF Flag"
+  ) +
+  theme_minimal()
+
+ggplot(data, aes(x = timeEnd, y = data.fluxH2o.nsae.flux, color = as.factor(qfqm.fluxH2o.nsae.qfFinl))) +
+  geom_point(alpha = 0.6) +
+  scale_color_manual(values = c("0" = "#67a9cf30", "1" = "#b2182b30")) +  # Adjust as needed for your QF codes
+  labs(
+    x = "Time",
+    y = "H2O Flux (NSAE)",
     color = "Final QF Flag"
   ) +
   theme_minimal()
@@ -47,10 +57,9 @@ ggplot(data, aes(x = timeEnd, y = data.fluxCo2.stor.flux, color = as.factor(qfqm
   scale_color_manual(values = c("0" = "#67a9cf30", "1" = "#b2182b30")) +  # Adjust as needed for your QF codes
   labs(
     x = "Time",
-    y = "CO2 Flux (nsae)",
+    y = "Storage Flux",
     color = "Final QF Flag"
   ) +
   theme_minimal()
 
-# get footprint --------------------------------------------------------------------------------
-neonUtilities::footRaster(filepath = "F:/16 Footprint/filesToStack00200/")
+
