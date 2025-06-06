@@ -4,7 +4,7 @@
 
 📚 Two tutorials are included here:
 1. 🚀 Get started with FLUXNET data  
-2. ⚙️ REddyProc
+2. ⚙️ REddyProc, you are encouraged to use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
 ---
 # 🚀 FLUXNET 
