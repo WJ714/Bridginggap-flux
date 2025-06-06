@@ -6,10 +6,10 @@ With just one click, users can launch a virtual compute environment with all dep
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 ### 📚 Two tutorials are included here:
-1. 🚀 Get started with FLUXNET data  
-2. ⚙️ REddyProc
+1. 🌐 Get started with FLUXNET data  
+2. 📦 REddyProc
 
-# 🚀 Tutorial 1: FLUXNET 
+# 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
@@ -20,7 +20,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - and make some figures to include in your group presentation.
 ## 📘 Tutorial Guide
 
-# ⚙️ Tutorial 2: REddyProc
+# 📦 Tutorial 2: REddyProc
 ### 🔗 What is REddyProc?
 REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes uStar-filtering, gap-filling, and flux-partitioning.  
 🌿 The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere.  
