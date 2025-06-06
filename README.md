@@ -1,7 +1,6 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
 
-# Structure of the repository
 # Two turtorials are included: 
 1. get started with FLUXNET data
 2. REddyProc
@@ -27,6 +26,3 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 - Material used for the short course using REddyProc at EGU 2019: https://github.com/bgctw/EGU19EddyCourse/tree/master
 - high frequency data processing: https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html
 
-# Reference
-The methodology and benchmark of REddyProc 1.1.3 is described in the following paper:
-Wutzler, T., Lucas-Moffat, A., Migliavacca, M., Knauer, J., Sickel, K., Šigut, L., Menzer, O., and Reichstein, M. (2018): Basic and extensible post-processing of eddy covariance flux data with REddyProc, Biogeosciences, 15, 5015-5030, https://doi.org/10.5194/bg-15-5015-2018.
