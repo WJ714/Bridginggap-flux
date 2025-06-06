@@ -7,8 +7,9 @@ Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux turt
 2. REddyProc
    
 # FLUXNEX data
-The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.
-The [next generation] (https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon. 
+- The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.
+- The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
+
 
 
 # REddyProc
