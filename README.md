@@ -55,7 +55,8 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 - 🔸 Papale et al., 2006: [https://doi.org/10.5194/bg-3-571-2006](https://doi.org/10.5194/bg-3-571-2006)  
 - 🔸 Reichstein et al., 2005: [https://doi.org/10.1111/j.1365-2486.2005.001002.x](https://doi.org/10.1111/j.1365-2486.2005.001002.x) 
 - 🔸 Lasslop et al., 2010: [https://doi.org/10.1111/j.1365-2486.2009.02041.x](https://doi.org/10.1111/j.1365-2486.2009.02041.x)
-- 🔸 Liu et al., 2025: [https://doi.org/10.1016/j.agrformet.2025.110438] (https://doi.org/10.1016/j.agrformet.2025.110438)
+- 🔸 Liu et al., 2025: [https://doi.org/10.1016/j.agrformet.2025.110438](https://doi.org/10.1016/j.agrformet.2025.110438)
+
 # Acknowledgement
 -
 
