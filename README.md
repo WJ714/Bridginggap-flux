@@ -6,9 +6,8 @@
 1. 🚀 Get started with FLUXNET data  
 2. ⚙️ REddyProc, you are encouraged to use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 ### 🔗 What is Binder?
-
 Binder is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research.
 
 ---
 # 🚀 FLUXNET 
