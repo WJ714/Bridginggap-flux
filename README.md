@@ -2,7 +2,7 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux tutorials!
 
-# 📚 Two tutorials are included here:
+📚 Two tutorials are included here:
 1. 🚀 Get started with FLUXNET data  
 2. ⚙️ REddyProc
 
