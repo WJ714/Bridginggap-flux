@@ -3,7 +3,7 @@
 ### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
 With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research.
-📚 Two tutorials are included here:
+### 📚 Two tutorials are included here:
 1. 🚀 Get started with FLUXNET data  
 2. ⚙️ REddyProc: Typically it takes > 30 mins to install the package, you are encouraged to use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
