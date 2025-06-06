@@ -7,12 +7,12 @@
 2. ⚙️ REddyProc
 
 ---
-# 🔷 FLUXNET 
+# FLUXNET 
 
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ---
-# 🔹 REddyProc
+# REddyProc
 
 Standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes uStar-filtering, gap-filling, and flux-partitioning.  
 🌿 The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere.  
