@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # load packages
+
 ```{r}
 library(amerifluxr) # Package for querying, downloading, and handling AmeriFlux data and metadata.
 library(REddyProc)  # Package for processing Eddy Covariance flux data (e.g., gap-filling, partitioning)
@@ -24,6 +25,7 @@ library(ggplot2)
 ```
 
 # working directory
+
 ```{r}
 # open a temporary directory
 tmp_dir <- tempdir()
@@ -174,6 +176,7 @@ class(EProc)
 EProc$sMDSGapFill('Tair', FillAll = FALSE,  minNWarnRunLength = NA)
 EProc$sMDSGapFill('Rg', FillAll = FALSE,  minNWarnRunLength = NA)
 EProc$sMDSGapFill('VPD', FillAll = FALSE,  minNWarnRunLength = NA)
+
 # use MDS to get the "best guess" of true flux
 EProc$sMDSGapFill('NEE') 
 
@@ -255,13 +258,16 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 -   EC towers may underestimate respiration fluxes as CO2 is not being
     transported upward efficiently to be measured.
 
-## Different treatments of u\* thresholds:
+## Different u\* threshold treatment options:
 
 The u\* threshold is the minimum u\* above which respiration reaches a
-plateau (see figure under /plots). Different reatment options: -
-User-specific u\* threshold - Single (fixed) u\* threshold - Annually
-varying u\* threshold - Seasonally varying u\* threshold
-<https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html>
+plateau (see figure under `/plots`). - User-specific u\* threshold\
+- Single (fixed) u\* threshold\
+- Annually varying u\* threshold\
+- Seasonally varying u\* threshold
+
+More details: [REddyProc u\* cases
+vignette](https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html)
 
 ```{r}
 # EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # keep this line commented, please check the figure under /plots
@@ -287,9 +293,11 @@ EProc$sGetUstarScenarios()
 # EProc$useAnnualUStarThresholds() # annual varing u*
 ```
 
-Bonus training: create a figure about u* threshold determined using different aggregationMode.
+Bonus training: create a figure about u\* threshold determined using
+different aggregationMode.
 
 # 06: MDS: gapfil NEE
+YL: this part looks busy. I will check out later.
 
 -   The MDS combines two gap-filling techniques: the “look-up” table
     (LUT) and the “mean diurnal course” (MDC). \## “look-up” table (LUT)
@@ -330,21 +338,27 @@ EProc$sPlotFingerprintY("NEE_50._f", Year = 2011); EProc$sPlotFingerprintY("NEE_
 ```
 
 # 07: Partitioning NEE into Reco and GPP
-Please note:
--   NEE = Reco - GPP
--   Reco is modeled and GPP is computed as Reco - NEE;
+
+Please note: - NEE = Reco - GPP - Reco is modeled and GPP is computed as
+Reco - NEE;
 
 There are three approaches to partition FCO₂ available in REddyProc:
-- Night-time partitioning (NT): This approach relies on the assumption
-that fluxes measured at night consist purely of respiration. It uses
-nighttime fluxes to estimate a seasonally varying reference respiration
-rate and its sensitivity to temperature. 
-- Day-time partitioning (DT): This method uses a light response curve based on daytime data to
-estimate the reference respiration rate, and then applies a temperature
-response function to estimate Reco. 
-- Modified day-time partitioning: both NT and DT assume that the same Rref is applicable during daytime as
-at night; a questionable assumption due to the potential for the
-inhibition of leaf respiration in the light
+
+-   **Night-time partitioning (NT)**: This approach relies on the
+    assumption that fluxes measured at night consist purely of
+    respiration. It uses nighttime fluxes to estimate a seasonally
+    varying reference respiration rate and its sensitivity to
+    temperature (Reichstein 2005).
+
+-   **Day-time partitioning (DT)**: This method uses a light response
+    curve based on daytime data to estimate the reference respiration
+    rate, and then applies a temperature response function to estimate
+    Reco (Lasslop 2010).
+
+-   **Modified day-time partitioning**: Both NT and DT assume that the
+    same Rref is applicable during daytime as at night—a questionable
+    assumption due to the potential for inhibition of leaf respiration
+    in the light (Keenan 2019).
 
 ```{r}
 # TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving
@@ -413,3 +427,7 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
 -   Keenan, Trevor F., et al. "Widespread inhibition of daytime
     ecosystem respiration." Nature Ecology & Evolution 3.3 (2019):
     407–415.
+-   Lasslop, Gitta, et al. "Separation of net ecosystem exchange into
+    assimilation and respiration using a light response curve approach:
+    critical issues and global evaluation." Global change biology 16.1
+    (2010): 187-208.
