@@ -35,7 +35,7 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 
 
 ## 📘 Tutorial Guide
-- Typically it takes > 30 mins to install the package, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
+- Typically it takes > 30 mins to install the package, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch. 
 ---
 
 # Other learning resources
