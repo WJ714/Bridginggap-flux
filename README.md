@@ -15,7 +15,7 @@ With just one click, users can launch a virtual compute environment with all dep
 ### 🎯 Purpose of this tutorial 
 - get familiarized with the data structure and variables in FLUXNET data,
 - get familiarized with your study sites (e.g. long-term trends, seasonal patterns ...),
-- group discussion on the optional tasks,
+- group discussions on the optional tasks,
 - and make some figures to include in your group presentation.
 ## 📘 Tutorial Guide
 
