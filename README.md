@@ -19,6 +19,8 @@ With just one click, users can launch a virtual compute environment with all dep
 - group discussions on the optional tasks,
 - and make some figures to include in your group presentation.
 ## 📘 Tutorial Guide
+- R script: FLUXNET.rmd
+- We provide some example uses of FLUXNET data. You can use these as a starting point, discuss with your group, and explore other ways of plotting. Please take time to interpret the figures and include them in your group presentation (add link for group slides!).
 
 # 📦 Tutorial 2: REddyProc
 ### 🔗 What is REddyProc?
