@@ -10,8 +10,6 @@ Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux turt
 - The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.
 - The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 
-
-
 # 🔹 REddyProc
 
 Standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes uStar-filtering, gap-filling, and flux-partitioning.  
@@ -22,15 +20,12 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 
 - 1️⃣ First, a quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
 - 2️⃣ Second, gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
-- 3️⃣ Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).  
-
----
-
-
-
+- 3️⃣ Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
 ## Where to download the package?
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
+
+---
 
 # Other learning resources
 
