@@ -12,7 +12,7 @@ With just one click, users can launch a virtual compute environment with all dep
 
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
-### 🔹 Purpose of this tutorial 
+### 🎯 Purpose of this tutorial 
 - get familiarized with the data structure and variables in FLUXNET data,
 - get familiarized with your study sites (e.g. long-term trends, seasonal patterns ...),
 - and make some figures to include in your group presentation.
