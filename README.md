@@ -1,7 +1,8 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
+Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux turtorials!
 
-# Two turtorials are included: 
+# Two turtorials are included here: 
 1. get started with FLUXNET data
 2. REddyProc
    
