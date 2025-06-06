@@ -1,6 +1,6 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
-👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux tutorials!
+👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
 📚 Two tutorials are included here:
 1. 🚀 Get started with FLUXNET data  
