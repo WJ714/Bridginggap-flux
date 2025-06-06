@@ -1,14 +1,17 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
-Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux turtorials!
+👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - flux tutorials!
 
-# Two turtorials are included here: 
-1. get started with FLUXNET data
-2. REddyProc
+# 📚 Two tutorials are included here:
+1. 🚀 Get started with FLUXNET data  
+2. ⚙️ REddyProc
+
    
-# FLUXNEX data
-- The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.
-- The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
+# 🔷 FLUXNET data
+
+- 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
+- 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
+
 
 # 🔹 REddyProc
 
