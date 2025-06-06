@@ -30,3 +30,9 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 - Material used for the short course using REddyProc at EGU 2019: https://github.com/bgctw/EGU19EddyCourse/tree/master
 - high frequency data processing: https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html
 
+# Other learning resources
+
+- 📺 [FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
+- ❓ [FAQ for REddyProc](https://www.bgc-jena.mpg.de/5629512/FAQ)
+- 📚 [EGU 2019 Short Course Materials (REddyProc)](https://github.com/bgctw/EGU19EddyCourse/tree/master)
+- 🔬 [High-Frequency Data Processing Documentation](https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html)
