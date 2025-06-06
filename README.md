@@ -34,7 +34,8 @@ This package inputs pre-processed (half-)hourly data and supports further proces
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
 ### 🎯 Purpose of this tutorial 
-
+- go through a typical workflow of flux postprocessing
+- discussion in group
 
 ## 📘 Tutorial Guide
 - Typically it takes > 30 mins to install the package, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch. 
