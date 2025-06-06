@@ -8,12 +8,11 @@ With just one click, users can launch a virtual compute environment with all dep
 2. ⚙️ REddyProc: Typically it takes > 30 mins to install the package, you are encouraged to use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
 
----
 ## 🚀 FLUXNET 
 
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
----
+
 ## ⚙️ REddyProc
 
 Standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes uStar-filtering, gap-filling, and flux-partitioning.  
