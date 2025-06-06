@@ -11,7 +11,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# load packages
+# Load packages
 
 ```{r}
 library(amerifluxr) # Package for querying, downloading, and handling AmeriFlux data and metadata.
@@ -24,14 +24,14 @@ library(data.table)  # Offers fast and memory-efficient manipulation of large da
 library(ggplot2)
 ```
 
-# working directory
+# Working directory
 
 ```{r}
 # open a temporary directory
 tmp_dir <- tempdir()
 ```
 
-# 01: Download AmeriFlux BASE data
+# 01: Download AmeriFlux BASE publish
 
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats
     the submitted flux/met data in the FP Standard format, bundles them
@@ -44,8 +44,8 @@ tmp_dir <- tempdir()
 -   The Bartlett Experimental Forest (44°06′N, 71°3′W, US-Bar) is a
     temperate deciduous forest located in the northeastern United
     States, in the state of New Hampshire where it lies within the Saco
-    Ranger District of the White Mountain National Forest.
--   How to download FLUXNET data? ...
+    Ranger District of the White Mountain National Forest.(YL: may change to another site later ...)
+
 
 ```{r}
 # check out data coverage for different sites
@@ -79,10 +79,10 @@ base <- amf_read_base(file = floc,
 
 # check data coverage for meteorology
 # visualizes the BASE data availability for selected AmeriFlux sites, variables, and years.
-#PPFD_IN	Photosynthetic photon flux density, incoming	µmolPhoton m-2 s-1
-#TA	Air temperature	deg C
-#RH	Relative humidity, range 0-100	%
-#VPD	Vapor Pressure Deficit	hPa
+##PPFD_IN	Photosynthetic photon flux density, incoming	µmolPhoton m-2 s-1
+##TA	Air temperature	deg C
+##RH	Relative humidity, range 0-100	%
+##VPD	Vapor Pressure Deficit	hPa
 #more variable names: https://ameriflux.lbl.gov/data/aboutdata/data-variables/#base
 amf_plot_datayear(site_set = site_name, 
                   var_set = c("PPFD_IN", "TA", "RH", "VPD"),
@@ -95,7 +95,7 @@ amf_plot_datayear(site_set = site_name,
                   # year_set = c(2004:2023),
                   nonfilled_only = TRUE)
 
-# you can uncomment the line below to check data availability by year for all variables
+# You can uncomment the line below to check data availability by year for all variables
 # amf_plot_datayear(site_set = site_name, nonfilled_only = FALSE)
 ```
 
@@ -152,7 +152,7 @@ class(EProc)
 
 # 04: IQR filtering
 
--   IQR: interquartile range, which is the difference between the 75th
+-   Interquartile range (IQR), which is the difference between the 75th
     percentile (Q3) and the 25th percentile (Q1) of a dataset;
 -   Marginal distribution sampling (MDS, Reichstein et al., 2005) has
     been adopted as a standard gap-filling method;
@@ -172,12 +172,12 @@ class(EProc)
     <https://doi.org/10.1016/j.agrformet.2025.110438>
 
 ```{r}
-# gapfill meteorological variables using MDS
+# Gapfill meteorological variables using MDS
 EProc$sMDSGapFill('Tair', FillAll = FALSE,  minNWarnRunLength = NA)
 EProc$sMDSGapFill('Rg', FillAll = FALSE,  minNWarnRunLength = NA)
 EProc$sMDSGapFill('VPD', FillAll = FALSE,  minNWarnRunLength = NA)
 
-# use MDS to get the "best guess" of true flux
+# Use MDS to get the "best guess" of true flux
 EProc$sMDSGapFill('NEE') 
 
 # Calculate residuals and identify outliers
@@ -239,22 +239,22 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 ## What is u\*?
 
 -   u\*: Friction velocity (m/s) is a measure of turbulent mixing in the
-    lower atmosphere near the surface
+    lower atmosphere near the surface;
 -   It can be thought of as a velocity scale, a representative value for
-    a 'turbulent velocity'
--   u\* is defined using the vertical flux of horizontal momentum
--   (u\*)\^2 = overbar(u'w')\^2 + overbar(v'w')\^2
--   CO2 transport is heavily influenced by turbulent mixing.
+    a 'turbulent velocity';
+-   u\* is defined using the vertical flux of horizontal momentum;
+-   (u\*)\^2 = overbar(u'w')\^2 + overbar(v'w')\^2;
+-   CO2 transport is heavily influenced by turbulent mixing;
 -   Unfavorable conditions could be detected by inspecting the
     relationship of nighttime NEE vs. u\*.
 
 ## Why is u\* filtering needed?
 
--   To filter out period with low turbulence
+-   To filter out period with low turbulence;
 -   At low u\* values, respiration is negatively biased;
 -   At night when winds are calm, the atmosphere often becomes stable
-    with low turbulence and low mixing locally.
--   This could lead to CO2 pooling near the surface or within canopies.
+    with low turbulence and low mixing locally;
+-   This could lead to CO2 pooling near the surface or within canopies;
 -   EC towers may underestimate respiration fluxes as CO2 is not being
     transported upward efficiently to be measured.
 
@@ -264,9 +264,7 @@ The u\* threshold is the minimum u\* above which respiration reaches a
 plateau (see figure under `/plots`). - User-specific u\* threshold\
 - Single (fixed) u\* threshold\
 - Annually varying u\* threshold\
-- Seasonally varying u\* threshold
-
-More details: [REddyProc u\* cases
+- Seasonally varying u\* threshold - More details: [REddyProc u\* cases
 vignette](https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html)
 
 ```{r}
@@ -297,6 +295,7 @@ Bonus training: create a figure about u\* threshold determined using
 different aggregationMode.
 
 # 06: MDS: gapfil NEE
+
 YL: this part looks busy. I will check out later.
 
 -   The MDS combines two gap-filling techniques: the “look-up” table
@@ -376,7 +375,6 @@ Bonus training: create some figures to compare different partitioning
 method;
 
 # 08: Visualise the output
-
 ```{r}
 FilledEddyData <- EProc$sExportResults()
 combined.df <- cbind(EddyData, FilledEddyData)
@@ -411,6 +409,7 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   theme_minimal() +
   ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
 ```
+Bonus training: gap-fill H or LE, and plot the diurnal patterns.
 
 # References
 
