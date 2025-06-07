@@ -30,20 +30,23 @@ library(Kendall)
 data_dir = ("C:/Users/yl763/Documents/GitHub/data_FLUXNET/AMF_US-Bar_FLUXNET_SUBSET_2004-2022_4-6/")
 ```
 
-# FLUXNET 2015
+# FLUXNET data
 - variables quick start guide <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
 - data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 - full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
 
-# Working on YY data
-## Figure 1: annual sums of NEE
+# Working on annual data (YY)
+## read in data
 ```{r}
 setwd(data_dir); df.YY = fread("AMF_US-Bar_FLUXNET_SUBSET_YY_2004-2022_4-6.csv")
 df.YY$year = as.numeric(df.YY$TIMESTAMP)
-
 head(df.YY$NEE_VUT_REF) # gapfilled annual sums of NEE, unit: ???
 head(df.YY$NEE_VUT_REF_RANDUNC) # uncertainty of annual sum, unit: ???
+```
 
+## Figure 1: annual sums of NEE
+- The random uncertainty of NEE is estimated by ...(Richardson et al, 2005)
+```{r}
 # create upper and lower bounds
 df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
 df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
@@ -54,10 +57,8 @@ min_NEE <- min(df.YY$NEE_lower, na.rm = TRUE)
 range_NEE <- max_NEE - min_NEE
 
 df.YY$QC_scaled <- min_NEE + (df.YY$NEE_VUT_REF_QC / max(df.YY$NEE_VUT_REF_QC, na.rm = TRUE)) * range_NEE
-
 ggplot(df.YY, aes(x = year)) +
-  # Uncertainty ribbon
-  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) +
+  geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) + # random uncertainty 
   geom_line(aes(y = NEE_VUT_REF), color = "black", size = 1) +
   geom_smooth(aes(y = NEE_VUT_REF), method = "lm", color = "red", se = FALSE, linetype = "dashed") + # Trend line
   geom_col(aes(y = QC_scaled), fill = "orange", width = 0.3, alpha = 0.5) + # QC flag bar plot
@@ -67,18 +68,21 @@ ggplot(df.YY, aes(x = year)) +
       ~ (. - min_NEE) / range_NEE * max(df.YY$NEE_VUT_REF_QC, na.rm = TRUE),
       name = "QC Flag"
     )
-  ) + theme_minimal()
+  ) + my_theme
   
 # The Mann-Kendall trend test is used to assess whether there is a significant monotonic trend (either increasing or decreasing) in a time series. 
 MannKendall(df.YY$NEE_VUT_REF) # when P < 0.05, you can reject the null hypothesis ("no trend").
 ```
 
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+- Plot annual sums of LE and H (add these to your group presentation).
 
-# Working on HH data
+
+# Aggreate half hourly data (HH) to monthly scale
 ## read in half hourly data
 ```{r}
-setwd(data_dir) 
-df.HH = fread(paste0("AMF_US-Bar_FLUXNET_SUBSET_HH_2004-2022_4-6.csv")) # read in half hourly data
+setwd(data_dir) ; df.HH = fread(paste0("AMF_US-Bar_FLUXNET_SUBSET_HH_2004-2022_4-6.csv")) 
 # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
 df.HH <- df.HH %>%
   mutate(across(everything(), ~na_if(. , -9999)))
@@ -125,7 +129,11 @@ monthly_data <- df.HH %>%
     y_label_pos = max(GPP, RECO, NEE, na.rm = TRUE) * 1.2
   ) 
 ```
-## Figure 2: montly meterological variables
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+
+
+## Figure 2: monthly meterological variables
 ```{r}
 # Tair -----------------------------------------------------
 monthly_data <- monthly_data %>%
@@ -160,7 +168,7 @@ ggplot(monthly_data, aes(x = month_year)) +
                  by = 4),
     limits = c(floor(min(monthly_data$Tair, na.rm = TRUE)) - 5, 
                ceiling(max(monthly_data$Tair, na.rm = TRUE)) + 5)
-  ) + theme_minimal(base_size = 14)
+  ) + my_theme
 
 # Incoming shortwave radiation -----------------------------------------------------
 monthly_data <- monthly_data %>%
@@ -195,9 +203,11 @@ ggplot(monthly_data, aes(x = month_year)) +
                  ceiling(max(monthly_data$SW_IN, na.rm = TRUE) / 10) * 10, 
                  by = 50),
     limits = c(0, ceiling(max(monthly_data$SW_IN, na.rm = TRUE)) + 5)
-  ) + 
-  theme_minimal(base_size = 14) 
+  ) + my_theme
 ```
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+- Alternatively, plot monthly anomalies of Tair and SW_IN, and add the figures to your group presentation.
 
 ## Figure 3: Monthly NEE, GPP, RECO
 ```{r}
@@ -235,7 +245,7 @@ ggplot(monthly_data, aes(x = month_year)) +
                  by = 20),
     )+
   # X-axis settings
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  theme_minimal(base_size = 14)
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  my_theme
 ```
 
 
@@ -311,7 +321,7 @@ names(df.DD)
 
 # Optional: Qualify flags
 ```{r, fig.height=5, fig.width=9}
-df.HH <- df.HH %>%
+df.HH <- df.HH %>% # using half-hourly data
   mutate(
     year = year(TIMESTAMP_END),
     DOY = yday(TIMESTAMP_END) + 
@@ -387,10 +397,13 @@ data_with_labels %>%
     color = "gray30"
   ) +
   labs(
-    title = "half hourly FCO2 and quality flags",
-    x = "DOY", y = expression(FCO2~(g~C~m^{-2}~d^{-1})) # unit?
+    title = "Half hourly FCO2 and quality flags for a single year",
+    x = "DOY", y = expression(FCO2~(g~C~m^{-2}~d^{-1})) 
   ) + my_theme
 ```
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+
 
 # Optional: Ecosystem water budget
 ET = Evapotranspiration = the sum of evaporation from soil + transpiration from plants.
@@ -472,6 +485,8 @@ ggplot(monthly_data, aes(x = month_year, y = WUE)) +
 # For winter, snowfall melt is 
 # WUE: only for growing season: focus on peak growing season only ... why 
 ```
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
 
 # Optional: Light use efficiency
 ```{r}
@@ -479,16 +494,16 @@ data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to 
 data_filtered$PPFD = data_filtered$PPFD_IN
 data_filtered$NEE = data_filtered$NEE_VUT_REF
 
-# # Function to calculate light response curve for NEE based on the Michaelis-Menten equation
-light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
-  -((Amax * PPFD) / (alpha + PPFD) - Rd)
-}
-
-
-fit_NEE <- nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd), 
-               data = data_filtered, 
-               start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE), 
-                            alpha = 200, Rd = 2))
+# # # Function to calculate light response curve for NEE based on the Michaelis-Menten equation
+# light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
+#   -((Amax * PPFD) / (alpha + PPFD) - Rd)
+# }
+# 
+# 
+# fit_NEE <- nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd), 
+#                data = data_filtered, 
+#                start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE), 
+#                             alpha = 200, Rd = 2))
 
 # Extract model parameter estimates
 params <- coef(fit_NEE)
@@ -507,7 +522,7 @@ ggplot(data_filtered, aes(x = PPFD, y = NEE))  +
   geom_vline(xintercept = 1800, linetype = "dashed", color = "grey", size = 1) +
   labs(x = expression(PPFD ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")"), 
        y = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")")) +
-  theme_minimal()
+  my_theme
   
 fit_light_response_NEE <- function(data) {
   # Skip if not enough data
@@ -546,8 +561,6 @@ fit_light_response_NEE <- function(data) {
   }
 }
 
-print(fit_light_response_NEE(data_filtered))
-
 # compute A2000 for each year
 data_by_year <- split(data_filtered, data_filtered$year)
 results_by_year <- lapply(data_by_year, fit_light_response_NEE)
@@ -558,19 +571,31 @@ ggplot(results_df, aes(x = as.numeric(Year), y = A2000)) +
   geom_line() +
   geom_point() +
   labs(title = "A2000 over Years", x = "Year", y = "A2000 (µmol m⁻² s⁻¹)") +
-  theme_minimal() +
-  ylim(0,50) # I will double-check with Andrew if this makes sense
+  ylim(0,50) + my_theme
 ```
-Ideas for follow-up analysis:
-- plot A2000 for peak growing season for different years? 
-- Explore light response curve for different seasons?
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+- Explore the seasonal pattern of A2000.
+- Group discussion: What parameters used in land surface models relate to light use and photosynthesis? 
+
 
 # Optional: Energy balance closure
 ```{r}
 
 ```
-# bigleaf:
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+- 
+
+
+
+# Optional: canpy conductance
+Using package bigleaf
 canopy conductance for each month
 pull GCC and integrate with flux data ... 
-
+```{r}
+library(bigleaf)
+```
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
 
