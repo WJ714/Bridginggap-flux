@@ -75,7 +75,10 @@ df.model = df.model[df.model$year >=2003, ]
 # flux output: NEE_VUT_REF, unit: gC m-2 d-1
 # model output: NEE, unit: gC/m2/s
 df.combined = left_join(df.model, df.flux)
+
 df.combined$NEE_day <- df.combined$NEE * 86400 # number of seconds in a day
+xlab = expression(NEE[flux]~'('*gC~m^{-2}~y^{-1}*')')
+ylab = expression(NEE[model]~'('*gC~m^{-2}~y^{-1}*')')
 ggscatter(
   data = df.combined,
   x = "NEE_VUT_REF",  # flux measurement
@@ -88,8 +91,6 @@ ggscatter(
   cor.coeff.args = list(size = 6),
   label.x = min(df.combined$NEE_VUT_REF, na.rm = TRUE),
   label.y = max(df.combined$NEE_day, na.rm = TRUE),
-  xlab = "NEE_VUT_REF (Flux)",
-  ylab = "NEE (Model)",
   title = "NEE Comparison",
   ggtheme = theme_pubr()
 ) +
@@ -98,14 +99,15 @@ stat_regline_equation(
   label.x = -10,
   label.y = 5,
   size = 6
-)
+) + xlab(xlab) + ylab(ylab)
 
-
-setwd(project_dir); ggsave("figure_NEE.png")
+# setwd(project_dir); ggsave("figure_NEE.png")
 ```
 # GPP
 ```{r}
 df.combined$GPP_day <- df.combined$GPP * 86400 # number of seconds in a day
+xlab = expression(GPP[flux]~'('*gC~m^{-2}~y^{-1}*')')
+ylab = expression(GPP[model]~'('*gC~m^{-2}~y^{-1}*')')
 ggscatter(
   data = df.combined,
   x = "GPP_NT_VUT_REF", # flux measurement
@@ -128,6 +130,6 @@ stat_regline_equation(
   label.x = 0,
   label.y = 15,
   size = 6
-)
-
+) + xlab(xlab) + ylab(ylab)
+# setwd(project_dir); ggsave("figure_GPP.png")
 ```
