@@ -1,0 +1,133 @@
+---
+title: "Untitled"
+output: html_document
+date: "2025-06-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(lubridate)
+library(data.table)
+my_theme <- theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(size = 12),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = "white", color = "white"),
+    plot.background = element_rect(fill = "white", color = "white")
+  )
+
+project_dir = ("G:/My Drive/FLUX-LSM workshop/")
+```
+# read in flux data
+```{r}
+setwd(paste0(project_dir, "AMF_US-ARM_FLUXNET_SUBSET_2003-2023_4-6"))
+# read in daily flux data
+df.flux = fread("AMF_US-ARM_FLUXNET_SUBSET_DD_2003-2023_4-6.csv")
+
+df.flux <- df.flux %>%
+  mutate(
+    TIMESTAMP = ymd(TIMESTAMP),
+    year = year(TIMESTAMP),
+    month = month(TIMESTAMP),
+    date = as.Date(TIMESTAMP),
+    doy = yday(TIMESTAMP)
+  )
+```
+
+# read in model output
+```{r}
+library(ncdf4)
+setwd(project_dir)
+# Open the NetCDF file
+nc <- nc_open("ELM_output_US_ARM.nc")
+
+# Extract time (mcdate)
+mcdate <- ncvar_get(nc, "mcdate")
+
+# Extract selected variables
+vars_to_extract <- c("NEE", "GPP", "ER", "TSOI_10CM", "FSH", "RH2M")
+data_list <- lapply(vars_to_extract, function(var) ncvar_get(nc, var))
+
+# Combine into data frame
+df.model <- data.frame(mcdate = mcdate)
+for (i in seq_along(vars_to_extract)) {
+  df.model[[vars_to_extract[i]]] <- data_list[[i]]
+}
+
+# Close NetCDF file
+nc_close(nc)
+
+# modify time variables
+df.model <- df.model %>%
+  mutate(
+    mcdate = ymd(mcdate),
+    year = year(mcdate),
+    month = month(mcdate),
+    date = as.Date(mcdate),
+    doy = yday(mcdate)
+  )
+df.model = df.model[df.model$year >=2003, ]
+```
+# NEE
+```{r}
+# flux output: NEE_VUT_REF, unit: gC m-2 d-1
+# model output: NEE, unit: gC/m2/s
+df.combined = left_join(df.model, df.flux)
+df.combined$NEE_day <- df.combined$NEE * 86400 # number of seconds in a day
+ggscatter(
+  data = df.combined,
+  x = "NEE_VUT_REF",  # flux measurement
+  y = "NEE_day",      # model output after unit conversion
+  color = "steelblue",
+  add = "reg.line",
+  add.params = list(color = "black", size = 1),  # regression line
+  conf.int = TRUE,
+  cor.coef = TRUE,
+  cor.coeff.args = list(size = 6),
+  label.x = min(df.combined$NEE_VUT_REF, na.rm = TRUE),
+  label.y = max(df.combined$NEE_day, na.rm = TRUE),
+  xlab = "NEE_VUT_REF (Flux)",
+  ylab = "NEE (Model)",
+  title = "NEE Comparison",
+  ggtheme = theme_pubr()
+) +
+stat_regline_equation(
+  aes(label = ..eq.label..),
+  label.x = -10,
+  label.y = 5,
+  size = 6
+)
+
+
+setwd(project_dir); ggsave("figure_NEE.png")
+```
+# GPP
+```{r}
+df.combined$GPP_day <- df.combined$GPP * 86400 # number of seconds in a day
+ggscatter(
+  data = df.combined,
+  x = "GPP_NT_VUT_REF", # flux measurement
+  y = "GPP_day", # model output after unit conversion
+  color = "darkgreen",
+  add = "reg.line",
+  add.params = list(color = "black", size = 1),  # regression line 
+  conf.int = TRUE,
+  cor.coef = TRUE,
+  cor.coeff.args = list(size = 6),  
+  label.x = min(df.combined$GPP_NT_VUT_REF, na.rm = TRUE),
+  label.y = max(df.combined$GPP, na.rm = TRUE),
+  xlab = "GPP_NT_VUT_REF (Flux)",
+  ylab = "GPP (Model)",
+  title = "GPP Comparison",
+  ggtheme = theme_pubr()
+) +
+stat_regline_equation(
+  aes(label = ..eq.label..),
+  label.x = 0,
+  label.y = 15,
+  size = 6
+)
+
+```
