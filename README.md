@@ -19,7 +19,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - Application:
 - Analysis:
 
-## 📘 Tutorial Guide
+### 📘 Tutorial Guide
 - R script: FLUXNET.rmd
 - We provide some example uses of FLUXNET data. You can use these as a starting point, discuss with your group, and explore other ways of plotting. Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
@@ -42,18 +42,18 @@ This package includes functions for post-processing half-hourly flux data:
 - Comprehension:
 - Application
 
-## 📘 Tutorial Guide
+### 📘 Tutorial Guide
 - Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch.
 - We use data from US-Ha1 for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
 - Bonus training: We've listed some suggestions for bonus training—feel free to explore them if you have extra time.
 ---
 
 # Other learning resources
-## ⏳ Working with half-hourly data:  
+### ⏳ Working with half-hourly data:  
 - 📺 [FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
 - ❓ [FAQ for REddyProc](https://www.bgc-jena.mpg.de/5629512/FAQ)
 - 📚 [EGU 2019 Short Course Materials (REddyProc)](https://github.com/bgctw/EGU19EddyCourse/tree/master)
-## ⚡ Working with high-frequency data:
+### ⚡ Working with high-frequency data:
 - 🔬 [EcoFlux Lab: High-Frequency Data Processing Documentation](https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html)
 
 # References
