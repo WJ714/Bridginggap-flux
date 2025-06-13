@@ -13,12 +13,13 @@ With just one click, users can launch a virtual compute environment with all dep
 ### 🔗 What is FLUXNET?
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
-### 🎯 Purpose of this tutorial 
-- get familiarized with the data structure and variables in FLUXNET data,
-- get familiarized with your study sites (e.g. long-term trends, seasonal patterns ...),
-- group discussions on the optional tasks,
-- and make some figures to include in your group presentation.
-## 📘 Tutorial Guide
+### 🎯 Tutorial outcomes
+- Knowledge: FLUXNET data products
+- Comprehension: data structure and variables in FLUXNET data; understanding study sites (e.g. long-term trends, seasonal patterns ...)
+- Application:
+- Analysis:
+
+### 📘 Tutorial Guide
 - R script: FLUXNET.rmd
 - We provide some example uses of FLUXNET data. You can use these as a starting point, discuss with your group, and explore other ways of plotting. Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
@@ -36,20 +37,23 @@ This package includes functions for post-processing half-hourly flux data:
 ### Where to download the package?
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
-### 🎯 Purpose of this tutorial 
-- go through a typical workflow of flux postprocessing
-- group discussion
+### 🎯 Tutorial outcomes
+- Knowledge: 
+- Comprehension:
+- Application
 
-## 📘 Tutorial Guide
-- Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch. 
+### 📘 Tutorial Guide
+- Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch.
+- We use data from US-Ha1 for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
+- Bonus training: We've listed some suggestions for bonus training—feel free to explore them if you have extra time.
 ---
 
 # Other learning resources
-## ⏳ Working with half-hourly data:  
+### ⏳ Working with half-hourly data:  
 - 📺 [FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
 - ❓ [FAQ for REddyProc](https://www.bgc-jena.mpg.de/5629512/FAQ)
 - 📚 [EGU 2019 Short Course Materials (REddyProc)](https://github.com/bgctw/EGU19EddyCourse/tree/master)
-## ⚡ Working with high-frequency data:
+### ⚡ Working with high-frequency data:
 - 🔬 [EcoFlux Lab: High-Frequency Data Processing Documentation](https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html)
 
 # References
