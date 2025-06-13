@@ -41,8 +41,8 @@ This package includes functions for post-processing half-hourly flux data:
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
 ### 🎯 Tutorial outcomes
 - Knowledge: flux postprocessing, including u* filtering, gap-filling and partitioning;
-- Comprehension: 
-- Application: 
+- Comprehension: understanding different processing levels of data products; 
+- Application: working on one typical workflow using REddyProc;
 
 ### 📘 Tutorial Guide
 - R script `REddyProc.rmd`
