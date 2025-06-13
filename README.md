@@ -16,7 +16,7 @@ With just one click, users can launch a virtual compute environment with all dep
 ### 🎯 Tutorial outcomes
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
 - Application: Work in groups to utilize FLUXNET data from your study sites;
-- Analysis: Explore temporal trends in meteorological and flux data at selected study sites; 
+- Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
 
 ### 📘 Tutorial Guide
 - In `FLUXNET.rmd`, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
