@@ -6,8 +6,8 @@ With just one click, users can launch a virtual compute environment with all dep
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 ### 📚 Two tutorials are included here:
-1. 🌐 Get started with FLUXNET data  
-2. 📦 REddyProc
+1. 🌐 Get familiarized with the FLUXNET dataset
+2. 📦 one typical workflow for REddyProc
 
 # 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
@@ -20,10 +20,11 @@ With just one click, users can launch a virtual compute environment with all dep
 
 ### 📘 Tutorial Guide
 - R script `FLUXNET.rmd`
-- You are free to work locally on your computer using other programming languages for plotting. We just provide some example usage of FLUXNET data.
-- You can use these as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
-- Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
-- Required task: Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
+- You are free any programming language you prefer for plotting.
+- In `FLUXNET.rmd`, we provide example use cases using FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
+- The input data use in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
+- Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
   
 # 📦 Tutorial 2: REddyProc
@@ -33,9 +34,9 @@ REddyProc is a R package about standard and extensible Eddy-Covariance data post
 ⚙️ It is important for understanding ecosystem dynamics and upscaling exchange fluxes (Aubinet et al., 2012).  
 
 This package includes functions for post-processing half-hourly flux data:
-- 1️⃣ First, a quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
-- 2️⃣ Second, gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
-- 3️⃣ Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
+- 1️⃣ A quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
+- 2️⃣ Gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
+- 3️⃣ The net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
 ### Where to download the package?
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
