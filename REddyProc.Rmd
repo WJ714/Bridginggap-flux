@@ -96,6 +96,7 @@ amf_plot_datayear(site_set = site_name,
 ```
 
 # 02: Organise input data
+
 ```{r}
 # subset data for two years
 base = base[base$YEAR %in% c(2020,2021), ]
@@ -297,11 +298,12 @@ different aggregationMode.
 
 # 06: MDS: gapfil NEE
 
-YL: this part looks busy. I will check out later.
-
 -   The MDS combines two gap-filling techniques: the “look-up” table
-    (LUT) and the “mean diurnal course” (MDC). \## “look-up” table (LUT)
-    Fluxes are expected similar if they are
+    (LUT) and the “mean diurnal course” (MDC).\
+
+## “look-up” table (LUT)
+
+Fluxes are expected similar if they are:
 
 -   at similar environmental conditions
 
@@ -310,16 +312,15 @@ YL: this part looks busy. I will check out later.
 
 -   and close in time
 
-    -   increasing time window until enough observations \## “mean
-        diurnal course” (MDC) Fluxes are expected similar if they are
+    -   increasing time window until enough observations\
 
--   at the same time of the day
+## “mean diurnal course” (MDC)
 
--   not too many days away
-
--   The methods are effective for short gaps as the missing values are
-    replaced by the average of response variables under similar weather
-    conditions in a small-time window; Combines LUT and MDC
+Fluxes are expected similar if they are at the same time of the day and
+not too many days away;\
+The methods are effective for short gaps as the missing values are
+replaced by the average of response variables under similar weather
+conditions in a small-time window;
 
 Quality flag increases with fewer variables and larger time windows
 
@@ -329,18 +330,16 @@ Quality flag increases with fewer variables and larger time windows
 
 ```{r}
 # fingerplot: inspect gaps needed to be filled
-EProc$sPlotFingerprintY("NEE", Year = 2011); EProc$sPlotFingerprintY("NEE", Year = 2012)
+EProc$sPlotFingerprintY("NEE", Year = 2020); EProc$sPlotFingerprintY("NEE", Year = 2021)
 # use MDS to gapfill flux data
 EProc$sMDSGapFillUStarScens('NEE')
 
 # gaps in flux data are filled 
-EProc$sPlotFingerprintY("NEE_50._f", Year = 2011); EProc$sPlotFingerprintY("NEE_50._f", Year = 2012)
+EProc$sPlotFingerprintY("NEE_50._f", Year = 2020); EProc$sPlotFingerprintY("NEE_50._f", Year = 2021)
 ```
 
 # 07: Partitioning NEE into Reco and GPP
-
-Please note: - NEE = Reco - GPP - Reco is modeled and GPP is computed as
-Reco - NEE;
+Reco is modeled and GPP is computed as Reco - NEE;
 
 There are three approaches to partition FCO₂ available in REddyProc:
 
@@ -362,7 +361,7 @@ There are three approaches to partition FCO₂ available in REddyProc:
 
 ```{r}
 # TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving
-EProc$sSetLocationInfo(LatDeg = 44.0646, LongDeg = -71.2881, TimeZoneHour = -5)
+EProc$sSetLocationInfo(LatDeg = 46.2420, LongDeg =-89.3477, TimeZoneHour = -6)
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
 EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 
@@ -372,8 +371,7 @@ EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 names(EProc$sTEMP)
 ```
 
-Bonus training: create some figures to compare different partitioning
-method;
+Bonus training: comparing different partitioning method;
 
 # 08: Visualise the output
 ```{r}
@@ -410,6 +408,7 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   theme_minimal() +
   ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
 ```
+
 Bonus training: gap-fill H or LE, and plot the diurnal patterns.
 
 # References

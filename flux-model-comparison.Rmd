@@ -18,13 +18,13 @@ my_theme <- theme_minimal(base_size = 14) +
     plot.background = element_rect(fill = "white", color = "white")
   )
 
-project_dir = ("G:/My Drive/FLUX-LSM workshop/")
+project_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/")
 ```
 # read in flux data
 ```{r}
-setwd(paste0(project_dir, "AMF_US-ARM_FLUXNET_SUBSET_2003-2023_4-6"))
+setwd(paste0(project_dir, "AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6"))
 # read in daily flux data
-df.flux = fread("AMF_US-ARM_FLUXNET_SUBSET_DD_2003-2023_4-6.csv")
+df.flux = fread("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")
 
 df.flux <- df.flux %>%
   mutate(
@@ -41,7 +41,7 @@ df.flux <- df.flux %>%
 library(ncdf4)
 setwd(project_dir)
 # Open the NetCDF file
-nc <- nc_open("ELM_output_US_ARM.nc")
+nc <- nc_open("ELM_output_US_Syv.nc")
 
 # Extract time (mcdate)
 mcdate <- ncvar_get(nc, "mcdate")
@@ -68,7 +68,7 @@ df.model <- df.model %>%
     date = as.Date(mcdate),
     doy = yday(mcdate)
   )
-df.model = df.model[df.model$year >=2003, ]
+df.model = df.model[df.model$year >=2001, ] # start year of flux measurement
 ```
 # NEE
 ```{r}
@@ -101,7 +101,6 @@ stat_regline_equation(
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", size = 1) +
   xlab(xlab) + ylab(ylab) +
   xlim(-10,10) + ylim(-10,10)
-
 
 setwd(project_dir); ggsave("figure_NEE.png")
 ```
