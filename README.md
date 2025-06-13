@@ -23,6 +23,8 @@ With just one click, users can launch a virtual compute environment with all dep
 - We just provide some example uses of FLUXNET data.
 - You can use these as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
 - Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- Required task: Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
+- Bonus task: We provide three examples related to ecosystem water budget, light use efficiency, and energy balance closure. Please explore 2–3 of them within your group.
 
 
 # 📦 Tutorial 2: REddyProc
