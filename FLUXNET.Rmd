@@ -199,9 +199,7 @@ ggplot(monthly_data, aes(x = month_year)) +
     limits = c(0, ceiling(max(monthly_data$SW_IN, na.rm = TRUE)) + 5)
   ) + my_theme
 ```
-Where to go from here:
-- Interpret the figure and include it in your group presentation.
-- Alternatively, plot monthly anomalies of Tair and SW_IN, and add the figures to your group presentation.
+
 
 ## Figure 3: Monthly NEE, GPP, RECO (to be updated with Mo's figure)
 ```{r}
@@ -241,7 +239,11 @@ ggplot(monthly_data, aes(x = month_year)) +
   # X-axis settings
   scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  my_theme
 ```
-
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+You can also create your own figures:
+- plot monthly anomalies of meterological variables.
+- plot diural patterns of meterological variables.
 
 # Optional: Qualify flags
 ```{r, fig.height=5, fig.width=9}
@@ -492,11 +494,7 @@ Where to go from here:
 - Interpret the figure and include it in your group presentation.
 - 
 
+Other ideas for group work: 
+- using `bigleaf` package to explore surface conductance and stomatal slope parameter; https://cran.r-project.org/web/packages/bigleaf/vignettes/bigleaf_tutorial.pdf 
 
-# Optional: Canpy conductance for each month
-```{r}
-library(bigleaf)
-```
-Where to go from here:
-- Interpret the figure and include it in your group presentation.
 
