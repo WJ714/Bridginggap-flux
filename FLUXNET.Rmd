@@ -27,7 +27,8 @@ library(lubridate)
 library(dplyr)
 library(Kendall)
 # working directory
-data_dir = ("G:/My Drive/FLUX-LSM workshop/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6")
+data_dir = ("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test/FLUXNET_US-Syv/") # Yujie's local path
+# data_dir = "~/"
 ```
 
 # FLUXNET data
@@ -84,14 +85,27 @@ Where to go from here:
 # Aggreate half hourly data (HH) to monthly scale
 ## read in half hourly data
 ```{r}
-setwd(data_dir) ; df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
+# setwd(data_dir); df.HH = read.csv(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
+# df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
+# df.HH <- df.HH %>%
+#   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+# df.HH <- df.HH[df.HH$year >= 2012 & df.HH$year <= 2023, ]
+# setwd(data_dir); write.csv(df.HH, "AMF_US-Syv_FLUXNET_SUBSET_HH_2012-2023_4-6.csv")
+
+setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
 # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
 df.HH <- df.HH %>%
   mutate(across(everything(), ~na_if(. , -9999)))
+
 # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
 class(df.HH$TIMESTAMP_END)
 df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
 class(df.HH$TIMESTAMP_END)
+
+# Create columns of year and month
+df.HH <- df.HH %>%
+  mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+
 ```
 
 
@@ -103,9 +117,7 @@ sec_per_30min <- 30*60  # Seconds in 30 minutes
 # Conversion factor for converting µmol CO2 m-2 s-1 to gC per 30 min
 conversion_factor_C <- (12 * 10^(-3)) * 1800 / 1000  # (mg C per µmol) * (sec per 30 min) / (mg to g)
 
-# Create a year and month column for data summary table
-df.HH <- df.HH %>%
-  mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+
 df.HH <- df.HH %>%
   mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
 # Summarize the data by year and month for NEE, GPP, RECO, and additional variables
@@ -224,7 +236,7 @@ ggplot(monthly_data, aes(x = month_year)) +
   geom_vline(data = monthly_data %>% filter(month == 12), 
              aes(xintercept = as.numeric(month_year) + 15), 
              linetype = "dashed", color = "black", size = 0.5) +
-  
+
   # Move year labels higher
   geom_text(data = monthly_data %>% filter(month == 6), 
             aes(x = year_label_pos, y = y_label_pos, label = year), 

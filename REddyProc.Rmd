@@ -24,13 +24,6 @@ library(data.table)  # Offers fast and memory-efficient manipulation of large da
 library(ggplot2)
 ```
 
-# Working directory
-
-```{r}
-# open a temporary directory
-tmp_dir <- tempdir()
-```
-
 # 01: Download AmeriFlux BASE publish
 
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats
@@ -66,8 +59,9 @@ site_name = "US-Syv"
 #   )
 
 # If you do not have an account, you can directly start from here
-setwd("~/") 
-# setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test")
+tmp_dir <- tempdir()
+setwd("~/") # binder wd
+setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test") # Yujie's local wd, will be removed later!
 floc =  "AMF_US-Syv_BASE-BADM_29-5.zip"
 base <- amf_read_base(file = floc,
                       unzip = TRUE,
@@ -115,7 +109,6 @@ base_df = data.frame(
   'Year' = base$YEAR,
   'Hour' = base$hour,
   'Date' = base$date,
-  'Min' = base$min,
   'Month' = base$month,
   'DoY' = base$DOY,
   'NEE' = base$FC,
@@ -270,15 +263,13 @@ plateau (see figure under `/plots`). - User-specific u\* threshold\
 vignette](https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html)
 
 ```{r}
-# EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # keep this line commented, please check the figure under /plots
 set.seed(2000)
-
 # Here, we are using nSample = 10L for demonstration, please use nSample = 1000L for real research 
 uStarTh <- EProc$sEstUstarThresholdDistribution(nSample = 10L, probs = c(0.05, 0.5, 0.95)) 
 print(uStarTh)
 
 # Define aggregation mode
-EProc$sGetUstarScenarios() # by default, annual varing u* is used
+EProc$sGetUstarScenarios() # by default, annual varying u* is used
 
 # Here, we use the single u* threshold
 uStar <- uStarTh  %>%
@@ -288,12 +279,14 @@ uStarDf <- cbind(season=na.omit(unique(uStarTh$season)), uStar)
 EProc$sSetUstarScenarios(uStarDf)
 EProc$sGetUstarScenarios()
 
-# if you want to use seasonal or annual varing u*:
-# EProc$useSeaonsalUStarThresholds()# seasonal varing u*
-# EProc$useAnnualUStarThresholds() # annual varing u*
+# if you want to use seasonal or annual varying u*:
+# EProc$useSeaonsalUStarThresholds()# seasonal varying u*
+# EProc$useAnnualUStarThresholds() # annual varying u*
+
+# EProc$sPlotNEEVersusUStarForSeason(format = "pdf") # keep this line commented when use binder, then check the figure under /plots on github repo
 ```
 
-Bonus training: create a figure about u\* threshold determined using
+Bonus training: create a figure comparing u\* threshold determined using
 different aggregationMode.
 
 # 06: MDS: gapfil NEE
