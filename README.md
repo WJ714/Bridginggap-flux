@@ -21,7 +21,7 @@ With just one click, users can launch a virtual compute environment with all dep
 ### 📘 Tutorial Guide
 - R script `FLUXNET.rmd`
 - You can use `binder`, or you are free to work locally on your computer using any programming language you prefer for plotting.
-- We provide example use cases of FLUXNET data. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
+- We provide example use cases using FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
 - Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 - Required task: Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
