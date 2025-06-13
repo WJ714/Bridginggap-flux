@@ -14,18 +14,18 @@ With just one click, users can launch a virtual compute environment with all dep
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ### 🎯 Tutorial outcomes
-- Knowledge: FLUXNET data products
-- Comprehension: data structure and variables in FLUXNET data; understanding study sites (e.g. long-term trends, seasonal patterns ...)
-- Application:
-- Analysis:
+- Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
+- Application: Work in groups to utilize FLUXNET data from your study sites;
+- Analysis: Explore temporal trends in meteorological and flux data at selected study sites; 
 
 ### 📘 Tutorial Guide
 - R script `FLUXNET.rmd`
-- We just provide some example uses of FLUXNET data.
-- You can use these as a starting point, discuss with your group, and explore other ways of plotting.
+- You are free to work locally on your computer using other programming languages for plotting. We just provide some example usage of FLUXNET data.
+- You can use these as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
 - Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
-
-
+- Required task: Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
+- Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
+  
 # 📦 Tutorial 2: REddyProc
 ### 🔗 What is REddyProc?
 REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes uStar-filtering, gap-filling, and flux-partitioning.  
@@ -40,15 +40,15 @@ This package includes functions for post-processing half-hourly flux data:
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
 ### 🎯 Tutorial outcomes
-- Knowledge: 
-- Comprehension:
-- Application
+- Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
+- Application: working on one typical workflow using REddyProc;
+- Analysis: ???
 
 ### 📘 Tutorial Guide
 - R script `REddyProc.rmd`
-- Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch.
+- Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
 - We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
-- Bonus training: We've listed some suggestions for bonus training—feel free to explore them if you have extra time.
+- Explore 'Bonus training' in the script, if you have extra time.
 ---
 
 # Other learning resources
