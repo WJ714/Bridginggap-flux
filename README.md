@@ -7,7 +7,7 @@ With just one click, users can launch a virtual compute environment with all dep
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 ### 📚 Two tutorials are included here:
 1. 🌐 Get familiarized with the FLUXNET dataset
-2. 📦 REddyProc
+2. 📦 one typical workflow for REddyProc
 
 # 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
