@@ -14,10 +14,9 @@ With just one click, users can launch a virtual compute environment with all dep
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ### 🎯 Tutorial outcomes
-- Knowledge: Understand FLUXNET data products, including data structure and key variables
-- Comprehension: Interpret the structure and meaning of variables in FLUXNET datasets
-- Application: Collaborate in groups to utilize FLUXNET data from various study sites
-- Analysis: Explore temporal trends in meteorological and flux data at selected study sites
+- Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
+- Application: Work in groups to utilize FLUXNET data from your study sites;
+- Analysis: Explore temporal trends in meteorological and flux data at selected study sites; 
 
 ### 📘 Tutorial Guide
 - R script `FLUXNET.rmd`
