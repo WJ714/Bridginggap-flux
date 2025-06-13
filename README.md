@@ -33,9 +33,9 @@ REddyProc is a R package about standard and extensible Eddy-Covariance data post
 ⚙️ It is important for understanding ecosystem dynamics and upscaling exchange fluxes (Aubinet et al., 2012).  
 
 This package includes functions for post-processing half-hourly flux data:
-- 1️⃣ First, a quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
-- 2️⃣ Second, gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
-- 3️⃣ Third, the net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
+- 1️⃣ A quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
+- 2️⃣ Gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
+- 3️⃣ The net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
 ### Where to download the package?
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
