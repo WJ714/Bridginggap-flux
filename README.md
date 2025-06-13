@@ -16,16 +16,15 @@ With just one click, users can launch a virtual compute environment with all dep
 ### 🎯 Tutorial outcomes
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
 - Application: Work in groups to utilize FLUXNET data from your study sites;
-- Analysis: Explore temporal trends in meteorological and flux data at selected study sites; 
+- Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
 
 ### 📘 Tutorial Guide
-- R script `FLUXNET.rmd`
-- You are free any programming language you prefer for plotting.
-- In `FLUXNET.rmd`, we provide example use cases using FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
-- The input data use in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
-- Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- In `FLUXNET.rmd`, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
+- You are free to use any programming language you prefer for plotting.
+- The FLUXNET data for `US-Syv` used in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) in meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
+- Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
   
 # 📦 Tutorial 2: REddyProc
 ### 🔗 What is REddyProc?
@@ -46,10 +45,11 @@ This package includes functions for post-processing half-hourly flux data:
 - Analysis: ???
 
 ### 📘 Tutorial Guide
-- R script `REddyProc.rmd`
-- Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
+- We will use R script `REddyProc.rmd`
+- Typically it takes > 30 mins to install `REddyProc` package and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
 - We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
 - Explore 'Bonus training' in the script, if you have extra time.
+- If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial. 
 ---
 
 # Other learning resources
