@@ -1,6 +1,8 @@
 ---
 title: "Figures_FLUXNET"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 date: "2025-04-23"
 ---
 
@@ -13,6 +15,11 @@ knitr::opts_chunk$set(
   warning = FALSE,  # Hide warnings
   message = FALSE   # Hide messages
 )
+library(data.table)
+library(lubridate)
+library(dplyr)
+library(Kendall)
+library(ggplot2)
 my_theme <- theme_minimal(base_size = 14) +
   theme(
     axis.text.x = element_text(size = 12),
@@ -22,13 +29,9 @@ my_theme <- theme_minimal(base_size = 14) +
     plot.background = element_rect(fill = "white", color = "white")
   )
 
-library(data.table)
-library(lubridate)
-library(dplyr)
-library(Kendall)
+
 # working directory
-data_dir = ("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test/FLUXNET_US-Syv/") # Yujie's local path
-# data_dir = "~/"
+data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/")
 ```
 
 # FLUXNET data
@@ -82,16 +85,9 @@ Where to go from here:
 - Explore the qualify flags for annual sums of LE and H.
 
 
-# Aggreate half hourly data (HH) to monthly scale
+# Working with half hourly data (HH) 
 ## read in half hourly data
 ```{r}
-# setwd(data_dir); df.HH = read.csv(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
-# df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
-# df.HH <- df.HH %>%
-#   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-# df.HH <- df.HH[df.HH$year >= 2012 & df.HH$year <= 2023, ]
-# setwd(data_dir); write.csv(df.HH, "AMF_US-Syv_FLUXNET_SUBSET_HH_2012-2023_4-6.csv")
-
 setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
 # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
 df.HH <- df.HH %>%
@@ -105,9 +101,89 @@ class(df.HH$TIMESTAMP_END)
 # Create columns of year and month
 df.HH <- df.HH %>%
   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-
 ```
+## Figure 2: qualify flags of half-hourly data
+```{r, fig.height=5, fig.width=9}
+df.HH <- df.HH %>% # using half-hourly data
+  mutate(
+    year = year(TIMESTAMP_END),
+    DOY = yday(TIMESTAMP_END) + 
+      (hour(TIMESTAMP_END) + minute(TIMESTAMP_END)/60 + second(TIMESTAMP_END)/3600) / 24,
+    qc_label = factor(
+      NEE_VUT_REF_QC,
+      levels = c(0, 1, 2, 3),
+      labels = c("Measured (0)", "Good (1)", "Medium (2)", "Poor (3)")
+    )
+  )
 
+#calculate the percentage of each flag
+qc_summary <- df.HH %>%
+  group_by(year, qc_label) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(year) %>%
+  mutate(
+    total = sum(count),
+    percent = round(100 * count / total, 1),
+    label = paste0(qc_label, ": ", percent, "%")
+  )
+# View(qc_summary)
+
+# plot qc_summary by year
+qc_summary %>%
+  filter(year >= 2004, year <= 2022) %>%
+  ggplot(aes(x = factor(year), y = percent, fill = qc_label)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(
+    name = "QC Flag",
+    values = c(
+      "Measured (0)" = "black",
+      "Good (1)" = "green4",
+      "Medium (2)" = "orange",
+      "Poor (3)" = "red"
+    )
+  ) +
+  labs(
+    title = "Summary of NEE Quality Flags",
+    x = "Year", y = "Percentage (%)"
+  ) + my_theme
+  
+
+qc_labels <- qc_summary %>%
+  group_by(year) %>%
+  summarise(
+    qc_text = paste(label, collapse = "\n"),
+    .groups = "drop"
+  )
+
+data_with_labels <- df.HH %>%
+  left_join(qc_labels, by = "year")
+
+# looking into data for one year: plot NEE with QC flags
+data_with_labels %>%
+  filter(year == 2018) %>% 
+  ggplot(aes(x = DOY, y = NEE_VUT_REF, color = qc_label)) +
+  geom_point(alpha = 0.6, size = 1) +
+  scale_color_manual(
+    name = "QC Flag",
+    values = c("Measured (0)" = "black",
+               "Good (1)" = "green4",
+               "Medium (2)" = "orange",
+               "Poor (3)" = "red")
+  ) +
+  geom_text(
+    data = qc_labels,
+    aes(x = 12, y = 20, label = qc_text),
+    inherit.aes = FALSE,
+    hjust = 0,
+    vjust = 1.1,
+    size = 3,
+    color = "gray30"
+  ) +
+  labs(
+    title = "Half hourly FCO2 and quality flags for a single year",
+    x = "DOY", y = expression(FCO2~(g~C~m^{-2}~d^{-1})) 
+  ) + my_theme
+```
 
 ## Computing monthly sums 
 ```{r}
@@ -144,7 +220,7 @@ monthly_data <- df.HH %>%
   ) 
 ```
 
-## Figure 2: monthly meterological variables
+## Figure 3: monthly meterological variables
 ```{r}
 # Tair -----------------------------------------------------
 monthly_data <- monthly_data %>%
@@ -218,7 +294,7 @@ ggplot(monthly_data, aes(x = month_year)) +
 ```
 
 
-## Figure 3: Monthly NEE, GPP, RECO (to be updated with Mo's figure)
+## Figure 4: Monthly NEE, GPP, RECO (to be updated with Mo's figure)
 ```{r}
 monthly_data <- monthly_data %>%
   mutate(y_label_pos = max(GPP,RECO, NEE, na.rm = TRUE) * 1)
@@ -262,7 +338,7 @@ You can also create your own figures:
 - plot monthly anomalies of meteorological variables.
 - plot diural patterns of meteorological variables.
 
-# Optional: Qualify flags
+# Inspect Qualify flags
 ```{r, fig.height=5, fig.width=9}
 df.HH <- df.HH %>% # using half-hourly data
   mutate(
@@ -504,7 +580,7 @@ Where to go from here:
 
 # Optional: Energy balance closure
 ```{r}
-
+# add some codes here
 ```
 Where to go from here:
 - Interpret the figure and include it in your group presentation.
