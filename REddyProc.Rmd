@@ -41,11 +41,6 @@ tmp_dir <- tempdir()
 -   AmeriFlux BASE data pipeline:
     <https://doi.org/10.1038/s41597-023-02531-2>
 -   R package `amerifluxr`: <https://github.com/chuhousen/amerifluxr>
--   The Bartlett Experimental Forest (44°06′N, 71°3′W, US-Bar) is a
-    temperate deciduous forest located in the northeastern United
-    States, in the state of New Hampshire where it lies within the Saco
-    Ranger District of the White Mountain National Forest.(YL: may change to another site later ...)
-
 
 ```{r}
 # check out data coverage for different sites
@@ -54,7 +49,7 @@ head(full.list)
 print(paste("number of sites included in BASE publish is", nrow(full.list)))
 
 # download single site flux/met data
-site_name = "US-Bar"
+site_name = "US-Syv"
 
 # please keep the codes below commented if you do not have an account 
 # floc<- amf_download_base(
@@ -71,8 +66,9 @@ site_name = "US-Bar"
 #   )
 
 # If you do not have an account, you can directly start from here
-setwd("~/")
-floc =  "AMF_US-Bar_BASE-BADM_7-5.zip"
+setwd("~/") 
+# setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test")
+floc =  "AMF_US-Syv_BASE-BADM_29-5.zip"
 base <- amf_read_base(file = floc,
                       unzip = TRUE,
                       parse_timestamp = TRUE) 
@@ -80,10 +76,10 @@ base <- amf_read_base(file = floc,
 # check data coverage for meteorology
 # visualizes the BASE data availability for selected AmeriFlux sites, variables, and years.
 ##PPFD_IN	Photosynthetic photon flux density, incoming	µmolPhoton m-2 s-1
-##TA	Air temperature	deg C
-##RH	Relative humidity, range 0-100	%
-##VPD	Vapor Pressure Deficit	hPa
-#more variable names: https://ameriflux.lbl.gov/data/aboutdata/data-variables/#base
+## TA	Air temperature	deg C
+## RH	Relative humidity, range 0-100	%
+## VPD	Vapor Pressure Deficit	hPa
+# more variable names: https://ameriflux.lbl.gov/data/aboutdata/data-variables/#base
 amf_plot_datayear(site_set = site_name, 
                   var_set = c("PPFD_IN", "TA", "RH", "VPD"),
                   # year_set = c(2004:2023),
@@ -100,35 +96,41 @@ amf_plot_datayear(site_set = site_name,
 ```
 
 # 02: Organise input data
-
-Please note: The \_suffix for variables are different for different
-sites;
-
 ```{r}
 # subset data for two years
-base = base[base$YEAR %in% c(2011,2012), ]
-# modify time variables
-# SP: would be good to explain what the code does here
+base = base[base$YEAR %in% c(2020,2021), ]
+
+# recreate time variables using TIMESTAMP_START
 base$TIMESTAMP=substr(base$TIMESTAMP_START,1,12)
 base$year=as.character(substr(base$TIMESTAMP_START,1,4))
 base$month=as.character(substr(base$TIMESTAMP_START,5,6))
 base$day= as.character(substr(base$TIMESTAMP_START,7,8))
-base$hour=as.numeric(as.character(substr(base$TIMESTAMP_START,9,10)))+ c(0.5,1)
+base$hour=as.numeric(as.character(substr(base$TIMESTAMP_START,9,10))) + c(0.5, 1)
 base$date=as.Date(with(base, paste(year, month, day, sep="-")), "%Y-%m-%d")
 base$doy=yday(base$date)
-base$min= as.character(substr(base$TIMESTAMP,11,12))
 
 # format the data to be used as input for REddyProc
-base_df = data.frame('Year' = base$year, 'Day' = base$day, 'Hour' = base$hour, 'Date' = as.Date(base$date),
-                      'Min' = base$min,  'Month' = base$month, 'DoY' = base$doy,
-                      'NEE' = base$FC_1_1_1, 'LE' = base$LE_1_1_1, 'H' = base$H_1_1_1, # flux data
-                      'Rg' = ifelse(base$PPFD_IN_PI_F_1_1_1 < 0, 0, PPFD.to.Rg(base$PPFD_IN_PI_F_1_1_1)), 
-                      'Tair' = base$TA_PI_F_1_1_1,
-                      'Tsoil' = base$TS_PI_F_1_2_1, 'RH' = ifelse(base$RH_PI_F_1_1_1 > 100, 100, base$RH_PI_F_1_1_1),
-                      'VPD' = base$VPD_PI_1_1_1, 'Ustar' = base$USTAR_1_1_1,
-                      'TIMESTAMP_START' = as.character(base$TIMESTAMP_START),
-                      'TIMESTAMP_END' = as.character(base$TIMESTAMP_END),
-                      'PPFD_f' = base$PPFD_IN_PI_F_1_1_1)
+base_df = data.frame(
+  'Year' = base$YEAR,
+  'Hour' = base$hour,
+  'Date' = base$date,
+  'Min' = base$min,
+  'Month' = base$month,
+  'DoY' = base$DOY,
+  'NEE' = base$FC,
+  'LE' = base$LE,
+  'H' = base$LE,
+  'Rg' = ifelse(base$PPFD_IN_PI_F_1_1_1 < 0, 0, PPFD.to.Rg(base$PPFD_IN_PI_F_1_1_1)),
+  'Tair' = base$TA_1_1_1,
+  'Tsoil' = base$TS_1_1_1,
+  'RH' = ifelse(base$RH_1_1_1 > 100, 100, base$RH_1_1_1),
+  'VPD' = base$VPD_PI_F_1_1_1,
+  'Ustar' = base$USTAR_1_1_1,
+  'TIMESTAMP_START' = as.character(base$TIMESTAMP_START),
+  'TIMESTAMP_END' = as.character(base$TIMESTAMP_END),
+  'PPFD' = base$PPFD_IN_PI_F_1_1_1
+)
+
 head(base_df)
 ```
 
@@ -137,13 +139,12 @@ head(base_df)
 ```{r}
 ?filterLongRuns
 #filterLongRuns : Longer runs, i.e. sequences of numerically identical values, in a series of measurements hint to problems during a noisy measurement, e.g. by sensor malfunction due to freezing. This function, replaces such values in such runs with NA to indicate missing values.
-
 EddyData <- filterLongRuns(base_df, "NEE")
 EddyData$Year <- as.numeric(EddyData$Year)
 EddyData$Hour <- as.numeric(EddyData$Hour)
 EddyData$DoY <- as.numeric(EddyData$DoY)
 EddyDataWithPosix <- fConvertTimeToPosix(EddyData, 'YDH', Year = 'Year', Day = 'DoY', Hour  = 'Hour') 
-head(EddyDataWithPosix$DateTime)
+
 EProc <- sEddyProc$new(site_name, EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE"))
 
 # EProc an R object used in REddyProc with the attributes defined
