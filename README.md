@@ -21,7 +21,9 @@ With just one click, users can launch a virtual compute environment with all dep
 
 ### 📘 Tutorial Guide
 - R script: FLUXNET.rmd
-- We provide some example uses of FLUXNET data. You can use these as a starting point, discuss with your group, and explore other ways of plotting. Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- We just provide some example uses of FLUXNET data.
+- You can use these as a starting point, discuss with your group, and explore other ways of plotting.
+- Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
 # 📦 Tutorial 2: REddyProc
