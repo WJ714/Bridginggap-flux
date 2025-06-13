@@ -20,8 +20,10 @@ With just one click, users can launch a virtual compute environment with all dep
 - Analysis:
 
 ### 📘 Tutorial Guide
-- R script: FLUXNET.rmd
-- We provide some example uses of FLUXNET data. You can use these as a starting point, discuss with your group, and explore other ways of plotting. Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- R script `FLUXNET.rmd`
+- We just provide some example uses of FLUXNET data.
+- You can use these as a starting point, discuss with your group, and explore other ways of plotting.
+- Please take time to interpret the figures and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
 # 📦 Tutorial 2: REddyProc
@@ -43,8 +45,9 @@ This package includes functions for post-processing half-hourly flux data:
 - Application
 
 ### 📘 Tutorial Guide
+- R script `REddyProc.rmd`
 - Typically it takes > 30 mins to install REddyProc and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5mins to lanuch.
-- We use data from US-Ha1 for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
+- We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
 - Bonus training: We've listed some suggestions for bonus training—feel free to explore them if you have extra time.
 ---
 
