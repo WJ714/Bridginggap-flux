@@ -19,7 +19,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
 
 ### 📘 Tutorial Guide
-- We will use or `FLUXNET.html` or `FLUXNET.rmd`;
+- We will use or `FLUXNET.html` or `FLUXNET.rmd`; 
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
 - You are free to use any programming language you feel comfortable for plotting.
 - The FLUXNET data for `US-Syv` used in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
