@@ -1,5 +1,9 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
+# Things to do before workshop
+- creat an account for downloading FLUXNET data:
+- download FLUXNET data (sublist for you study site)
+- 
 ### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
 With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research.
