@@ -1,7 +1,7 @@
 ---
-title: "Untitled"
+title: "flux-model-comparison"
 output: html_document
-date: "2025-06-09"
+date: "2025-08-02"
 ---
 
 ```{r setup, include=FALSE}
@@ -9,6 +9,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(lubridate)
 library(data.table)
+library(ggplot2)
+library(ggpubr)
+library(tidyverse)
 my_theme <- theme_minimal(base_size = 14) +
   theme(
     axis.text.x = element_text(size = 12),
@@ -25,7 +28,11 @@ project_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/")
 setwd(paste0(project_dir, "AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6"))
 # read in daily flux data
 df.flux = fread("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")
+# covert -9999 to NA
+df.flux <- df.flux %>%
+  mutate(across(everything(), ~na_if(. , -9999)))
 
+# add more time variables
 df.flux <- df.flux %>%
   mutate(
     TIMESTAMP = ymd(TIMESTAMP),
@@ -34,6 +41,7 @@ df.flux <- df.flux %>%
     date = as.Date(TIMESTAMP),
     doy = yday(TIMESTAMP)
   )
+
 ```
 
 # read in model output
@@ -47,7 +55,13 @@ nc <- nc_open("ELM_output_US_Syv.nc")
 mcdate <- ncvar_get(nc, "mcdate")
 
 # Extract selected variables
-vars_to_extract <- c("NEE", "GPP", "ER", "TSOI_10CM", "FSH", "RH2M")
+vars_to_extract <- c("NEE", # net ecosystem exchange of carbon
+                     "GPP", # gross primary production
+                     "ER", # ecosystem respiration
+                     "TSOI_10CM", # soil temperature (10cm)
+                     "FSH", # sensible heat
+                     "EFLX_LH_TOT", # total latent heat flux
+                     "RH2M") # 2m relative humidity
 data_list <- lapply(vars_to_extract, function(var) ncvar_get(nc, var))
 
 # Combine into data frame
@@ -69,20 +83,55 @@ df.model <- df.model %>%
     doy = yday(mcdate)
   )
 df.model = df.model[df.model$year >=2001, ] # start year of flux measurement
-```
-# NEE
-```{r}
-# flux output: NEE_VUT_REF, unit: gC m-2 d-1
-# model output: NEE, unit: gC/m2/s
-df.combined = left_join(df.model, df.flux)
 
-df.combined$NEE_day <- df.combined$NEE * 86400 # number of seconds in a day
+df.combined = left_join(df.model, df.flux) # dataframe combining fluxnet variables with selected model output
+names(df.combined)
+```
+# One to one figure
+## TSOI_10CM
+```{r}
+# fluxnet variable: TS_F_MDS_1, unit: °C
+# model output:  TSOI_10CM, unit: K
+xlab = expression(Tsoil[flux]~(degree*C))
+ylab = expression(Tsoil[model]~(degree*C))
+df.combined$TSOI_10CM_celsius = df.combined$TSOI_10CM - 273.15
+
+ggscatter(
+  data = df.combined,
+  x = "TS_F_MDS_1",  # flux measurement
+  y = "TSOI_10CM_celsius",      # model variable after unit conversion
+  color = "steelblue",
+  add = "reg.line",
+  add.params = list(color = "black", size = 1),  # regression line
+  conf.int = TRUE,
+  cor.coef = TRUE,
+  cor.coeff.args = list(size = 6),
+  label.x = min(df.combined$TS_F_MDS_1, na.rm = TRUE),
+  label.y = max(df.combined$TS_F_MDS_1, na.rm = TRUE),
+  title = "Tsoil Comparison",
+  ggtheme = theme_pubr()
+) +
+stat_regline_equation(
+  aes(label = ..eq.label..),
+  label.x = -10, label.y = 18, size = 6
+) + 
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", size = 1) +
+xlim(-15,25) + ylim(-15,25) +
+  xlab(xlab) + ylab(xlab)
+```
+## NEE
+```{r}
+# fluxnet variable: NEE_VUT_REF, unit: gC m-2 d-1
+# model variable: NEE, unit: gC/m2/s
+
+# convert model variable to the same unit of fluxnet variable: gC m-2 d-1
+df.combined$NEE_model <- df.combined$NEE * 86400 # number of seconds in a day
 xlab = expression(NEE[flux]~'('*gC~m^{-2}~day^{-1}*')')
 ylab = expression(NEE[model]~'('*gC~m^{-2}~day^{-1}*')')
 ggscatter(
   data = df.combined,
   x = "NEE_VUT_REF",  # flux measurement
-  y = "NEE_day",      # model output after unit conversion
+  y = "NEE_model",      # model variable after unit conversion
   color = "steelblue",
   add = "reg.line",
   add.params = list(color = "black", size = 1),  # regression line
@@ -90,29 +139,31 @@ ggscatter(
   cor.coef = TRUE,
   cor.coeff.args = list(size = 6),
   label.x = min(df.combined$NEE_VUT_REF, na.rm = TRUE),
-  label.y = max(df.combined$NEE_day, na.rm = TRUE),
+  label.y = max(df.combined$NEE_model, na.rm = TRUE),
   title = "NEE Comparison",
   ggtheme = theme_pubr()
 ) +
 stat_regline_equation(
   aes(label = ..eq.label..),
-  label.x = -10, label.y = 8, size = 6
+  label.x = -10, label.y = 5, size = 6
 ) + 
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", size = 1) +
   xlab(xlab) + ylab(ylab) +
-  xlim(-10,10) + ylim(-10,10)
-
-setwd(project_dir); ggsave("figure_NEE.png")
+  xlim(-10,10) + ylim(-10,10) 
 ```
-# GPP
+
+
+
+## GPP
 ```{r}
-df.combined$GPP_day <- df.combined$GPP * 86400 # number of seconds in a day
+# convert model variable to the same unit of fluxnet variable: gC m-2 d-1
+df.combined$GPP_model <- df.combined$GPP * 86400 # number of seconds in a day
 xlab = expression(GPP[flux]~'('*gC~m^{-2}~day^{-1}*')')
 ylab = expression(GPP[model]~'('*gC~m^{-2}~day^{-1}*')')
 ggscatter(
   data = df.combined,
   x = "GPP_NT_VUT_REF", # flux measurement
-  y = "GPP_day", # model output after unit conversion
+  y = "GPP_model", # model variable after unit conversion
   color = "darkgreen",
   add = "reg.line",
   add.params = list(color = "black", size = 1),  # regression line 
@@ -133,5 +184,47 @@ stat_regline_equation(
   geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", size = 1) +
   xlab(xlab) + ylab(ylab) + 
   xlim(0,15) + ylim(0,15)
-setwd(project_dir); ggsave("figure_GPP.png")
+# setwd(project_dir); ggsave("figure_GPP.png")
 ```
+
+# Temporal comparison 
+## TSOIL_10CM
+```{r}
+xlab = expression(Tsoil[flux]~(degree*C))
+ylab = expression(Tsoil[model]~(degree*C))
+df.combined$TSOI_10CM_celsius = df.combined$TSOI_10CM - 273.15
+df_long <- df.combined %>%
+  pivot_longer(cols = c(TS_F_MDS_1, TSOI_10CM_celsius),
+               names_to = "source",
+               values_to = "Tsoil") %>%
+  filter(year >= 2001 & year <= 2006)
+
+ggplot(df_long, aes(x = doy, y = Tsoil, color = source)) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  facet_wrap(~ year, ncol = 2) +
+  ylab(ylab) +
+  scale_color_manual(values = c("TS_F_MDS_1" = "red", "TSOI_10CM_celsius" = "blue"),
+                     labels = c("Flux", "Model")) +
+  my_theme
+```
+## NEE
+```{r}
+#smooth line graph vs DOY
+ylab = expression(NEE~'('*gC~m^{-2}~day^{-1}*')')
+df_long <- df.combined %>%
+  pivot_longer(cols = c(NEE_VUT_REF, NEE_model),
+               names_to = "source",
+               values_to = "flux") %>%
+  filter(year >= 2001 & year <= 2006) # filter years of interest
+
+ggplot(df_long, aes(x = doy, y = flux, color = source)) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  facet_wrap(~ year, ncol = 2) +
+  ylab(ylab) +
+  scale_color_manual(values = c("NEE_VUT_REF" = "red", "NEE_model" = "blue"),
+                     labels = c("Flux", "Model")) +
+  my_theme
+```
+# Other variables to compare
