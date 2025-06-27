@@ -60,12 +60,13 @@ This package includes functions for post-processing half-hourly flux data:
 ### 📘 Tutorial Guide
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial 2.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch.
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
+
 - We will use R script `REddyProc.rmd`
-- Typically it takes > 30 mins to install `REddyProc` package and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
-- We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
+- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
 - Explore 'Bonus training' in the script, if you have extra time.
-- If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial.
+- If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
 - Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
