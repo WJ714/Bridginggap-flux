@@ -19,7 +19,7 @@
 
 # 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
-- 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
+- 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks. 
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ### 🎯 Tutorial outcomes
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
@@ -68,7 +68,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
-- You can find out data for
+- Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 ---
 
 # Other learning resources
