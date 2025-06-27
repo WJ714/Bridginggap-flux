@@ -25,7 +25,6 @@
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
 - Application: Work in groups to utilize FLUXNET data from your study sites;
 - Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
-### Study sites for different groups
 
 ### 📘 Tutorial Guide
 - Script: `FLUXNET.html` or `FLUXNET.rmd`;
@@ -65,9 +64,10 @@ With just one click, users can launch a virtual compute environment with all dep
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
-- We will use R script `REddyProc.rmd`
-- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
-- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script.
+- Script: `REddyProc.rmd`;
+- Data: AmeriFlux BASE data for `US-Syv`;
+- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
+- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
 - If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
