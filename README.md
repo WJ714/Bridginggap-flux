@@ -10,8 +10,6 @@
 
 - 
 
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 ### 📚 Three tutorials are included here:
 1. 🌐 Get familiarized with the FLUXNET dataset
 2. 📦 One typical workflow for REddyProc
