@@ -64,6 +64,7 @@ This package includes functions for post-processing half-hourly flux data:
 - If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
+- link for the input data: 
 ---
 
 # Other learning resources
