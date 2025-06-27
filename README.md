@@ -68,7 +68,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
 - If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
 
-## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
+# 🔍 Tutorial 3: Flux model comparison (in progress ...)
 - Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 ---
 
