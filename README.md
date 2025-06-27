@@ -2,8 +2,8 @@
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
 # Things to do before workshop
-- creat an account for downloading FLUXNET data (add link):
-- download FLUXNET data?
+- creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
+- download FLUXNET data 
 - anything else?
 
 - 
@@ -61,7 +61,9 @@ This package includes functions for post-processing half-hourly flux data:
 - Typically it takes > 30 mins to install `REddyProc` package and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
 - We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
 - Explore 'Bonus training' in the script, if you have extra time.
-- If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial. 
+- If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial.
+
+## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
 ---
 
 # Other learning resources
