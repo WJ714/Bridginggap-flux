@@ -3,8 +3,10 @@
 
 # Things to do before workshop
 - creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
-- download FLUXNET data 
-- anything else?
+- download FLUXNET data for their study sites; (have a pdf with screencut of webpage ...)
+- download files in this repo beforehand (one day before);
+- basic plotting package on their compute: list of R package (basic); list python (pandas .... Mo)
+- test binder in this repo 
 
 - 
 ### 🔗 What is Binder?
