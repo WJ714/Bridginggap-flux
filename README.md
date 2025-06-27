@@ -31,7 +31,7 @@
 - We will use or `FLUXNET.html` or `FLUXNET.rmd`; 
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site.
 - You are free to use any programming language you feel comfortable for plotting.
-- The FLUXNET data for `US-Syv` used in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
+- Data for different dataset can be found [here] (https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) for meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
@@ -57,7 +57,6 @@ This package includes functions for post-processing half-hourly flux data:
 - Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
 - Application: working on one typical workflow using REddyProc;
 
-
 ### 📘 Tutorial Guide
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
@@ -69,7 +68,7 @@ With just one click, users can launch a virtual compute environment with all dep
 - If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
-- link for the input data: 
+- You can find out data for
 ---
 
 # Other learning resources
