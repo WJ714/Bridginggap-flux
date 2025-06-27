@@ -26,10 +26,11 @@ With just one click, users can launch a virtual compute environment with all dep
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
 - Application: Work in groups to utilize FLUXNET data from your study sites;
 - Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
+### Study sites for different groups
 
 ### 📘 Tutorial Guide
 - We will use or `FLUXNET.html` or `FLUXNET.rmd`; 
-- In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
+- In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site.
 - You are free to use any programming language you feel comfortable for plotting.
 - The FLUXNET data for `US-Syv` used in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) for meteorological and flux data;
@@ -56,7 +57,7 @@ This package includes functions for post-processing half-hourly flux data:
 ### 🎯 Tutorial outcomes
 - Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
 - Application: working on one typical workflow using REddyProc;
-- Analysis: ???
+
 
 ### 📘 Tutorial Guide
 - We will use R script `REddyProc.rmd`
