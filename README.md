@@ -61,7 +61,7 @@ This package includes functions for post-processing half-hourly flux data:
 ### 📘 Tutorial Guide
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. Please click on the icon below:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
