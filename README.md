@@ -9,14 +9,13 @@
 - test binder in this repo 
 
 - 
-### 🔗 What is Binder?
-[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for Tutorial 2: REddyProc.
+
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
-### 📚 Two tutorials are included here:
+### 📚 Three tutorials are included here:
 1. 🌐 Get familiarized with the FLUXNET dataset
 2. 📦 One typical workflow for REddyProc
+3. 🔍 Flux model comparison
 
 # 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
@@ -60,6 +59,9 @@ This package includes functions for post-processing half-hourly flux data:
 
 
 ### 📘 Tutorial Guide
+#### 🔗 What is Binder?
+[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial 2.
 - We will use R script `REddyProc.rmd`
 - Typically it takes > 30 mins to install `REddyProc` package and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
 - We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
