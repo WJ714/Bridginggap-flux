@@ -28,10 +28,11 @@
 ### Study sites for different groups
 
 ### 📘 Tutorial Guide
-- We will use or `FLUXNET.html` or `FLUXNET.rmd`; 
+- Script: `FLUXNET.html` or `FLUXNET.rmd`;
+- Data: different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
 - You are free to use any programming language you feel comfortable for plotting;
-- Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
+- 
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) for meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
