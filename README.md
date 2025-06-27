@@ -65,7 +65,7 @@ With just one click, users can launch a virtual compute environment with all dep
 
 - We will use R script `REddyProc.rmd`
 - We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
-- Explore 'Bonus training' in the script, if you have extra time.
+- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script.
 - If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
 
 ## Tutorial 3: Comparing ELM model output with flux data (in progress ...)
