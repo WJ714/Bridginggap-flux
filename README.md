@@ -3,12 +3,10 @@
 
 # Things to do before workshop
 - creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
-- download FLUXNET data for their study sites; (have a pdf with screencut of webpage ...)
-- download the github repo one week before the workshop (link to be updated);
-- basic plotting package on their compute: list of R package (basic); list python (pandas .... Mo)
-- test binder in this repo 
-
-- 
+- download FLUXNET data for their study sites; 
+- download the github repo one week before the workshop;
+- basic plotting package on your compute: list of R package (basic); list python (pandas .... Mo)
+- test binder 
 
 ### 📚 Three tutorials are included here:
 1. 🌐 Get familiarized with the FLUXNET dataset
