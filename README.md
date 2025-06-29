@@ -85,5 +85,5 @@ With just one click, users can launch a virtual compute environment with all dep
 - 🔸 Liu et al., 2025: [https://doi.org/10.1016/j.agrformet.2025.110438](https://doi.org/10.1016/j.agrformet.2025.110438)
 
 # Acknowledgement
-- 
+- Andrew D. Richardson
 
