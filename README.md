@@ -19,8 +19,8 @@
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ### 🎯 Tutorial outcomes
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
-- Application: Work in groups to utilize FLUXNET data from your study sites;
-- Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
+- Application: Work in groups to utilize FLUXNET data to understand your study site;
+- Analysis: Explore temporal trends in meteorological and flux data for your study site; 
 
 ### 📘 Tutorial Guide
 - Script: `FLUXNET.html` or `FLUXNET.rmd`;
