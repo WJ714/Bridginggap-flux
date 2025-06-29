@@ -28,7 +28,22 @@ This package includes functions for post-processing half-hourly flux data:
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
 - 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)  
 - 🌐 [REddyProcWeb online tool](https://www.bgc-jena.mpg.de/5622399/REddyProc)
+### 🎯 Tutorial outcomes
+- Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
+- Application: working on one typical workflow using REddyProc;
 
+### 📘 Tutorial Guide
+#### 🔗 What is Binder?
+[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. Please click on the icon below:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
+
+- Script: `REddyProc.rmd`;
+- Data: AmeriFlux BASE data for `US-Syv`;
+- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
+- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
+- If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
   
 # 🌐 Tutorial 2: FLUXNET data application
 ### 🔗 What is FLUXNET?
@@ -49,22 +64,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
-### 🎯 Tutorial outcomes
-- Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
-- Application: working on one typical workflow using REddyProc;
 
-### 📘 Tutorial Guide
-#### 🔗 What is Binder?
-[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. Please click on the icon below:
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
-
-- Script: `REddyProc.rmd`;
-- Data: AmeriFlux BASE data for `US-Syv`;
-- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
-- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
-- If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
 
 # 🔍 Tutorial 3: Flux model comparison (in progress ...)
 - Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
