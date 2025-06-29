@@ -1,19 +1,36 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
-# Things to do before workshop
+# Things to do before workshop 
 - creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
 - download FLUXNET data for their study sites; 
 - download the github repo one week before the workshop;
-- basic plotting package on your compute: list of R package (basic); list python (pandas .... Mo)
-- test binder 
+- Basic plotting package on your compute: list of R package (basic); list python (pandas .... Mo)
+- Test binder (optional)
 
 ### 📚 Three tutorials are included here:
-1. 🌐 Get familiarized with the FLUXNET dataset
-2. 📦 One typical workflow for REddyProc
+1. 📦 REddyProc workflow
+2. 🌐 FLUXNET data application
 3. 🔍 Flux model comparison
 
-# 🌐 Tutorial 1: FLUXNET 
+# 📦 Tutorial 1: REddyProc workflow
+### 🔗 What is REddyProc?
+REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes u* filtering, gap-filling, and flux-partitioning.  
+🌿 The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere.  
+⚙️ It is important for understanding ecosystem dynamics and upscaling exchange fluxes (Aubinet et al., 2012).  
+
+This package includes functions for post-processing half-hourly flux data:
+- 1️⃣ A quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
+- 2️⃣ Gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
+- 3️⃣ The net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
+
+### Where to download the package?
+- 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
+- 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)  
+- 🌐 [REddyProcWeb online tool](https://www.bgc-jena.mpg.de/5622399/REddyProc)
+
+  
+# 🌐 Tutorial 2: FLUXNET data application
 ### 🔗 What is FLUXNET?
 - 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks. 
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
@@ -30,22 +47,6 @@
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) for meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
-  
-# 📦 Tutorial 2: REddyProc
-### 🔗 What is REddyProc?
-REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes u* filtering, gap-filling, and flux-partitioning.  
-🌿 The Eddy-Covariance (EC) micrometeorological technique quantifies continuous exchange fluxes of gases, energy, and momentum between an ecosystem and the atmosphere.  
-⚙️ It is important for understanding ecosystem dynamics and upscaling exchange fluxes (Aubinet et al., 2012).  
-
-This package includes functions for post-processing half-hourly flux data:
-- 1️⃣ A quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
-- 2️⃣ Gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
-- 3️⃣ The net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
-
-### Where to download the package?
-- 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
-- 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)  
-- 🌐 [REddyProcWeb online tool](https://www.bgc-jena.mpg.de/5622399/REddyProc)
 
 
 ### 🎯 Tutorial outcomes
