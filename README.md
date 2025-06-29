@@ -1,32 +1,32 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
-# Things to do before workshop
-- creat an account for downloading FLUXNET data (add link):
-- download FLUXNET data?
-- anything else?
-### 🔗 What is Binder?
-[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research.
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
-### 📚 Two tutorials are included here:
+# Things to do before workshop
+- creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
+- download FLUXNET data for their study sites; 
+- download the github repo one week before the workshop;
+- basic plotting package on your compute: list of R package (basic); list python (pandas .... Mo)
+- test binder 
+
+### 📚 Three tutorials are included here:
 1. 🌐 Get familiarized with the FLUXNET dataset
 2. 📦 One typical workflow for REddyProc
+3. 🔍 Flux model comparison
 
 # 🌐 Tutorial 1: FLUXNET 
 ### 🔗 What is FLUXNET?
-- 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks.  
+- 📊 The [FLUXNET2015](https://fluxnet.org/data/fluxnet2015-dataset/) dataset includes data collected at sites from multiple regional flux networks. 
 - 🚀 The [next generation](https://fluxnet.org/2024/09/17/announcing-the-fluxnet-data-system-initiative/) of global, open, and accessible FLUXNET data will be available soon.
 ### 🎯 Tutorial outcomes
 - Comprehension: Understand FLUXNET data products (data structure, key variables, uncertainty, qualify flags, etc);
-- Application: Work in groups to utilize FLUXNET data from your study sites;
-- Analysis: Explore temporal trends in meteorological and flux data for your study sites; 
+- Application: Work in groups to utilize FLUXNET data to understand your study site;
+- Analysis: Explore temporal trends in meteorological and flux data for your study site; 
 
 ### 📘 Tutorial Guide
-- We will use or `FLUXNET.html` or `FLUXNET.rmd`; 
-- In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your study site.
-- You are free to use any programming language you feel comfortable for plotting.
-- The FLUXNET data for `US-Syv` used in `FLUXNET.rmd` can be downloaded [here](https://drive.google.com/drive/folders/1NKmjQgN3d5lPG7RSclBkhCfQkxdl3q-k?usp=sharing).
+- Script: `FLUXNET.html` or `FLUXNET.rmd`;
+- Data: different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
+- In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
+- You are free to use other programming language you feel comfortable for plotting;
 - Required task (3 figures): Explore temporal trends (long-term annual sums, monthly sums) for meteorological and flux data;
 - Bonus task: We provide three examples related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
@@ -41,20 +41,32 @@ This package includes functions for post-processing half-hourly flux data:
 - 1️⃣ A quality-check and filtering is performed based on the relationship between measured flux and friction velocity (uStar) to discard biased data (Papale et al., 2006).  
 - 2️⃣ Gaps in the data are filled based on information from environmental conditions (Reichstein et al., 2005).  
 - 3️⃣ The net flux of carbon dioxide is partitioned into its gross fluxes in and out of the ecosystem by night-time based and day-time based approaches (Lasslop et al., 2010).
+
 ### Where to download the package?
 - 📦 [CRAN release of REddyProc](https://cran.r-project.org/web/packages/REddyProc/index.html)  
-- 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)
+- 🚧 [Development version on GitHub](https://github.com/EarthyScience/REddyProc)  
+- 🌐 [REddyProcWeb online tool](https://www.bgc-jena.mpg.de/5622399/REddyProc)
+
+
 ### 🎯 Tutorial outcomes
 - Comprehension: flux postprocessing, including u* filtering, gap-filling and partitioning;
 - Application: working on one typical workflow using REddyProc;
-- Analysis: ???
 
 ### 📘 Tutorial Guide
-- We will use R script `REddyProc.rmd`
-- Typically it takes > 30 mins to install `REddyProc` package and the dependencies, please use [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio). It takes < 5 mins to lanuch.
-- We use data from US-Syv for demonstration. Please do not change to other sites if you are using REddyProc for the first time.
-- Explore 'Bonus training' in the script, if you have extra time.
-- If you want to use REddyProc for your own study sites, we have a xxx session after the turtorial. 
+#### 🔗 What is Binder?
+[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. Please click on the icon below:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
+
+- Script: `REddyProc.rmd`;
+- Data: AmeriFlux BASE data for `US-Syv`;
+- We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
+- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
+- If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
+
+# 🔍 Tutorial 3: Flux model comparison (in progress ...)
+- Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 ---
 
 # Other learning resources
