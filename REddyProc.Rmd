@@ -59,9 +59,7 @@ site_name = "US-Syv"
 #   )
 
 # If you do not have an account, you can directly start from here
-tmp_dir <- tempdir()
-setwd("~/") # binder wd
-setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test") # Yujie's local wd, will be removed later!
+tmp_dir <- tempdir(); setwd("~/") 
 floc =  "AMF_US-Syv_BASE-BADM_29-5.zip"
 base <- amf_read_base(file = floc,
                       unzip = TRUE,

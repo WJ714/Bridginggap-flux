@@ -1,8 +1,8 @@
 ---
 title: "Figures_FLUXNET"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 date: "2025-08-05"
 ---
 
@@ -39,8 +39,8 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 - data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 - full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
 
-# Working on annual data (YY)
-## read in data
+# Read in data
+## read in annual data (YY)
 ```{r}
 filename = "AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv"
 setwd(data_dir); df.YY = fread(filename)
@@ -48,7 +48,23 @@ df.YY$year = as.numeric(df.YY$TIMESTAMP)
 df.YY <- df.YY %>%
   mutate(across(everything(), ~na_if(. , -9999)))
 ```
+## read in half hourly data (HH)
+```{r}
+setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
+# FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+df.HH <- df.HH %>%
+  mutate(across(everything(), ~na_if(. , -9999)))
 
+# Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
+class(df.HH$TIMESTAMP_END)
+df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
+class(df.HH$TIMESTAMP_END)
+
+# Create columns of year and month
+df.HH <- df.HH %>%
+  mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+```
+# Required task
 ## Figure 1: annual sums of NEE
 Variables expressing random uncertainty are identified by the suffix _RANDUNC. One of two methods are used to estimate random uncertainty, applied hierarchically:
 - NEE-RANDUNC Method 1 (direct standard deviation method)
@@ -84,24 +100,6 @@ Where to go from here:
 - Plot annual sums (uncertainty) of LE and H.
 - Explore the qualify flags for annual sums of LE and H.
 
-
-# Working with half hourly data (HH) 
-## read in half hourly data
-```{r}
-setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
-# FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
-df.HH <- df.HH %>%
-  mutate(across(everything(), ~na_if(. , -9999)))
-
-# Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
-class(df.HH$TIMESTAMP_END)
-df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
-class(df.HH$TIMESTAMP_END)
-
-# Create columns of year and month
-df.HH <- df.HH %>%
-  mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-```
 ## Figure 2: qualify flags of half-hourly data
 ```{r, fig.height=5, fig.width=9}
 df.HH <- df.HH %>% # using half-hourly data
@@ -338,155 +336,7 @@ You can also create your own figures:
 - plot monthly anomalies of meteorological variables.
 - plot diural patterns of meteorological variables.
 
-# Inspect Qualify flags
-```{r, fig.height=5, fig.width=9}
-df.HH <- df.HH %>% # using half-hourly data
-  mutate(
-    year = year(TIMESTAMP_END),
-    DOY = yday(TIMESTAMP_END) + 
-      (hour(TIMESTAMP_END) + minute(TIMESTAMP_END)/60 + second(TIMESTAMP_END)/3600) / 24,
-    qc_label = factor(
-      NEE_VUT_REF_QC,
-      levels = c(0, 1, 2, 3),
-      labels = c("Measured (0)", "Good (1)", "Medium (2)", "Poor (3)")
-    )
-  )
-
-#calculate the percentage of each flag
-qc_summary <- df.HH %>%
-  group_by(year, qc_label) %>%
-  summarise(count = n(), .groups = "drop") %>%
-  group_by(year) %>%
-  mutate(
-    total = sum(count),
-    percent = round(100 * count / total, 1),
-    label = paste0(qc_label, ": ", percent, "%")
-  )
-# View(qc_summary)
-
-# plot qc_summary by year
-qc_summary %>%
-  filter(year >= 2004, year <= 2022) %>%
-  ggplot(aes(x = factor(year), y = percent, fill = qc_label)) +
-  geom_bar(stat = "identity") +
-  scale_fill_manual(
-    name = "QC Flag",
-    values = c(
-      "Measured (0)" = "black",
-      "Good (1)" = "green4",
-      "Medium (2)" = "orange",
-      "Poor (3)" = "red"
-    )
-  ) +
-  labs(
-    title = "Summary of NEE Quality Flags",
-    x = "Year", y = "Percentage (%)"
-  ) + my_theme
-  
-
-qc_labels <- qc_summary %>%
-  group_by(year) %>%
-  summarise(
-    qc_text = paste(label, collapse = "\n"),
-    .groups = "drop"
-  )
-
-data_with_labels <- df.HH %>%
-  left_join(qc_labels, by = "year")
-
-# looking into data for one year: plot NEE with QC flags
-data_with_labels %>%
-  filter(year == 2018) %>% 
-  ggplot(aes(x = DOY, y = NEE_VUT_REF, color = qc_label)) +
-  geom_point(alpha = 0.6, size = 1) +
-  scale_color_manual(
-    name = "QC Flag",
-    values = c("Measured (0)" = "black",
-               "Good (1)" = "green4",
-               "Medium (2)" = "orange",
-               "Poor (3)" = "red")
-  ) +
-  geom_text(
-    data = qc_labels,
-    aes(x = 12, y = 20, label = qc_text),
-    inherit.aes = FALSE,
-    hjust = 0,
-    vjust = 1.1,
-    size = 3,
-    color = "gray30"
-  ) +
-  labs(
-    title = "Half hourly FCO2 and quality flags for a single year",
-    x = "DOY", y = expression(FCO2~(g~C~m^{-2}~d^{-1})) 
-  ) + my_theme
-```
-Where to go from here:
-- Interpret the figure and include it in your group presentation.
-
-# Optional: Ecosystem water budget
-ET = Evapotranspiration = the sum of evaporation from soil + transpiration from plants.
-P = Precipitation = all water input from rain/snow.
-```{r}
-# https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
-monthly_data <- monthly_data %>%
-  mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
-
-# Add ET/P ratio to monthly_data
-monthly_data <- monthly_data %>%
-  mutate(ET_P_ratio = ET / P)
-
-# Add GPP/ET ratio to monthly_data for WUE
-monthly_data <- monthly_data %>%
-  mutate(WUE = -(GPP)/ET)
-
-# monthly_data <- monthly_data %>%
-#   mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
-
-# plot: P and ET
-ggplot(monthly_data, aes(x = month_year)) +
-  geom_bar(aes(y = P, fill = "P"), stat = "identity", position = "dodge", alpha = 0.7) +
-  geom_line(aes(y = ET, color = "ET"), size = 1) +
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "black", size = 0.5) +
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, 
-                y = max(ET, P, na.rm = TRUE) * 1,  # Adjust label position based on max value
-                label = year), 
-            color = "black", size = 5, fontface = "bold") +
-  labs(x = "Month", y = expression("mm of water"), title = "Monthly ET and P Trends") +
-  scale_fill_manual(values = c("P" = "gray")) +  # P (bars)
-  scale_color_manual(values = c("ET" = "#F8766D")) +  # ET (line)
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  
-  scale_y_continuous(
-    breaks = seq(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5), by = 50),
-    limits = c(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5))
-  )  + my_theme
-
-# plot: water use efficiency
-ggplot(monthly_data, aes(x = month_year, y = WUE)) +
-  geom_bar(stat = "identity", fill = "#619CFF", alpha = 0.8) +
-  labs(x = "Month", y = "WUE", title = "Water-use efficiency (GPP/ET)") +
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "black", size = 0.5) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "black", size = 0.8) +
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, 
-                y = 60,  # Adjust label position based on max value
-                label = year), 
-            color = "black", size = 5, fontface = "bold") +
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +
-  scale_y_continuous(
-    breaks = seq(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 1), by = 10),
-    limits = c(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 0.5))
-  ) + my_theme
-# For winter, snowfall melt is 
-# WUE: only for growing season: focus on peak growing season only ... why 
-```
-Where to go from here:
-- Interpret the figure and include it in your group presentation.
-
+## Bonus task
 # Optional: Light use efficiency
 ```{r}
 data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to focus on
@@ -572,6 +422,72 @@ ggplot(results_df, aes(x = as.numeric(Year), y = A2000)) +
   labs(title = "A2000 over Years", x = "Year", y = "A2000 (µmol m⁻² s⁻¹)") +
   ylim(0,50) + my_theme
 ```
+
+# Optional: Ecosystem water budget
+ET = Evapotranspiration = the sum of evaporation from soil + transpiration from plants.
+P = Precipitation = all water input from rain/snow.
+```{r}
+# https://rdrr.io/cran/bigleaf/man/LE.to.ET.html
+monthly_data <- monthly_data %>%
+  mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
+
+# Add ET/P ratio to monthly_data
+monthly_data <- monthly_data %>%
+  mutate(ET_P_ratio = ET / P)
+
+# Add GPP/ET ratio to monthly_data for WUE
+monthly_data <- monthly_data %>%
+  mutate(WUE = -(GPP)/ET)
+
+# monthly_data <- monthly_data %>%
+#   mutate(y_label_pos = max(P, ET, na.rm = TRUE) * 1)
+
+# plot: P and ET
+ggplot(monthly_data, aes(x = month_year)) +
+  geom_bar(aes(y = P, fill = "P"), stat = "identity", position = "dodge", alpha = 0.7) +
+  geom_line(aes(y = ET, color = "ET"), size = 1) +
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, 
+                y = max(ET, P, na.rm = TRUE) * 1,  # Adjust label position based on max value
+                label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  labs(x = "Month", y = expression("mm of water"), title = "Monthly ET and P Trends") +
+  scale_fill_manual(values = c("P" = "gray")) +  # P (bars)
+  scale_color_manual(values = c("ET" = "#F8766D")) +  # ET (line)
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  
+  scale_y_continuous(
+    breaks = seq(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5), by = 50),
+    limits = c(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5))
+  )  + my_theme
+
+# plot: water use efficiency
+ggplot(monthly_data, aes(x = month_year, y = WUE)) +
+  geom_bar(stat = "identity", fill = "#619CFF", alpha = 0.8) +
+  labs(x = "Month", y = "WUE", title = "Water-use efficiency (GPP/ET)") +
+  geom_vline(data = monthly_data %>% filter(month == 12), 
+             aes(xintercept = as.numeric(month_year) + 15), 
+             linetype = "dashed", color = "black", size = 0.5) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "black", size = 0.8) +
+  geom_text(data = monthly_data %>% filter(month == 6), 
+            aes(x = year_label_pos, 
+                y = 60,  # Adjust label position based on max value
+                label = year), 
+            color = "black", size = 5, fontface = "bold") +
+  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +
+  scale_y_continuous(
+    breaks = seq(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 1), by = 10),
+    limits = c(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 0.5))
+  ) + my_theme
+# For winter, snowfall melt is 
+# WUE: only for growing season: focus on peak growing season only ... why 
+```
+Where to go from here:
+- Interpret the figure and include it in your group presentation.
+
+
 Where to go from here:
 - Interpret the figure and include it in your group presentation.
 - Explore the seasonal pattern of A2000.
@@ -580,7 +496,7 @@ Where to go from here:
 
 # Optional: Energy balance closure
 ```{r}
-# add some codes here
+# please add some codes here
 ```
 Where to go from here:
 - Interpret the figure and include it in your group presentation.
