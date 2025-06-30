@@ -9,9 +9,9 @@
 - Test binder (optional)
 
 ### 📚 Three tutorials are included here:
-1. 📦 REddyProc workflow
-2. 🌐 FLUXNET data application
-3. 🔍 Flux model comparison
+1. 📦 REddyProc workflow (day 1: 75 mins)
+2. 🌐 FLUXNET data application (day 1: 75 mins)
+3. 🔍 Flux model comparison (day 3: 60 mins)
 
 # 📦 Tutorial 1: REddyProc workflow
 ### 🔗 What is REddyProc?
