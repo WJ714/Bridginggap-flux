@@ -259,7 +259,9 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 ## Different u\* threshold treatment options:
 
 The u\* threshold is the minimum u\* above which respiration reaches a
-plateau (see figure under `/plots`). - User-specific u\* threshold\
+plateau (see figure under `/plots`). 
+
+- User-specific u\* threshold\
 - Single (fixed) u\* threshold\
 - Annually varying u\* threshold\
 - Seasonally varying u\* threshold - More details: [REddyProc u\* cases
