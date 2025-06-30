@@ -2,11 +2,11 @@
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
 # Things to do before workshop 
-- creat an account for downloading FLUXNET data: https://amfcdn.lbl.gov/create 
-- download FLUXNET data for their study sites; 
-- download the github repo one week before the workshop;
-- Basic plotting package on your compute: list of R package (basic); list python (pandas .... Mo)
-- Test binder (optional)
+- Create an account to download FLUXNET data: https://amfcdn.lbl.gov/create
+- Download FLUXNET data for your study sites
+- Download the GitHub repository at least one week before the workshop
+- Install basic plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
+- Test Binder (optional)
 
 ### 📚 Three tutorials are included here:
 1. 📦 REddyProc workflow (day 1: 75 mins)
