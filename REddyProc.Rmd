@@ -358,8 +358,8 @@ There are three approaches to partition FCO₂ available in REddyProc:
     in the light (Keenan 2019).
 
 ```{r}
-# TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving
-EProc$sSetLocationInfo(LatDeg = 46.2420, LongDeg =-89.3477, TimeZoneHour = -6)
+# TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving. This is a site-specific input. 
+EProc$sSetLocationInfo(LatDeg = 46.2420, LongDeg =-89.3477, TimeZoneHour = -6) 
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
 EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 

@@ -4,6 +4,9 @@ output:
   html_document: default
   pdf_document: default
 date: "2025-08-05"
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
@@ -18,9 +21,10 @@ knitr::opts_chunk$set(
 library(data.table)
 library(lubridate)
 library(dplyr)
+library(tidyverse)
 library(Kendall)
 library(ggplot2)
-my_theme <- theme_minimal(base_size = 14) +
+my_theme <- theme_light(base_size = 14) +
   theme(
     axis.text.x = element_text(size = 12),
     panel.grid.major = element_blank(),
@@ -34,12 +38,17 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 ```
 
 # FLUXNET data
-- variables quick start guide <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
-- data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
-- full set data product: https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/ 
+
+-   Variables quick start guide:
+    <https://fluxnet.org/data/fluxnet2015-dataset/variables-quick-start-guide/>
+-   Data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
+-   Full set data product:
+    <https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/>
 
 # Read in data
+
 ## read in annual data (YY)
+
 ```{r}
 filename = "AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv"
 setwd(data_dir); df.YY = fread(filename)
@@ -47,7 +56,31 @@ df.YY$year = as.numeric(df.YY$TIMESTAMP)
 df.YY <- df.YY %>%
   mutate(across(everything(), ~na_if(. , -9999)))
 ```
+
+## read in monthly data (MM)
+
+```{r}
+setwd(data_dir)
+df.MM = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_MM_2001-2023_4-6.csv"))
+# FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+df.MM <- df.MM %>%
+  mutate(across(everything(), ~na_if(. , -9999)))
+
+# Timestamp column of flux data is formatted as YYYYMM. We need to change it to a readable timestamp format.
+class(df.MM$TIMESTAMP)
+df.MM$TIMESTAMP <- ym(as.character(df.MM$TIMESTAMP))
+class(df.MM$TIMESTAMP)
+
+# Create columns of year
+df.MM <- df.MM %>%
+  mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+```
+
 ## read in half hourly data (HH)
+
+Please note that the data for US-Ha1 and BR-Sa1 are provided at an
+hourly scale.
+
 ```{r}
 setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
 # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
@@ -63,47 +96,23 @@ class(df.HH$TIMESTAMP_END)
 df.HH <- df.HH %>%
   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
 ```
-## computing monthly sums 
-```{r}
-lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
-sec_per_30min <- 30*60  # Seconds in 30 minutes
-molarMass <- 12.011 # molar mass of carbon (C) in grams per mole (g/mol)
 
-df.HH <- df.HH %>%
-  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
-
-# Conversion factor for converting unit from µmol CO2 mol-1 to g C m-2 month-1
-conversion_factor_C <- (molarMass * 10^(-3)) * 1800 / 1000  # molarMass * (sec per 30 min) / (mg to g)
-
-# Summarize the data by year and month for NEE, GPP, RECO, and additional variables
-## For NEE, GPP, and Reco, converting unit from µmol CO2 mol-1 to g C m-2 month-1
-monthly_data <- df.HH %>%
-  group_by(year, month) %>%
-  summarise(
-    NEE = sum(NEE_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    GPP = -sum(GPP_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    RECO = sum(RECO_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    P = sum(P_F, na.rm = TRUE), # unit: mm
-    ET = sum(ET, na.rm = TRUE), # unit: mm
-    # n() * 0.5 gives the number of hours covered by the data
-    NETRAD = sum(NETRAD, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    LE = sum(LE_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    H = sum(H_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    SW_IN = sum(SW_IN_F, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    Tair = median(TA_F, na.rm = TRUE),  # Monthly median of air temperature
-    .groups = "drop"
-  ) %>%
-  mutate(
-    month_year = as.Date(paste(year, month, 1, sep = "-")),
-    year_label_pos = as.Date(paste(year, "07", "01", sep = "-"))
-  ) 
-```
 # Required task
+
 ## Task 1: annual sums of NEE
-Variables expressing random uncertainty are identified by the suffix _RANDUNC. One of two methods are used to estimate random uncertainty, applied hierarchically:
-- NEE-RANDUNC Method 1 (direct standard deviation method)
-- NEE-RANDUNC Method 2 (median standard deviation method)
-- For more details, please check out Pastorello et al. 2020
+
+-   Variables expressing random uncertainty are identified by the suffix
+    \_RANDUNC. One of two methods are used to estimate random
+    uncertainty, applied hierarchically;
+
+-   NEE-RANDUNC Method 1 (direct standard deviation method);
+
+-   NEE-RANDUNC Method 2 (median standard deviation method) - For more
+    details, please check out Pastorello et al. 2020 NEE_VUT_REF:
+
+-   NEE_VUT_REF, using Variable Ustar Threshold (VUT) for each year,
+    reference selected on the basis of the model efficiency (MEF). The
+    MEF analysis is repeated for each time aggregation.
 
 ```{r}
 # create upper and lower bounds
@@ -134,56 +143,49 @@ ggplot(df.YY, aes(x = as.factor(year), y = NEE_VUT_REF_QC)) +
 ```
 
 Where to go from here:
-- Interpret the figure and include it in your group presentation.
-- Plot annual sums (uncertainty) of LE and H.
-- Explore the qualify flags for annual sums of LE and H.
 
-## Task 2: monthly NEE, GPP, RECO 
+-   Interpret the figure and include it in your group presentation.
+
+-   Plot annual sums of LE and H (value + uncertainty).
+
+-   Explore the qualify flags for annual sums of LE and H.
+
+## Task 2: monthly NEE, GPP, RECO
+
 ```{r}
-monthly_data <- monthly_data %>%
-  mutate(y_label_pos = max(GPP, RECO, NEE, na.rm = TRUE) * 1.2)
+ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ d^{-1} * ")")
+# Create date label for graphing
+df.MM <- df.MM %>%
+  mutate(
+    date = as.Date(paste(year, month, "01", sep = "-"))
+  )
 
-ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ month^{-1} * ")")
-ggplot(monthly_data, aes(x = month_year)) +
-  # Add bars for GPP and RECO
-  geom_bar(aes(y = GPP, fill = "GPP"), stat = "identity", position = "dodge") +
-  geom_bar(aes(y = RECO, fill = "RECO"), stat = "identity", position = "dodge") +
-  
-  # Add continuous line and dots for NEE
-  geom_line(aes(y = NEE, color = "NEE"), size = 1) +
-  geom_point(aes(y = NEE, color = "NEE"), size = 3) +
-  
-  # Add vertical dashed lines at the end of each year
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "black", size = 0.5) +
+# Pivot data for easier plotting
+df.MM_long <- df.MM %>%
+  mutate(GPP_NT_VUT_REF = -GPP_NT_VUT_REF) %>%  # make GPP negative
+  select(date, year, GPP_NT_VUT_REF, RECO_NT_VUT_REF, NEE_VUT_REF) %>%
+  pivot_longer(cols = c(GPP_NT_VUT_REF, RECO_NT_VUT_REF), names_to = "variable", values_to = "value")
 
-  # Move year labels higher
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, y = y_label_pos, label = year), 
-            color = "black", size = 3) +
-  
-  # Define colors for bars and lines
-  scale_fill_manual(values = c("GPP" = "#00BFC4", "RECO" = "#F8766D")) +
-  scale_color_manual(values = c("NEE" = "purple")) +
-  
-  # Scale for the left y-axis (Carbon fluxes)
-  scale_y_continuous(
-    name = ylab,
-    breaks = seq(floor(min(monthly_data$NEE, monthly_data$GPP, monthly_data$RECO, na.rm = TRUE) / 50) * 50, 
-                 ceiling(max(monthly_data$NEE, monthly_data$GPP, monthly_data$RECO, na.rm = TRUE) / 50) * 50, 
-                 by = 20),
-    )+
-  # X-axis settings
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  my_theme
+# Create the plot
+ggplot() +
+  # Bar plots for GPP and RECO
+  geom_col(data = df.MM_long, aes(x = date, y = value, fill = variable), position = "dodge") +
+  # Line for NEE
+  geom_line(data = df.MM, aes(x = date, y = NEE_VUT_REF), color = "black", size = 1) +
+  scale_fill_manual(values = c("GPP_NT_VUT_REF" = "#2ca02c", "RECO_NT_VUT_REF" = "#d62728")) +
+  labs(x = "Date", y = ylab, fill = "Variable", 
+       title = "Daily average flux per monthly: GPP, RECO (bars) and NEE (line)") + my_theme
 ```
-Where to go from here:
-- Interpret the figures and include them in your group presentation.
-You can also create your own figures:
-- plot monthly anomalies of meteorological variables.
-- plot diural patterns of meteorological variables.
 
-## Task 3: qualify flags of half-hourly data
+Where to go from here:
+
+-   Interpret the figures and include them in your group presentation;
+
+-   You can also create your own figures, e.g. monthly anomalies, or
+    diurnal patterns;
+
+## Task 3: qualify flags for half-hourly data
+
 ```{r}
 df.HH <- df.HH %>% # using half-hourly data
   mutate(
@@ -258,7 +260,14 @@ data_with_labels %>%
   ) + my_theme
 ```
 
-## Task 4: monthly meterological variables
+Where to go from here:
+
+-   Interpret the figures and include them in your group presentation;
+
+## Task 4: monthly meteorological variables
+
+To do: update the input data as df.MM (\@Roel)
+
 ```{r}
 # Tair -----------------------------------------------------
 monthly_data <- monthly_data %>%
@@ -331,10 +340,24 @@ ggplot(monthly_data, aes(x = month_year)) +
   ) + my_theme
 ```
 
-
-
 # Bonus task
+
 ## Task 1: Light use efficiency
+
+The light response curve describes how **Net Ecosystem Exchange (NEE)**
+responds to incoming light (PPFD – photosynthetic photon flux density).
+It is a key tool for quantifying ecosystem carbon uptake
+characteristics.
+
+-   Where**:**
+
+    -   `PPFD`: Photosynthetic photon flux density (μmol m⁻² s⁻¹)
+    -   `Amax`: Maximum photosynthetic rate at light saturation (μmol
+        m⁻² s⁻¹)
+    -   `alpha`: Curvature parameter describing how quickly
+        photosynthesis saturates (unitless)
+    -   `Rd`: Dark respiration rate (μmol m⁻² s⁻¹)
+
 ```{r}
 data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to focus on
 data_filtered$PPFD = data_filtered$PPFD_IN
@@ -343,7 +366,9 @@ data_filtered$NEE = data_filtered$NEE_VUT_REF
 # Function to calculate light response curve for NEE based on the Michaelis-Menten equation
 light_response_NEE <- function(PPFD, Amax, alpha, Rd) {
   -((Amax * PPFD) / (alpha + PPFD) - Rd)
-}
+} # > The negative sign reflects the convention that **NEE is negative during net CO₂ uptake** (photosynthesis > respiration).
+
+# Fit the model using non-linear least squares 
 fit_NEE <- nls(NEE ~ light_response_NEE(PPFD, Amax, alpha, Rd),
                data = data_filtered,
                start = list(Amax = max(-data_filtered$NEE, na.rm = TRUE),
@@ -354,7 +379,8 @@ params <- coef(fit_NEE)
 Amax_est <- round(params["Amax"], 2)
 alpha_est <- round(params["alpha"], 2)
 Rd_est <- round(params["Rd"], 2)
-# compute A2000
+
+# Compute NEE at 2000 μmol m⁻² s⁻¹ light intensity
 A2000 = Amax_est * 2000/(alpha_est + 2000)
 
 # Generate predicted values from the fitted model
@@ -421,13 +447,60 @@ ggplot(results_df, aes(x = as.numeric(Year), y = A2000)) +
 ```
 
 Where to go from here:
-- Interpret the figure and include it in your group presentation.
-- Explore the seasonal pattern of A2000.
-- Group discussion: What parameters used in land surface models relate to light use and photosynthesis? 
+
+-   Interpret the figures and include them in your group presentation.
+
+-   Explore the seasonal pattern of A2000.
+
+-   Group discussion: What parameters used in land surface models relate
+    to light use and photosynthesis?
 
 ## Task 2: Ecosystem water budget
-ET = Evapotranspiration = the sum of evaporation from soil + transpiration from plants.
-P = Precipitation = all water input from rain/snow.
+
+-   ET = Evapotranspiration (the sum of evaporation from soil +
+    transpiration from plants)
+
+-    P = Precipitation (all water input from rain/snow).
+
+### aggregate to monthly sums
+
+```{r}
+lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
+sec_per_30min <- 30*60  # Seconds in 30 minutes
+molarMass <- 12.011 # molar mass of carbon (C) in grams per mole (g/mol)
+
+df.HH <- df.HH %>%
+  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
+
+# Conversion factor for converting unit from µmol CO2 mol-1 to g C m-2 month-1
+conversion_factor_C <- (molarMass * 10^(-3)) * 1800 / 1000  # molarMass * (sec per 30 min) / (mg to g)
+
+# Summarize the data by year and month for NEE, GPP, RECO, and additional variables
+## For NEE, GPP, and Reco, converting unit from µmol CO2 mol-1 to g C m-2 month-1
+monthly_data <- df.HH %>%
+  group_by(year, month) %>%
+  summarise(
+    NEE = sum(NEE_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
+    GPP = -sum(GPP_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
+    RECO = sum(RECO_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
+    P = sum(P_F, na.rm = TRUE), # unit: mm
+    ET = sum(ET, na.rm = TRUE), # unit: mm
+    # n() * 0.5 gives the number of hours covered by the data
+    NETRAD = sum(NETRAD, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    LE = sum(LE_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    H = sum(H_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    SW_IN = sum(SW_IN_F, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
+    Tair = median(TA_F, na.rm = TRUE),  # Monthly median of air temperature
+    .groups = "drop"
+  ) %>%
+  mutate(
+    month_year = as.Date(paste(year, month, 1, sep = "-")),
+    year_label_pos = as.Date(paste(year, "07", "01", sep = "-"))
+  ) 
+```
+
+### plot the data
+
 ```{r}
 # Add ET/P ratio to monthly_data
 monthly_data <- monthly_data %>%
@@ -480,20 +553,91 @@ ggplot(monthly_data, aes(x = month_year, y = WUE)) +
   ) + my_theme
 
 ```
-Where to go from here:
-- Interpret the figure and include it in your group presentation.
 
+Where to go from here: - Interpret the figure and include it in your
+group presentation.
 
 ## Task 3: Energy balance closure
+
+The **energy balance closure equation** is used to evaluate how well the
+measured energy components at an eddy covariance site balance. The
+standard form is:
+
+$$
+R_n - G = H + LE
+$$
+
+Where:
+
+-   $R_n$: Net radiation *(W m⁻²)*
+-   $G$: Ground heat flux *(W m⁻²)*
+-   $H$: Sensible heat flux *(W m⁻²)*
+-   $LE$: Latent heat flux *(W m⁻²)*
+
+A commonly used metric is the **closure ratio**, defined as:
+
+$$
+\text{Closure Ratio} = \frac{H + LE}{R_n - G}
+$$
+
+This ratio should ideally be close to **1**.\
+Values significantly below 1 suggest underestimation of turbulent fluxes
+($H + LE$), possibly due to:
+
+-   Measurement errors
+-   Missing energy storage terms
+-   Unaccounted biophysical or soil processes
+
 ```{r}
-# please add some codes here ....
+xlab  = expression(Rn+G~'('*W~m^{-2}*')')
+ylab = expression(H+LE~'('*W~m^{-2}*')')
+
+df.plot = data.frame(v1 = df.HH$NETRAD - df.HH$G_F_MDS, 
+                v2 = df.HH$H_F_MDS + df.HH$LE_F_MDS,
+                year = df.HH$year)
+
+ggscatter(
+  data = df.plot,
+  x = "v1",  y = "v2",      
+  color = "grey",
+  add = "reg.line",
+  add.params = list(color = "black", size = 1),  # regression line
+  conf.int = TRUE, cor.coef = TRUE,
+  cor.coeff.args = list(size = 6),
+  title = "Energy balance closure"
+) +
+stat_regline_equation(
+  aes(label = ..eq.label..),
+  label.x = -250, label.y = 600, # adjust the position if needed
+  size = 6
+) + 
+  geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", size = 1) +
+  xlab(xlab) + ylab(ylab) +
+  xlim(-250, 800) + ylim(-250,800) # adjust the limits if needed
+
+# Calculate closure ratio
+df.plot <- df.plot %>%
+  mutate(closure_ratio = v2 / v1)
+df.yearly <- df.plot %>%
+  group_by(year) %>%
+  summarize(mean_ratio = mean(closure_ratio, na.rm = TRUE))
+# plotu closure ratio by year
+ggplot(df.yearly, aes(x = year, y = mean_ratio)) +
+  geom_col(fill = "grey") +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "red") +
+  labs(
+    title = "Energy Balance Closure Ratio by Year",
+    x = "Year", y = "Closure Ratio (unitless)"
+  ) + my_theme
 ```
+
 Where to go from here:
-- Interpret the figure and include it in your group presentation.
--
 
+-   Interpret the figures and include them in your group presentation.
 
+# References
 
-# References 
-- Pastorello, Gilberto, et al. "The FLUXNET2015 dataset and the ONEFlux processing pipeline for eddy covariance data." Scientific data 7.1 (2020): 225.
-
+-   Pastorello, Gilberto, et al. "The FLUXNET2015 dataset and the
+    ONEFlux processing pipeline for eddy covariance data." Scientific
+    data 7.1 (2020): 225.
+-   
