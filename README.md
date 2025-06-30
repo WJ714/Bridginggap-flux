@@ -13,6 +13,7 @@
 2. 🌐 FLUXNET data application (day 1: 75 mins)
 3. 🔍 Flux model comparison (day 3: 60 mins)
 
+💡 Please note: We will use Binder for the first tutorial, but please use your own computer for Tutorials 2 and 3.
 # 📦 Tutorial 1: REddyProc workflow
 ### 🔗 What is REddyProc?
 REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes u* filtering, gap-filling, and flux-partitioning.  
