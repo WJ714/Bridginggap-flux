@@ -3,7 +3,7 @@
 
 # Things to do before workshop 
 - Create an account to download FLUXNET data: https://amfcdn.lbl.gov/create
-- Download FLUXNET data for your study sites
+- Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following the guidance of pdf file
 - Download the GitHub repository at least one week before the workshop
 - Install basic plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
 - Test Binder (optional)
