@@ -23,7 +23,17 @@ library(bigleaf)  # Provides functions to calculate leaf area index and other pl
 library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
 library(ggplot2)
 ```
+# How to save figures using R?
+We do not include code for saving figures in this tutorial. If you wish to save figures locally, you can use functions like ggsave() (for ggplot objects) or base R functions such as png(), pdf(), and others.Here are some examples:
+```{r}
+## ggsave
+# ggsave("my_figure.png", plot = p, width = 8, height = 6, dpi = 300)
 
+## base R function
+# png("my_plot.png", width = 800, height = 600, res = 150)
+# plot(x, y)
+# dev.off()
+```
 # 01: Download AmeriFlux BASE publish
 
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats

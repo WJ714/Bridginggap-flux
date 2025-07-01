@@ -44,7 +44,19 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 -   Data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 -   Full set data product:
     <https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/>
+    
+    
+# How to save figures using R?
+We do not include code for saving figures in this tutorial. If you wish to save figures locally, you can use functions like ggsave() (for ggplot objects) or base R functions such as png(), pdf(), and others.Here are some examples:
+```{r}
+## ggsave
+# ggsave("my_figure.png", plot = p, width = 8, height = 6, dpi = 300)
 
+## base R function
+# png("my_plot.png", width = 800, height = 600, res = 150)
+# plot(x, y)
+# dev.off()
+```
 # Read in data
 
 ## read in annual data (YY)
@@ -500,7 +512,6 @@ monthly_data <- df.HH %>%
 ```
 
 ### plot the data
-
 ```{r}
 # Add ET/P ratio to monthly_data
 monthly_data <- monthly_data %>%
