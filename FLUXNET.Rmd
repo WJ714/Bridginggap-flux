@@ -279,75 +279,20 @@ Where to go from here:
 
 ## Task 4: monthly meteorological variables
 ```{r}
-# Tair -----------------------------------------------------
-monthly_data <- monthly_data %>%
-  mutate(y_label_pos = max(Tair, na.rm = TRUE) * 1.2)
+# Air Temperature
+ggplot() +
+  geom_line(data = df.MM, aes(x = date, y = TA_F), color = "black", size = 1) +
+  labs(x = "Date", y = "Deg C", fill = "Variable", 
+       title = "Average Monthly Air Temperature")+
+  my_theme
 
-ggplot(monthly_data, aes(x = month_year)) +
-  # Add continuous lines and dots for Tair
-  geom_line(aes(y = Tair, color = "Tair"), size = 1) +
-  geom_point(aes(y = Tair, color = "Tair"), size = 3) +
-  
-  # Add horizontal dashed line at 0°C
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
-  
-  # Add vertical dashed lines at the end of each year
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "gray", size = 0.5) +
-  
-  # Fix year labels position
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, label = year), 
-            y = max(monthly_data$Tair, na.rm = TRUE) * 1.2, 
-            color = "black", size = 5, fontface = "bold") +
-  
-  # Customize the plot
-  labs(x = "Month", y = expression("Air Temperature (°C)"), title = "Monthly Air Temperature Trend") +
-  scale_color_manual(values = c("Tair" = "orange")) +
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  # Continuous months
-  scale_y_continuous(
-    breaks = seq(floor(min(monthly_data$Tair, na.rm = TRUE) / 10) * 10, 
-                 ceiling(max(monthly_data$Tair, na.rm = TRUE) / 10) * 10, 
-                 by = 4),
-    limits = c(floor(min(monthly_data$Tair, na.rm = TRUE)) - 5, 
-               ceiling(max(monthly_data$Tair, na.rm = TRUE)) + 5)
-  ) + my_theme
 
-# Incoming shortwave radiation -----------------------------------------------------
-monthly_data <- monthly_data %>%
-  mutate(y_label_pos = max(SW_IN, na.rm = TRUE) * 1)
-
-ggplot(monthly_data, aes(x = month_year)) +
-  # Add continuous lines and dots for SW_IN
-  geom_line(aes(y = SW_IN, color = "SW_IN"), size = 1) +
-  geom_point(aes(y = SW_IN, color = "SW_IN"), size = 3) +
-  
-  # Add horizontal dashed line at 0
-  geom_hline(yintercept = 0, linetype = "dashed", color = "black", size = 0.8) +
-  
-  # Add vertical dashed lines at the end of each year
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "gray", size = 0.5) +
-  
-  # Fix year labels position
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, label = year), 
-            y = max(monthly_data$SW_IN, na.rm = TRUE) * 1, 
-            color = "black", size = 5, fontface = "bold") +
-  
-  # Customize the plot
-  labs(x = "Month", y = expression("Incoming Shortwave Radiation (W/m²)"), 
-       title = "Monthly Incoming Shortwave Trend") +
-  scale_color_manual(values = c("SW_IN" = "blue")) +
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  
-  scale_y_continuous(
-    breaks = seq(0, 
-                 ceiling(max(monthly_data$SW_IN, na.rm = TRUE) / 10) * 10, 
-                 by = 50),
-    limits = c(0, ceiling(max(monthly_data$SW_IN, na.rm = TRUE)) + 5)
-  ) + my_theme
+# Incoming shortwave radiation
+ggplot() +
+  geom_line(data = df.MM, aes(x = date, y = SW_IN_F), color = "black", size = 1) +
+  labs(x = "Date", y = "W/m²", fill = "Variable", 
+       title = "Average Incoming Shortwave Radiation") +
+  my_theme
 ```
 
 # Bonus task
