@@ -220,10 +220,7 @@ ggplot(df.cumulative, aes(x = mcdate)) +
   scale_color_manual(values = c("Flux" = "blue", "Model" = "red")) +
   my_theme
 
-# # setwd(project_dir); fwrite(df.subset, "US-Syv_NEE.csv")
-# YUJIE: let me double-check with Andrew ...
-
-# plot by year
+# plot by cumulative NEE for each year
 {
   df_cum_long <- df.combined %>%
   pivot_longer(cols = c(NEE_flux, NEE_model),
@@ -417,20 +414,20 @@ for (variable_run in variable_list) {
   #and compute centralized RMS of reference obs (crms)
   crms <- sqrt(mean(obs_anom^2, na.rm = TRUE))
   
-  #calc relative error
+  # calculate relative error
   e_rmse <- crmse / crms
   
   S_rmse <- exp(-1 * e_rmse)
   
   # Overall score
-  S <- (domain_S_bias + 2 * S_rmse + S_dist) / 4
+  S <- (domain_S_bias + 2 * S_rmse + S_corr) / 4
   
   # Summary metrics
   metric <- c("tower mean", "tower SD","model mean", "model SD", "SD norm.", "bias", "RMSE", 
               "correlation score", "bias score", "RMSE score", "overall score")
   
   model_scores <- c(mean(obs$value), sd(obs$value), mean(model$value), sd(model$value), norm_sd,
-                     mean(bias), rmse, S_corr, domain_S_bias, S_rmse, S)
+                     mean(bias), crmse, S_corr, domain_S_bias, S_rmse, S)
   
   
   score_df <- data.frame(site = site_name, variable = variable_run, metric = metric, value = model_scores)
@@ -448,15 +445,17 @@ print(metric_df) #check out the results!
 ## plot the results
 ```{r}
 library(RColorBrewer)
-
-scores <- c("correlation score", "bias score", "RMSE score", "overall score") #only want to make heatmap of scores, other stuff will be table
+# plot subset of the metrics
+scores <- c("correlation score", "bias score", "RMSE score", "overall score") 
 metric_df_sub <- subset(metric_df, metric_df$metric %in% scores)
 var_list <- c("GPP", "NEE")
 metric_df_sub <- subset(metric_df_sub, metric_df_sub$variable %in% var_list)
-metric_df_sub$metric <- factor(metric_df_sub$metric, levels = c("bias score", "correlation score", "RMSE score", "overall score"))
+metric_df_sub$metric <- factor(metric_df_sub$metric, 
+                               levels = c("bias score", "correlation score", 
+                                          "RMSE score", "overall score"))
 
 
-p <- ggplot(metric_df_sub, aes(x = metric, y = site, fill = value)) +
+ggplot(metric_df_sub, aes(x = metric, y = site, fill = value)) +
   geom_tile(color = "white") +
   geom_text(aes(label = sprintf("%.2f", value)), size = 5) +  # Display metric values
   scale_fill_gradientn(colors = brewer.pal(n = 10, name = "Spectral"), limit = c(0, 1), name = "Metric Score") +
@@ -464,10 +463,11 @@ p <- ggplot(metric_df_sub, aes(x = metric, y = site, fill = value)) +
   my_theme + 
   labs(title = NULL,
        x = "Evaluation Metric",
-       y = NULL)
-p
+       y = NULL) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
 #plot_save <- "model_scoring_GPP_NEE.png"
-#ggsave(filename = plot_save, plot = p, dpi = 500)
+#ggsave(filename = plot_save, dpi = 500)
 ```
 
 
