@@ -70,7 +70,6 @@ df.YY <- df.YY %>%
 ```
 
 ## read in monthly data (MM)
-- unit g C m-2 .day, average for a month
 
 ```{r}
 setwd(data_dir)
@@ -163,10 +162,10 @@ Where to go from here:
 
 -   Explore the qualify flags for annual sums of LE and H.
 
-## Task 2: monthly NEE, GPP, RECO
-
+## Task 2: monthly average NEE, GPP, RECO
 ```{r}
-ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ d^{-1} * ")")
+ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ d^{-1} * ")") # monthly average
+
 # Create date label for graphing
 df.MM <- df.MM %>%
   mutate(
@@ -418,7 +417,7 @@ Where to go from here:
 -    P = Precipitation (all water input from rain/snow).
 
 ### aggregate to monthly sums
-
+last update needed from Roel: using df.MM data
 ```{r}
 lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
 sec_per_30min <- 30*60  # Seconds in 30 minutes
