@@ -70,6 +70,7 @@ df.YY <- df.YY %>%
 ```
 
 ## read in monthly data (MM)
+- unit g C m-2 .day, average for a month
 
 ```{r}
 setwd(data_dir)
@@ -277,9 +278,6 @@ Where to go from here:
 -   Interpret the figures and include them in your group presentation;
 
 ## Task 4: monthly meteorological variables
-
-To do: update the input data as df.MM (\@Roel)
-
 ```{r}
 # Tair -----------------------------------------------------
 monthly_data <- monthly_data %>%
