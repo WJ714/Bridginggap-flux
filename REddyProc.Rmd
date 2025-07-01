@@ -23,8 +23,14 @@ library(bigleaf)  # Provides functions to calculate leaf area index and other pl
 library(data.table)  # Offers fast and memory-efficient manipulation of large datasets.
 library(ggplot2)
 ```
+
 # How to save figures using R?
-We do not include code for saving figures in this tutorial. If you wish to save figures locally, you can use functions like ggsave() (for ggplot objects) or base R functions such as png(), pdf(), and others.Here are some examples:
+
+We do not include code for saving figures in this tutorial. If you wish
+to save figures locally, you can use functions like ggsave() (for ggplot
+objects) or base R functions such as png(), pdf(), and others.Here are
+some examples:
+
 ```{r}
 ## ggsave
 # ggsave("my_figure.png", plot = p, width = 8, height = 6, dpi = 300)
@@ -34,6 +40,7 @@ We do not include code for saving figures in this tutorial. If you wish to save 
 # plot(x, y)
 # dev.off()
 ```
+
 # 01: Download AmeriFlux BASE publish
 
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats
@@ -141,7 +148,7 @@ base_df = data.frame(
 head(base_df)
 ```
 
-# 03: Intialize EProc
+# 03: Initialize EProc
 
 ```{r}
 ?filterLongRuns
@@ -152,9 +159,8 @@ EddyData$Hour <- as.numeric(EddyData$Hour)
 EddyData$DoY <- as.numeric(EddyData$DoY)
 EddyDataWithPosix <- fConvertTimeToPosix(EddyData, 'YDH', Year = 'Year', Day = 'DoY', Hour  = 'Hour') 
 
-EProc <- sEddyProc$new(site_name, EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE"))
-
 # EProc an R object used in REddyProc with the attributes defined
+EProc <- sEddyProc$new(site_name, EddyDataWithPosix, c('NEE','Rg','Tair','VPD', 'Ustar', "H", "LE"))
 class(EProc)
 ```
 
@@ -269,13 +275,14 @@ EProc$sDATA$NEE <- EddieC$NEE_filt2
 ## Different u\* threshold treatment options:
 
 The u\* threshold is the minimum u\* above which respiration reaches a
-plateau (see figure under `/plots`). 
+plateau (see figure under `/plots`).
 
-- User-specific u\* threshold\
-- Single (fixed) u\* threshold\
-- Annually varying u\* threshold\
-- Seasonally varying u\* threshold - More details: [REddyProc u\* cases
-vignette](https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html)
+-   User-specific u\* threshold
+-   Single (fixed) u\* threshold
+-   Annually varying u\* threshold
+-   Seasonally varying u\* threshold
+-   More details: [REddyProc u\* cases
+    vignette](https://cran.r-project.org/web/packages/REddyProc/vignettes/uStarCases.html)
 
 ```{r}
 set.seed(2000)
@@ -307,7 +314,7 @@ different aggregationMode.
 # 06: MDS: gapfil NEE
 
 -   The MDS combines two gap-filling techniques: the “look-up” table
-    (LUT) and the “mean diurnal course” (MDC).\
+    (LUT) and the “mean diurnal course” (MDC).
 
 ## “look-up” table (LUT)
 
@@ -320,7 +327,7 @@ Fluxes are expected similar if they are:
 
 -   and close in time
 
-    -   increasing time window until enough observations\
+    -   increasing time window until enough observations
 
 ## “mean diurnal course” (MDC)
 
@@ -330,7 +337,7 @@ The methods are effective for short gaps as the missing values are
 replaced by the average of response variables under similar weather
 conditions in a small-time window;
 
-Quality flag increases with fewer variables and larger time windows
+Quality flag increases with fewer variables and larger time windows:
 
 -   0: true measurement
 -   1: gap-filled with good quality
@@ -347,6 +354,7 @@ EProc$sPlotFingerprintY("NEE_50._f", Year = 2020); EProc$sPlotFingerprintY("NEE_
 ```
 
 # 07: Partitioning NEE into Reco and GPP
+
 Reco is modeled and GPP is computed as Reco - NEE;
 
 There are three approaches to partition FCO₂ available in REddyProc:
@@ -382,6 +390,7 @@ names(EProc$sTEMP)
 Bonus training: comparing different partitioning method;
 
 # 08: Visualise the output
+
 ```{r}
 FilledEddyData <- EProc$sExportResults()
 combined.df <- cbind(EddyData, FilledEddyData)
