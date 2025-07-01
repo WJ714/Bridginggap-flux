@@ -5,7 +5,7 @@
 - Create an account: https://amfcdn.lbl.gov/create
 - Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following 'GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf'
 - Download the GitHub repository at least one week before the workshop
-- Install basic plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
+- Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
 - Test Binder (optional)
 
 ### 📚 Three tutorials are included here:
