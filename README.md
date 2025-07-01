@@ -1,7 +1,7 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
-# Things to do before workshop 
+### Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
 - Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following 'GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf'
 - Download the GitHub repository at least one week before the workshop
