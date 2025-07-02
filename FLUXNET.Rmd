@@ -622,16 +622,16 @@ stat_regline_equation(
   xlab(xlab) + ylab(ylab) +
   xlim(-250, 800) + ylim(-250,800) # adjust the limits if needed
 
-# Calculate closure ratio
-df.plot <- df.plot %>%
-  mutate(closure_ratio = v2 / v1)
-df.yearly <- df.plot %>%
+# Calculate closure ratio for each year
+df.summary <- df.plot %>%
+  filter(!is.na(v1), !is.na(v2)) %>%
+  mutate(closure_ratio = v2 / v1) %>%
   group_by(year) %>%
-  summarize(mean_ratio = mean(closure_ratio, na.rm = TRUE))
-# plotu closure ratio by year
-ggplot(df.yearly, aes(x = year, y = mean_ratio)) +
+  summarise(mean_closure = mean(closure_ratio, na.rm = TRUE))
+
+ggplot(df.summary, aes(x = year, y = mean_closure)) +
   geom_col(fill = "grey") +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "red") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
   labs(
     title = "Energy Balance Closure Ratio by Year",
     x = "Year", y = "Closure Ratio (unitless)"
