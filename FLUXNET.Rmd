@@ -47,7 +47,7 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
     
     
 # How to save figures using R?
-We do not include code for saving figures in this tutorial. If you wish to save figures locally, you can use functions like ggsave() (for ggplot objects) or base R functions such as png(), pdf(), and others.Here are some examples:
+We do not include any codes for saving figures in this tutorial. If you wish to save figures locally, you can use functions like `ggsave()` (for ggplot objects) or base R functions such as `png()` or `pdf()`. Here are some examples:
 ```{r}
 ## ggsave
 # ggsave("my_figure.png", plot = p, width = 8, height = 6, dpi = 300)
@@ -108,7 +108,23 @@ class(df.HH$TIMESTAMP_END)
 df.HH <- df.HH %>%
   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
 ```
+## read in daily data (DD)
+```{r}
+#import daily data from FLUXNET
+setwd(data_dir); df.DD = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")) 
+# FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+df.DD <- df.DD %>%
+  mutate(across(everything(), ~na_if(. , -9999)))
 
+# Timestamp column of flux data is formatted as YYYYMMDD. We need to change it to a readable timestamp format.
+class(df.DD$TIMESTAMP)
+df.DD$TIMESTAMP <- ymd(as.character(df.DD$TIMESTAMP))
+class(df.DD$TIMESTAMP)
+
+# Create columns of year and month
+df.DD <- df.DD %>%
+  mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+```
 # Required task
 
 ## Task 1: annual sums of NEE
@@ -410,105 +426,90 @@ Where to go from here:
     to light use and photosynthesis?
 
 ## Task 2: Ecosystem water budget
+## Task 2: Ecosystem water budget
+
+- Ecosystem water use is affected by vegetation type and age, climate/seasonality, and water availability, and in some cases, presence of environmental stress. Looking at the long-term trend of the balance between input (precipitation) and outputs (evapotranspiration) of water in the ecosystem provides important information about its interaction with the environment. We can generally estimate the ecosystem water budget by looking at ET and P which are both derived from flux tower data. We will only look at the growing season ecosystem water budget (months 5 to 10; except for Br-Sa1 which is from months 10 to 5)
 
 -   ET = Evapotranspiration (the sum of evaporation from soil +
     transpiration from plants)
 
 -    P = Precipitation (all water input from rain/snow).
 
-### aggregate to monthly sums
-last update needed from Roel: using df.MM data
+ET is derived from latent heat flux (LE) using the formula:
+
+ET = (LE / (density of water x latent heat of vaporization)
+    LE is in W/m2 unit
+    density of water = 1000 kg/m3
+    latent heat of vaporization = 2.26x10^6 J/kg
+    
+    
 ```{r}
-lambda <- 2.45e6  # Latent heat of vaporization (J/kg)
-sec_per_30min <- 30*60  # Seconds in 30 minutes
-molarMass <- 12.011 # molar mass of carbon (C) in grams per mole (g/mol)
+# Constants
+rho_w <- 1000         # kg/m3 density of water
+lambda <- 2.26e6       # J/kg latent heat of vaporization
+seconds_per_day <- 86400
 
-df.HH <- df.HH %>%
-  mutate(ET = (LE_F_MDS / lambda) * sec_per_30min) # convert unit from  W m-2 to mm
-
-# Conversion factor for converting unit from µmol CO2 mol-1 to g C m-2 month-1
-conversion_factor_C <- (molarMass * 10^(-3)) * 1800 / 1000  # molarMass * (sec per 30 min) / (mg to g)
-
-# Summarize the data by year and month for NEE, GPP, RECO, and additional variables
-## For NEE, GPP, and Reco, converting unit from µmol CO2 mol-1 to g C m-2 month-1
-monthly_data <- df.HH %>%
-  group_by(year, month) %>%
-  summarise(
-    NEE = sum(NEE_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    GPP = -sum(GPP_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    RECO = sum(RECO_DT_VUT_REF * conversion_factor_C, na.rm = TRUE), # unit: g C m-2 month-1
-    P = sum(P_F, na.rm = TRUE), # unit: mm
-    ET = sum(ET, na.rm = TRUE), # unit: mm
-    # n() * 0.5 gives the number of hours covered by the data
-    NETRAD = sum(NETRAD, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    LE = sum(LE_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    H = sum(H_F_MDS, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    SW_IN = sum(SW_IN_F, na.rm = TRUE) / (n() * 0.5),  # Convert to W/m²
-    Tair = median(TA_F, na.rm = TRUE),  # Monthly median of air temperature
-    .groups = "drop"
-  ) %>%
+# Calculate ET in mm/day from LE_F_MDS
+df.DD <- df.DD %>%
   mutate(
-    month_year = as.Date(paste(year, month, 1, sep = "-")),
-    year_label_pos = as.Date(paste(year, "07", "01", sep = "-"))
-  ) 
-```
+    ET_mm_day = (LE_F_MDS * seconds_per_day) / (rho_w * lambda) *1000 #convert from m to mm of water
+  )
 
-### plot the data
-```{r}
-# Add ET/P ratio to monthly_data
-monthly_data <- monthly_data %>%
-  mutate(ET_P_ratio = ET / P)
+# Summarize total ET and P per year (Growing season only)
+annual_summary <- df.DD %>%
+  filter(month %in% 5:10) %>%  # Growing season (May to October in N hemisphere). If working on Br-Sa1, change to
+  group_by(year) %>%
+  summarise(
+    total_ET_mm = sum(ET_mm_day, na.rm = TRUE),
+    total_precip_mm = sum(P_F, na.rm = TRUE),
+    n_days = sum(!is.na(ET_mm_day)),
+    .groups = "drop") %>%
+  mutate(ET_over_P =  total_ET_mm / total_precip_mm)
 
-# Add GPP/ET ratio to monthly_data for WUE
-monthly_data <- monthly_data %>%
-  # compute WUE: mass-based Water Use Efficiency: grams of carbon fixed per kilogram of water lost
-  mutate(WUE = -(GPP)/ET) # WUE unit:  g C kg -1 H2O
+#if working on Br-Sa1, use this code
+#annual_summary <- df.DD %>%
+  #filter(month %in% c(9:12, 1:5)) %>%
+  #mutate(year = if_else(month >= 9, year + 1, year)) %>%  # assign Sept–Dec to next year
+  #group_by(year) %>%
+  #summarise(
+    #total_ET_mm = sum(ET_mm_day, na.rm = TRUE),
+    #total_precip_mm = sum(P_F, na.rm = TRUE),
+    #n_days = sum(!is.na(ET_mm_day)),
+    #.groups = "drop"
+ #) %>%
+  #mutate(ET_over_P = if_else(total_precip_mm > 0, total_ET_mm / total_precip_mm, NA_real_))
 
-# plot: P and ET
-ggplot(monthly_data, aes(x = month_year)) +
-  geom_bar(aes(y = P, fill = "P"), stat = "identity", position = "dodge", alpha = 0.7) +
-  geom_line(aes(y = ET, color = "ET"), size = 1) +
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "black", size = 0.5) +
-  geom_text(data = monthly_data %>% filter(month == 6),
-            aes(x = year_label_pos,
-                y = max(ET, P, na.rm = TRUE) * 0.9,  # Adjust label position based on max value of y
-                label = year),
-            color = "black", size = 3) +
-  labs(x = "Month", y = expression("mm of water"), title = "Monthly ET and P Trends") +
-  scale_fill_manual(values = c("P" = "gray")) +  # P (bars)
-  scale_color_manual(values = c("ET" = "#F8766D")) +  # ET (line)
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +  
-  scale_y_continuous(
-    breaks = seq(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5), by = 50),
-    limits = c(0, ceiling(max(monthly_data$ET, monthly_data$P, na.rm = TRUE) + 5))
-  )  + my_theme
 
-# plot: water use efficiency
-ylab = ylab(expression(WUE ~ "(" * g~C~kg^{-1}~H[2]*O * ")"))
+annual_long <- annual_summary %>%
+  select(year, total_ET_mm, total_precip_mm) %>%
+    pivot_longer(cols = c(total_ET_mm, total_precip_mm),
+               names_to = "variable",
+               values_to = "value")
 
-ggplot(monthly_data, aes(x = month_year, y = WUE)) +
-  geom_bar(stat = "identity", fill = "#619CFF", alpha = 0.8) +
-  labs(x = "Month", y = ylab, title = "Water-use efficiency (GPP/ET)") +
-  geom_vline(data = monthly_data %>% filter(month == 12), 
-             aes(xintercept = as.numeric(month_year) + 15), 
-             linetype = "dashed", color = "black", size = 0.5) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "black", size = 0.8) +
-  geom_text(data = monthly_data %>% filter(month == 6), 
-            aes(x = year_label_pos, 
-                y = 18,  # Adjust label position based on max value of y
-                label = year), color = "black", size = 3) +
-  scale_x_date(date_labels = "%m", date_breaks = "6 month", expand = c(0, 0)) +
-  scale_y_continuous(
-    breaks = seq(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 1), by = 10),
-    limits = c(0, ceiling(max(monthly_data$WUE, na.rm = TRUE) + 0.5))
-  ) + my_theme
+### plot the annual trend
+ggplot(annual_long, aes(x = year, y = value, fill = variable)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
+  scale_fill_manual(values = c("total_ET_mm" = "#D55E00", "total_precip_mm" ="#0072B2" ),
+                    labels = c("ET", "Precipitation")) +
+  labs(x = "Month", y = "Water (mm)", fill = "Variable",
+       title = "Annual Evapotranspiration and Precipitation") +
+  my_theme
+
+### plot annual ET/P trend
+ggplot(annual_summary, aes(x = year, y = ET_over_P)) +
+  geom_line(color = "#009E73", size = 1.2) +  
+  geom_point(color = "black") +
+  geom_hline(yintercept = 1, color = "red", linetype = "dashed", size = 1) + 
+  labs(title = "Annual ET/P Ratio",
+       x = "Year",
+       y = "ET/P") +
+  my_theme
 
 ```
 
 Where to go from here: - Interpret the figure and include it in your
 group presentation.
+
 
 ## Task 3: Energy balance closure
 
@@ -545,6 +546,28 @@ Values significantly below 1 suggest underestimation of turbulent fluxes
 xlab  = expression(Rn+G~'('*W~m^{-2}*')')
 ylab = expression(H+LE~'('*W~m^{-2}*')')
 
+# check if there are NAs in NETRAD, G, H and LE
+{
+  # Calculate missing percentage by year
+  na_pct <- df.HH %>%
+    group_by(year) %>%
+    summarise(
+      NETRAD = mean(is.na(NETRAD)) * 100,
+      G_F_MDS = mean(is.na(G_F_MDS)) * 100,
+      H_F_MDS = mean(is.na(H_F_MDS)) * 100,
+      LE_F_MDS = mean(is.na(LE_F_MDS)) * 100
+    ) %>%
+    pivot_longer(cols = -year, names_to = "variable", values_to = "na_percent")
+  
+  # Plot heatmap
+  ggplot(na_pct, aes(x = factor(year), y = variable, fill = na_percent)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "white", high = "skyblue", name = "Missing %") +
+    labs(x = "Year", y = "Variable", title = "Heatmap of Missing Data Percentage") +
+    my_theme +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust = 1))
+}
+# data frame for plotting
 df.plot = data.frame(v1 = df.HH$NETRAD - df.HH$G_F_MDS, 
                 v2 = df.HH$H_F_MDS + df.HH$LE_F_MDS,
                 year = df.HH$year)
@@ -593,4 +616,4 @@ Where to go from here:
 -   Pastorello, Gilberto, et al. "The FLUXNET2015 dataset and the
     ONEFlux processing pipeline for eddy covariance data." Scientific
     data 7.1 (2020): 225.
--   
+
