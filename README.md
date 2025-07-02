@@ -67,9 +67,9 @@ With just one click, users can launch a virtual compute environment with all dep
 
 # 🔍 Tutorial 3: Flux model comparison (in progress ...)
 - Script: flux-model-comparison.rmd;
-- Flux data and ELM output for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
+- FLUXNET data and ELM output for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - We use data for `US-Syv` in the R script;
-- 
+  
 ---
 
 # Other learning resources
