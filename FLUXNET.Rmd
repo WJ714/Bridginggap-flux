@@ -156,7 +156,7 @@ df.DD <- df.DD %>%
 # NEE_VUT_REF_RANDUNC
 df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
 df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
-ylab = expression("NEE" ~ "(" * gC ~ m^{-2} ~ d^{-1} * ")")
+ylab = expression("NEE" ~ "(" * gC ~ m^{-2} ~ year^{-1} * ")")
 
 # plot annual sums of NEE across years
 ggplot(df.YY, aes(x = year)) +
@@ -283,7 +283,7 @@ data_with_labels <- df.HH %>%
 
 # looking into data for one year: plot NEE with QC flags
 data_with_labels %>%
-  filter(year == 2018) %>% 
+  filter(year == 2018) %>% # filter data for one year
   ggplot(aes(x = DOY, y = NEE_VUT_REF, color = qc_label)) +
   geom_point(alpha = 0.6, size = 1) +
   scale_color_manual(
