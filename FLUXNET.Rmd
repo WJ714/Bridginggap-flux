@@ -24,6 +24,7 @@ library(dplyr)
 library(tidyverse)
 library(Kendall)
 library(ggplot2)
+library(ggpubr)
 my_theme <- theme_light(base_size = 14) +
   theme(
     axis.text.x = element_text(size = 12),
@@ -44,10 +45,14 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 -   Data variables: <https://fluxnet.org/data/aboutdata/data-variables/>
 -   Full set data product:
     <https://fluxnet.org/data/fluxnet2015-dataset/fullset-data-product/>
-    
-    
+
 # How to save figures using R?
-We do not include any codes for saving figures in this tutorial. If you wish to save figures locally, you can use functions like `ggsave()` (for ggplot objects) or base R functions such as `png()` or `pdf()`. Here are some examples:
+
+We do not include any codes for saving figures in this tutorial. If you
+wish to save figures locally, you can use functions like `ggsave()` (for
+ggplot objects) or base R functions such as `png()` or `pdf()`. Here are
+some examples:
+
 ```{r}
 ## ggsave
 # ggsave("my_figure.png", plot = p, width = 8, height = 6, dpi = 300)
@@ -57,6 +62,7 @@ We do not include any codes for saving figures in this tutorial. If you wish to 
 # plot(x, y)
 # dev.off()
 ```
+
 # Read in data
 
 ## read in annual data (YY)
@@ -108,7 +114,9 @@ class(df.HH$TIMESTAMP_END)
 df.HH <- df.HH %>%
   mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
 ```
+
 ## read in daily data (DD)
+
 ```{r}
 #import daily data from FLUXNET
 setwd(data_dir); df.DD = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")) 
@@ -125,6 +133,7 @@ class(df.DD$TIMESTAMP)
 df.DD <- df.DD %>%
   mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
 ```
+
 # Required task
 
 ## Task 1: annual sums of NEE
@@ -179,6 +188,7 @@ Where to go from here:
 -   Explore the qualify flags for annual sums of LE and H.
 
 ## Task 2: monthly average NEE, GPP, RECO
+
 ```{r}
 ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ d^{-1} * ")") # monthly average
 
@@ -292,23 +302,28 @@ Where to go from here:
 
 -   Interpret the figures and include them in your group presentation;
 
-## Task 4: monthly meteorological variables
+## Task 4: monthly average meteorological variables
+
 ```{r}
 # Air Temperature
 ggplot() +
-  geom_line(data = df.MM, aes(x = date, y = TA_F), color = "black", size = 1) +
-  labs(x = "Date", y = "Deg C", fill = "Variable", 
-       title = "Average Monthly Air Temperature")+
+  geom_line(data = df.MM, aes(x = date, y = TA_F), color = "orange", size = 1) +
+  labs(x = "Date", y = "Temperature (\u00B0C)", fill = "Variable", 
+       title = "Monthly Average Air Temperature")+
   my_theme
 
 
 # Incoming shortwave radiation
 ggplot() +
-  geom_line(data = df.MM, aes(x = date, y = SW_IN_F), color = "black", size = 1) +
-  labs(x = "Date", y = "W/m²", fill = "Variable", 
-       title = "Average Incoming Shortwave Radiation") +
+  geom_line(data = df.MM, aes(x = date, y = SW_IN_F), color = "blue", size = 1) +
+  labs(x = "Date", y = "(SW_IN_F) W/m²", fill = "Variable", 
+       title = "Monthly Average Incoming Shortwave Radiation") +
   my_theme
 ```
+
+Please check: - Is the data consistent? Are there any noticeable
+outliers? - what other important meteorological variables should be
+checked?
 
 # Bonus task
 
@@ -426,23 +441,39 @@ Where to go from here:
     to light use and photosynthesis?
 
 ## Task 2: Ecosystem water budget
-## Task 2: Ecosystem water budget
 
-- Ecosystem water use is affected by vegetation type and age, climate/seasonality, and water availability, and in some cases, presence of environmental stress. Looking at the long-term trend of the balance between input (precipitation) and outputs (evapotranspiration) of water in the ecosystem provides important information about its interaction with the environment. We can generally estimate the ecosystem water budget by looking at ET and P which are both derived from flux tower data. We will only look at the growing season ecosystem water budget (months 5 to 10; except for Br-Sa1 which is from months 10 to 5)
+-   Ecosystem water use is affected by vegetation type and age,
+    climate/seasonality, and water availability, and in some cases,
+    presence of environmental stress. Looking at the long-term trend of
+    the balance between input (precipitation) and outputs
+    (evapotranspiration) of water in the ecosystem provides important
+    information about its interaction with the environment. We can
+    generally estimate the ecosystem water budget by looking at ET and P
+    which are both derived from flux tower data. We will only look at
+    the growing season ecosystem water budget (months 5 to 10; except
+    for Br-Sa1 which is from months 10 to 5)
 
 -   ET = Evapotranspiration (the sum of evaporation from soil +
     transpiration from plants)
 
--    P = Precipitation (all water input from rain/snow).
+-   P = Precipitation (all water input from rain/snow).
 
 ET is derived from latent heat flux (LE) using the formula:
 
-ET = (LE / (density of water x latent heat of vaporization)
-    LE is in W/m2 unit
-    density of water = 1000 kg/m3
-    latent heat of vaporization = 2.26x10^6 J/kg
-    
-    
+The **evapotranspiration (ET)** is derived from latent heat flux (LE) using the following equation:
+
+$$
+ET = \frac{LE}{\rho_w \cdot \lambda}
+$$
+
+Where:
+
+- $ET$: Evapotranspiration *(m s⁻¹ or mm s⁻¹)*
+- $LE$: Latent heat flux *(W m⁻² = J s⁻¹ m⁻²)*
+- $\rho_w$: Density of water = 1000 kg m⁻³
+- $\lambda$: Latent heat of vaporization = 2.26 × 10⁶ J kg⁻¹
+
+
 ```{r}
 # Constants
 rho_w <- 1000         # kg/m3 density of water
@@ -509,7 +540,6 @@ ggplot(annual_summary, aes(x = year, y = ET_over_P)) +
 
 Where to go from here: - Interpret the figure and include it in your
 group presentation.
-
 
 ## Task 3: Energy balance closure
 
@@ -616,4 +646,3 @@ Where to go from here:
 -   Pastorello, Gilberto, et al. "The FLUXNET2015 dataset and the
     ONEFlux processing pipeline for eddy covariance data." Scientific
     data 7.1 (2020): 225.
-
