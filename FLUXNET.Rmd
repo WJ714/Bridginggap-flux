@@ -1,5 +1,5 @@
 ---
-title: "Figures_FLUXNET"
+title: "FLUXNET data application"
 output:
   html_document: default
   pdf_document: default
@@ -156,7 +156,8 @@ df.DD <- df.DD %>%
 # NEE_VUT_REF_RANDUNC
 df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
 df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
-ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ y^{-1} * ")")
+ylab = expression("NEE" ~ "(" * gC ~ m^{-2} ~ d^{-1} * ")")
+
 # plot annual sums of NEE across years
 ggplot(df.YY, aes(x = year)) +
   geom_ribbon(aes(ymin = NEE_lower, ymax = NEE_upper), fill = "blue", alpha = 0.4) + # random uncertainty 
@@ -172,7 +173,7 @@ MannKendall(df.YY$NEE_VUT_REF) # When P < 0.05, you can reject the null hypothes
 ggplot(df.YY, aes(x = as.factor(year), y = NEE_VUT_REF_QC)) +
   geom_bar(stat = "identity", fill = "grey") +
   geom_hline(yintercept = 0.75, linetype = "dashed", color = "red") +
-  labs(x = "Year", y = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ yr^{-1} * ")"), 
+  labs(x = "Year", y = "%", 
        title = "Qualify flags for annual sums") +
   ylim(0, 1) +
   scale_x_discrete(breaks = df.YY$year[seq(1, nrow(df.YY), by = 2)]) +
@@ -190,7 +191,7 @@ Where to go from here:
 ## Task 2: monthly average NEE, GPP, RECO
 
 ```{r}
-ylab = expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ d^{-1} * ")") # monthly average
+ylab = expression("Carbon flux" ~ "(" * gC ~ m^{-2} ~ d^{-1} * ")") # monthly average
 
 # Create date label for graphing
 df.MM <- df.MM %>%
@@ -212,7 +213,7 @@ ggplot() +
   geom_line(data = df.MM, aes(x = date, y = NEE_VUT_REF), color = "black", size = 1) +
   scale_fill_manual(values = c("GPP_NT_VUT_REF" = "#2ca02c", "RECO_NT_VUT_REF" = "#d62728")) +
   labs(x = "Date", y = ylab, fill = "Variable", 
-       title = "Daily average flux per monthly: GPP, RECO (bars) and NEE (line)") + my_theme
+       title = "Daily average flux by month: GPP, RECO (bars) and NEE (line)") + my_theme
 ```
 
 Where to go from here:
@@ -316,7 +317,7 @@ ggplot() +
 # Incoming shortwave radiation
 ggplot() +
   geom_line(data = df.MM, aes(x = date, y = SW_IN_F), color = "blue", size = 1) +
-  labs(x = "Date", y = "(SW_IN_F) W/m²", fill = "Variable", 
+  labs(x = "Date", y = "SW_IN_F (W/m²)", fill = "Variable", 
        title = "Monthly Average Incoming Shortwave Radiation") +
   my_theme
 ```
