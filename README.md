@@ -40,6 +40,10 @@ With just one click, users can launch a virtual compute environment with all dep
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
+new link for binder
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=124)
+
+
 - Script: `REddyProc.rmd`;
 - Data: AmeriFlux BASE data for `US-Syv`;
 - We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
