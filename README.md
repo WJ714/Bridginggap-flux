@@ -1,5 +1,5 @@
 
-👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
+👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - Flux tutorials!
 
 # Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
