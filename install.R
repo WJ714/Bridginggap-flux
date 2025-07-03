@@ -1,6 +1,7 @@
 # Install necessary R packages
 install.packages(c("amerifluxr", "REddyProc", "lubridate", "tidyverse", "dplyr", 
-                   "bigleaf", "data.table", "ggplot2", "ggpubr", "Kendall", "googledrive"))
+                   "bigleaf", "data.table", "ggplot2", "ggpubr", "Kendall", 
+                   "googledrive", "ncdf4"))
 
 # Install devtools if not already installed
 if (!requireNamespace("devtools", quietly = TRUE)) {
