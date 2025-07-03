@@ -65,10 +65,10 @@ With just one click, users can launch a virtual compute environment with all dep
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
-# 🔍 Tutorial 3: Flux model comparison (in progress ...)
+# 🔍 Tutorial 3: Flux model comparison 
 - Script: flux-model-comparison.rmd;
 - FLUXNET data and ELM output for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
-- We use data for `US-Syv` in the R script;
+- We use data for `US-Syv` for demonstration in the R script;
   
 ---
 
