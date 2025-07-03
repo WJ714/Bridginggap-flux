@@ -91,4 +91,5 @@ With just one click, users can launch a virtual compute environment with all dep
 # Acknowledgement
 - Andrew D. Richardson
 - Thomas Wutzler
+- Darby Bergl
 
