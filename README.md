@@ -24,8 +24,6 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 - ⏳ When the session ends, all changes are lost
 
 💾 In order to save your changes, please download files manually from the Binder file browser:
-
-🖥️ For RStudio interface:
 1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
 2.	☑️ Check the box next to the file
 3.	⚙️ Click the More button (gear icon), then select Export...
