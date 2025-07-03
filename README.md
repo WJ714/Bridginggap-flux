@@ -24,7 +24,7 @@ new link for binder
 
 
 ![Description](image/launching_binder.png)
-![Description](image/![Description](images/launching_binder.png))
+![Description](image/Rstudio.png)
 
 💡 Please note: We will use Binder for the first tutorial. You can also use Binder for Tutorial 2 (and 3), but you are encouraged to work locally.
 
