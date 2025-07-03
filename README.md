@@ -6,7 +6,8 @@
 - Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following `GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf`
 - Download the GitHub repository at least one week before the workshop
 - Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
-- Test if you can launch Binder for turtorial 1 
+- Test if you can launch Binder for turtorial 1
+
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
 With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. If it is still loading after 3 mins, you can refresh the browser page. Please click on the icon below:
