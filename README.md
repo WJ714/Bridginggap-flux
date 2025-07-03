@@ -20,7 +20,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 ![Description](image/launching_binder.png)
 ![Description](image/Rstudio.png)
 
-🧪 Binder launches a temporary session (in a Docker container) based on your GitHub repo, but:
+🧪 Binder launches a temporary session (in a Docker container) based on GitHub repo, but:
 - 📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
 - ⏳ When the session ends, all changes are lost
 
