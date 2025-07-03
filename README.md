@@ -32,6 +32,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 4.	⬇️ Your browser will download the selected file
 
 ![Description](image/save_binder.png)
+
 💡 Please note: You can use Binder for all of the tutorials, but you are encouraged to work locally for tutorial 2 and 3.
 
 ________________________________________
