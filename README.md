@@ -16,7 +16,9 @@ Please click on the icon (link) below:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
 
-Then you will see Binder launching a virtual computing environment, as shown in the images below. Typically, it takes less than 5 minutes to launch. If it is still loading after 3 minutes, you can refresh the browser page.
+new link: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=126)
+
+Then you will see Binder launching a virtual computing environment, as shown in the images below. Typically, it takes > 5 mins to launch. If it is still loading after 3 mins, you can refresh the browser page.
 ![Description](image/launching_binder.png)
 ![Description](image/Rstudio.png)
 
@@ -25,7 +27,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 - ⏳ When the session ends, all changes are lost
 
 💾 In order to save your changes, please download files manually from the Binder file browser:
-🖥️ RStudio interface:
+🖥️ For RStudio interface:
 1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
 2.	☑️ Check the box next to the file
 3.	⚙️ Click the More button (gear icon), then select Export...
