@@ -124,6 +124,7 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 ```
 
 # Read data on google drive (experimenting)
+- If you are using binder for this tutorial
 ```{r}
 # if it does not work, comment the codes and download data the read from your local drive manually
 library(googledrive)
