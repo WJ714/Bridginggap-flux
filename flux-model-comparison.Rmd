@@ -420,7 +420,7 @@ for (variable_run in variable_list) {
   #calculate the RMSE score 
   S_rmse <- exp(-1 * e_rmse)
 
-  #can also calculate standard RMSE to look at
+  #can also calculate traditional (non centralized) RMSE to look at
   rmse <- sqrt(mean((model$value - obs$value)^2))
   
   # Overall score
