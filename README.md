@@ -16,11 +16,10 @@ With just one click, users can launch a virtual compute environment with all dep
 ![Description](image/Rstudio.png)
 
 🧪 Binder launches a temporary session (in a Docker container) based on your GitHub repo, but:
-•	📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
-•	⏳ When the session ends, all changes are lost
-•	🔗 There is no link back to GitHub unless you manually copy code and push it yourself
+- 📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
+- ⏳ When the session ends, all changes are lost
 
-💾 To download files manually from the Binder file browser:
+💾 In order to save your changes, please download files manually from the Binder file browser:
 🖥️ RStudio interface:
 1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
 2.	☑️ Check the box next to the file
