@@ -3,7 +3,7 @@
 
 ### Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
-- Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following 'GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf'
+- Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following `GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf`
 - Download the GitHub repository at least one week before the workshop
 - Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
 - Test if you can launch Binder for turtorial 1 (optional)
@@ -36,7 +36,7 @@ This package includes functions for post-processing half-hourly flux data:
 ### 📘 Tutorial Guide
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. Please click on the icon below:
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. If it is still loading after 3 mins, you can refresh the browser page. Please click on the icon below:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
 
@@ -65,10 +65,10 @@ With just one click, users can launch a virtual compute environment with all dep
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
-# 🔍 Tutorial 3: Flux model comparison (in progress ...)
+# 🔍 Tutorial 3: Flux model comparison 
 - Script: flux-model-comparison.rmd;
 - FLUXNET data and ELM output for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
-- We use data for `US-Syv` in the R script;
+- We use data for `US-Syv` for demonstration in the R script;
   
 ---
 
@@ -90,4 +90,5 @@ With just one click, users can launch a virtual compute environment with all dep
 
 # Acknowledgement
 - Andrew D. Richardson
+- Thomas Wutzler
 
