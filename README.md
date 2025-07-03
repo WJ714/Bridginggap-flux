@@ -6,7 +6,7 @@
 - Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following `GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf`
 - Download the GitHub repository at least one week before the workshop
 - Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
-- Test if you can launch Binder for turtorial 1
+- Test if you can launch Binder
 
 #### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
@@ -28,7 +28,7 @@ With just one click, users can launch a virtual compute environment with all dep
 3.	⚙️ Click the More button (gear icon), then select Export...
 4.	⬇️ Your browser will download the selected file
 
-
+💡 Please note: You can use Binder for all of the tutorials, but you are encouraged to work locally for tutorial 2 and 3.
 
 ________________________________________
 ## 📚 Three tutorials are included here:
@@ -38,7 +38,7 @@ ________________________________________
 
 
 
-💡 Please note: We will use Binder for the first tutorial. You can also use Binder for Tutorial 2 (and 3), but you are encouraged to work locally.
+
 
 # 📦 Tutorial 1: REddyProc workflow
 ### 🔗 What is REddyProc?
