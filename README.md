@@ -15,7 +15,7 @@ Please click on the icon (link) below:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
 
-new link: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=127)
+new link: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=128)
 
 Then you will see Binder launching a virtual computing environment, as shown in the images below. Typically, it takes > 5 mins to launch. If it is still loading after 3 mins, you can refresh the browser page.
 ![Description](image/launching_binder.png)
@@ -85,7 +85,7 @@ This package includes functions for post-processing half-hourly flux data:
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
 - You are free to use other programming language you feel comfortable for plotting;
 - Required task (4 taskes): Explore temporal trends (long-term annual sums, monthly average) for meteorological and flux data;
-- Bonus task: three optional task related to **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 2–3 of them within your group.
+- Bonus task (3 tasks): **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 1–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
