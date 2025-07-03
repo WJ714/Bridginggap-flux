@@ -1,32 +1,47 @@
 
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - FLUX tutorials!
 
-### Things to do before workshop 
+# Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
 - Download FLUXNET data for `US-Ha1` or `BR-Sa1`, following `GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf`
 - Download the GitHub repository at least one week before the workshop
 - Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
-- Test if you can launch Binder for turtorial 1 (optional)
+- Test if you can launch Binder
 
-### 📚 Three tutorials are included here:
+### 🔗 What is Binder?
+[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. 
+
+Please click on the icon (link) below:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
+
+Then you will see Binder launching a virtual computing environment, as shown in the images below. Typically, it takes less than 5 minutes to launch. If it is still loading after 3 minutes, you can refresh the browser page.
+![Description](image/launching_binder.png)
+![Description](image/Rstudio.png)
+
+🧪 Binder launches a temporary session (in a Docker container) based on GitHub repo, but:
+- 📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
+- ⏳ When the session ends, all changes are lost
+
+💾 In order to save your changes, please download files manually from the Binder file browser:
+🖥️ RStudio interface:
+1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
+2.	☑️ Check the box next to the file
+3.	⚙️ Click the More button (gear icon), then select Export...
+4.	⬇️ Your browser will download the selected file
+
+💡 Please note: You can use Binder for all of the tutorials, but you are encouraged to work locally for tutorial 2 and 3.
+
+________________________________________
+## 📚 Three tutorials are included here:
 1. 📦 REddyProc workflow (day 1: 75 mins)
 2. 🌐 FLUXNET data application (day 1: 75 mins)
 3. 🔍 Flux model comparison (day 3: 60 mins)
 
-#### 🔗 What is Binder?
-[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. If it is still loading after 3 mins, you can refresh the browser page. Please click on the icon below:
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
-
-new link for binder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
 
 
-![Description](images/launching_binder.png)
-![Description](images/![Description](images/launching_binder.png))
 
-💡 Please note: We will use Binder for the first tutorial. You can also use Binder for Tutorial 2 (and 3), but you are encouraged to work locally.
 
 # 📦 Tutorial 1: REddyProc workflow
 ### 🔗 What is REddyProc?
