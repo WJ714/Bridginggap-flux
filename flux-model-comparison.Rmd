@@ -417,6 +417,9 @@ for (variable_run in variable_list) {
   e_rmse <- crmse / crms
   
   S_rmse <- exp(-1 * e_rmse)
+
+  #can also calculate standard RMSE to look at
+  rmse <- sqrt(mean((model$value - obs$value)^2))
   
   # Overall score
   S <- (domain_S_bias + 2 * S_rmse + S_corr) / 4
@@ -465,8 +468,6 @@ ggplot(metric_df_sub, aes(x = metric, y = site, fill = value)) +
        y = NULL) + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
-#plot_save <- "model_scoring_GPP_NEE.png"
-#ggsave(filename = plot_save, dpi = 500)
 ```
 
 
