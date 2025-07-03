@@ -323,6 +323,8 @@ stat_regline_equation(
   xlim(0,15) + ylim(0,15)
 
 ```
+
+
 # Evaluating level of agreement
 NOTE: this is a simplified approach that evaluates model-data agreement assuming model and obs data are from a single point, over the entire period that data is available for both, instead of looking at specific intervals where data is available and integrating over those for the full record, we just dropped time periods where there isn't observational data to compare to the model. This means that model-data agreement isn't scored for interannual variability, and there aren't spatial components to the evaluation. 
 ## subset of data
@@ -384,6 +386,8 @@ for (variable_run in variable_list) {
   
   # Bias and bias score -- tells us if the model consistently over or underestimates
   bias <- model$value - obs$value #pointwise 
+  # regular rmse
+  rmse <- sqrt(mean((model$value - obs$value)^2)) 
   
   #nondimensionalize bias as a relative error, account for cases where you might be dividing by 0 b/c obs values could be 0
   e_bias <- ifelse(
@@ -408,6 +412,7 @@ for (variable_run in variable_list) {
   
   #then compute centralized rmse
   n <- length(obs_anom)
+  
   crmse <- sqrt(mean((model_anom - obs_anom)^2, na.rm=T))
   
   #and compute centralized RMS of reference obs (crms)
@@ -415,7 +420,6 @@ for (variable_run in variable_list) {
   
   # calculate relative error
   e_rmse <- crmse / crms
-  
   S_rmse <- exp(-1 * e_rmse)
   
   # Overall score
@@ -426,7 +430,8 @@ for (variable_run in variable_list) {
               "correlation score", "bias score", "RMSE score", "overall score")
   
   model_scores <- c(mean(obs$value), sd(obs$value), mean(model$value), sd(model$value), norm_sd,
-                     mean(bias), rmse, S_corr, domain_S_bias, S_rmse, S)
+                     mean(bias), rmse, 
+                    S_corr, domain_S_bias, S_rmse, S)
   
   
   score_df <- data.frame(site = site_name, variable = variable_run, metric = metric, value = model_scores)
@@ -447,7 +452,7 @@ library(RColorBrewer)
 # plot subset of the metrics
 scores <- c("correlation score", "bias score", "RMSE score", "overall score") 
 metric_df_sub <- subset(metric_df, metric_df$metric %in% scores)
-var_list <- c("GPP", "NEE")
+var_list <- c("GPP", "NEE") # you can add Reco here 
 metric_df_sub <- subset(metric_df_sub, metric_df_sub$variable %in% var_list)
 metric_df_sub$metric <- factor(metric_df_sub$metric, 
                                levels = c("bias score", "correlation score", 
@@ -461,9 +466,9 @@ ggplot(metric_df_sub, aes(x = metric, y = site, fill = value)) +
   facet_wrap(~ variable, scales = "free", ncol = 3) +
   my_theme + 
   labs(title = NULL,
-       x = "Evaluation Metric",
+       x = " ",
        y = NULL) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45))
 
 #plot_save <- "model_scoring_GPP_NEE.png"
 #ggsave(filename = plot_save, dpi = 500)
