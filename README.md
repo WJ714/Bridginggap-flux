@@ -33,7 +33,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 
 ![Description](image/save_binder.png)
 
-💡 Please note: We will use Binder for Tutorial 1. However, for Tutorials 2 and 3, since you will be working with different study sites, you are encouraged to work locally.
+💡 Please note: We will use Binder for Tutorial 1. For Tutorials 2 and 3, you can also run the scripts using Binder, but since you will be working with different study sites, you are encouraged to work locally.
 
 ________________________________________
 ## 📚 Three tutorials are included here:
