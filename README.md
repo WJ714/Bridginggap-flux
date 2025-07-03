@@ -13,7 +13,19 @@
 2. 🌐 FLUXNET data application (day 1: 75 mins)
 3. 🔍 Flux model comparison (day 3: 60 mins)
 
-💡 Please note: We will use Binder for the first tutorial, but please use your own computer for Tutorials 2 and 3.
+#### 🔗 What is Binder?
+[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
+With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. If it is still loading after 3 mins, you can refresh the browser page. Please click on the icon below:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
+
+new link for binder
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
+![Description](images/launching_binder.png)
+![Description](images/![Description](images/launching_binder.png))
+
+💡 Please note: We will use Binder for the first tutorial. You can also use Binder for Tutorial 2 (and 3), but you are encouraged to work locally.
+
 # 📦 Tutorial 1: REddyProc workflow
 ### 🔗 What is REddyProc?
 REddyProc is a R package about standard and extensible Eddy-Covariance data post-processing (Wutzler et al., 2018) includes u* filtering, gap-filling, and flux-partitioning.  
@@ -34,16 +46,6 @@ This package includes functions for post-processing half-hourly flux data:
 - Application: working on one typical workflow using REddyProc;
 
 ### 📘 Tutorial Guide
-#### 🔗 What is Binder?
-[Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
-With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. We will use binder for this tutorial and < 5 mins to lanuch. If it is still loading after 3 mins, you can refresh the browser page. Please click on the icon below:
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio)
-
-new link for binder
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
-
-
 - Script: `REddyProc.rmd`;
 - Data: AmeriFlux BASE data for `US-Syv`;
 - We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
