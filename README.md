@@ -21,6 +21,8 @@ With just one click, users can launch a virtual compute environment with all dep
 
 new link for binder
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=125)
+
+
 ![Description](images/launching_binder.png)
 ![Description](images/![Description](images/launching_binder.png))
 
