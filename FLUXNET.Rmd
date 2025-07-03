@@ -62,9 +62,70 @@ some examples:
 # plot(x, y)
 # dev.off()
 ```
+
+# Read data from local drive
+```{r}
+# local working directory
+data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/"); setwd(data_dir)
+
+# read YY data
+{
+  filename = "AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv"
+  setwd(data_dir); df.YY = fread(filename)
+  df.YY$year = as.numeric(df.YY$TIMESTAMP)
+  df.YY <- df.YY %>%
+    mutate(across(everything(), ~na_if(. , -9999)))
+}
+
+# read MM data
+{
+  df.MM = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_MM_2001-2023_4-6.csv"))
+  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+  df.MM <- df.MM %>%
+    mutate(across(everything(), ~na_if(. , -9999)))
+  
+  # Timestamp column of flux data is formatted as YYYYMM. We need to change it to a readable timestamp format.
+  df.MM$TIMESTAMP <- ym(as.character(df.MM$TIMESTAMP))
+  
+  # Create columns of year
+  df.MM <- df.MM %>%
+    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+}
+
+# read DD data
+{
+  df.DD = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")) 
+  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+  df.DD <- df.DD %>%
+    mutate(across(everything(), ~na_if(. , -9999)))
+  
+  # Timestamp column of flux data is formatted as YYYYMMDD. We need to change it to a readable timestamp format.
+  df.DD$TIMESTAMP <- ymd(as.character(df.DD$TIMESTAMP))
+  
+  # Create columns of year and month
+  df.DD <- df.DD %>%
+    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+}
+
+# read HH data
+{
+  setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
+  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
+  df.HH <- df.HH %>%
+    mutate(across(everything(), ~na_if(. , -9999)))
+  
+  # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
+  df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
+  
+  # Create columns of year and month
+  df.HH <- df.HH %>%
+    mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+}
+```
+
 # Read data on google drive (experimenting)
 ```{r}
-# if it does not work, comment the codes and download data the read from your local drive manually (using the codes in the chunks below)
+# if it does not work, comment the codes and download data the read from your local drive manually
 library(googledrive)
 
 # Download YY data
@@ -133,67 +194,6 @@ library(googledrive)
     mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
 }
 ```
-# Read data from local drive
-```{r}
-# local working directory
-data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/"); setwd(data_dir)
-
-# read YY data
-{
-  filename = "AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv"
-  setwd(data_dir); df.YY = fread(filename)
-  df.YY$year = as.numeric(df.YY$TIMESTAMP)
-  df.YY <- df.YY %>%
-    mutate(across(everything(), ~na_if(. , -9999)))
-}
-
-# read MM data
-{
-  df.MM = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_MM_2001-2023_4-6.csv"))
-  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
-  df.MM <- df.MM %>%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMM. We need to change it to a readable timestamp format.
-  df.MM$TIMESTAMP <- ym(as.character(df.MM$TIMESTAMP))
-  
-  # Create columns of year
-  df.MM <- df.MM %>%
-    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
-}
-
-# read DD data
-{
-  df.DD = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")) 
-  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
-  df.DD <- df.DD %>%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMMDD. We need to change it to a readable timestamp format.
-  df.DD$TIMESTAMP <- ymd(as.character(df.DD$TIMESTAMP))
-  
-  # Create columns of year and month
-  df.DD <- df.DD %>%
-    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
-}
-
-# read HH data
-{
-  setwd(data_dir); df.HH = fread(paste0("AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv")) 
-  # FLUXNET data uses "-9999" as placeholder for missing data. Replace -9999 with NA across all columns
-  df.HH <- df.HH %>%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
-  df.HH$TIMESTAMP_END <- ymd_hm(as.character(df.HH$TIMESTAMP_END))
-  
-  # Create columns of year and month
-  df.HH <- df.HH %>%
-    mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-}
-```
-
-
 # Required task
 
 ## Task 1: annual sums of NEE
