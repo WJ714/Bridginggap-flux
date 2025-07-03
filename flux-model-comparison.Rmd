@@ -395,13 +395,14 @@ for (variable_run in variable_list) {
   
   S_bias[!is.finite(S_bias)] <- NA
   
-  domain_S_bias <- mean(S_bias, na.rm = TRUE)
+  S_bias <- mean(S_bias, na.rm = TRUE)
   
   # RMSE and RMSE score -- tells us how well the amplitude and variability match (this approach controls for double-counting bias by using centralized rmse)
   #This implementation assumes no spatial structure (i.e., it’s a single grid cell or averaged across an area of interest). 
   #If you're computing this per grid cell in a spatial array, you'd apply it per column or group
   #This approach removes bias before computing RMSE, so the RMSE score focuses on variance differences rather than 
   #systematic offset, and so bias doesn't get essentially 'double counted' in the overall score
+
   #first need to centralize (remove mean) the timeseries
   model_anom <- model$value - mean(model$value, na.rm=T)
   obs_anom <- obs$value - mean(obs$value, na.rm=T)
@@ -415,21 +416,22 @@ for (variable_run in variable_list) {
   
   # calculate relative error
   e_rmse <- crmse / crms
-  
+
+  #calculate the RMSE score 
   S_rmse <- exp(-1 * e_rmse)
 
   #can also calculate standard RMSE to look at
   rmse <- sqrt(mean((model$value - obs$value)^2))
   
   # Overall score
-  S <- (domain_S_bias + 2 * S_rmse + S_corr) / 4
+  S <- (S_bias + 2 * S_rmse + S_corr) / 4
   
   # Summary metrics
   metric <- c("tower mean", "tower SD","model mean", "model SD", "SD norm.", "bias", "RMSE", 
               "correlation score", "bias score", "RMSE score", "overall score")
   
   model_scores <- c(mean(obs$value), sd(obs$value), mean(model$value), sd(model$value), norm_sd,
-                     mean(bias), rmse, S_corr, domain_S_bias, S_rmse, S)
+                     mean(bias), rmse, S_corr, S_bias, S_rmse, S)
   
   
   score_df <- data.frame(site = site_name, variable = variable_run, metric = metric, value = model_scores)
