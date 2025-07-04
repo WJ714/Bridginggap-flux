@@ -114,5 +114,5 @@ This package includes functions for post-processing half-hourly flux data:
 # Acknowledgement
 - Andrew D. Richardson: critical suggestions for the analysis
 - Thomas Wutzler: sharing knowledge about REddyProc
-- Darby Bergl: experience of building up binder
+- Darby Bergl: sharing experience of building up binder
 
