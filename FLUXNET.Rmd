@@ -33,8 +33,6 @@ my_theme <- theme_light(base_size = 14) +
     panel.background = element_rect(fill = "white", color = "white"),
     plot.background = element_rect(fill = "white", color = "white")
   )
-
-
 ```
 
 
@@ -65,7 +63,7 @@ some examples:
 
 # Read data from local drive
 ```{r}
-# local working directory
+# please modify the data_dir to your own local working directory
 data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/"); setwd(data_dir)
 
 # read YY data
@@ -123,10 +121,9 @@ data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001
 }
 ```
 
-# Read data on google drive (experimenting)
-- If you are using binder for this tutorial
+# Read data on google drive 
 ```{r}
-# if it does not work, comment the codes and download data the read from your local drive manually
+# You can also download data from Google drive, if you have a Google account
 library(googledrive)
 
 # Download YY data
