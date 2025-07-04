@@ -23,7 +23,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 - 📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
 - ⏳ When the session ends, all changes are lost
 
-💾 Luckily, you can save files with your input manually from the Binder file browser:
+💾 Luckily, you can save files with your edits manually from the Binder file browser:
 1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
 2.	☑️ Check the box next to the file
 3.	⚙️ Click the More button (gear icon), then select Export...
