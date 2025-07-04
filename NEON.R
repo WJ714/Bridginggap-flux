@@ -1,3 +1,4 @@
+# Author: Adam Young
 rm(list = ls())
 invisible(gc())
 # download data --------------------------------------------------------------------------------
