@@ -404,7 +404,7 @@ ggplot(combined.df, aes(x = Hour, y = NEE_50._f)) +
   stat_summary(fun = mean, geom = "line") + 
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("FC") +  ylab(expression(FCO[2]~'('*gC~m^{-2}~y^{-1}*')'))
+  ggtitle("FC") +  ylab(expression(FCO[2] ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")"))
  
 
 # diurnal pattern of GPP
@@ -414,7 +414,7 @@ ggplot(combined.df, aes(x = Hour, y = `GPP_50%_f`)) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("GPP") + ylab(expression(GPP~'('*gC~m^{-2}~y^{-1}*')'))
+  ggtitle("GPP") + ylab(expression(GPP ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")"))
 
 # diural pattern of Reco
 ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
@@ -423,7 +423,7 @@ ggplot(combined.df, aes(x = Hour, y = `Reco_50%`)) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +  
   facet_wrap(~ interaction(Month, Year)) +
   theme_minimal() +
-  ggtitle("Reco") + ylab(expression(Reco~'('*gC~m^{-2}~y^{-1}*')'))
+  ggtitle("Reco") + ylab(expression(Reco ~ "(" * mu * "mol" ~ m^{-2} ~ s^{-1} * ")"))
 ```
 
 Bonus training: gap-fill H or LE, and plot the diurnal patterns.
