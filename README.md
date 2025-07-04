@@ -31,7 +31,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 
 ![Description](image/save_binder.png)
 
-💡 Please note: We will use Binder for Tutorial 1. For Tutorials 2 and 3, you can also run the scripts using Binder, but since you will be working with different study sites, you are encouraged to work locally.
+💡 Please note: We will use Binder for Tutorial 1, as it takes > 20 mins to install `REddyProc`. For Tutorials 2 and 3, you may run the scripts either using Binder or locally on your own machine.
 
 ________________________________________
 ## 📚 Three tutorials are included here:
