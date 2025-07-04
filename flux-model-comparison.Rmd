@@ -43,62 +43,62 @@ vars_to_extract <- c(
 
 # Read data from local drive
 ```{r}
-# read flux data
-{
-  # please modify to your own local working directory
-  project_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/")
-  setwd(paste0(project_dir, "AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6"))
-  # read in daily flux data
-  df.flux = fread("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")
-  # covert -9999 to NA
-  df.flux <- df.flux %>%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  df.flux <- df.flux %>% # add more time variables
-    mutate(
-      TIMESTAMP = ymd(TIMESTAMP),
-      year = year(TIMESTAMP),
-      month = month(TIMESTAMP),
-      date = as.Date(TIMESTAMP),
-      doy = yday(TIMESTAMP)
-    )
-}
-
-# read model output
-{
-  setwd(project_dir)
-  # Open the NetCDF file
-  nc <- nc_open("ELM_output_US_Syv.nc")
-  
-  # Extract time (mcdate)
-  mcdate <- ncvar_get(nc, "mcdate")
-  data_list <- lapply(vars_to_extract, function(var) ncvar_get(nc, var))
-  
-  # Combine into data frame
-  df.model <- data.frame(mcdate = mcdate)
-  for (i in seq_along(vars_to_extract)) {
-    df.model[[vars_to_extract[i]]] <- data_list[[i]]
-  }
-  
-  # Close NetCDF file
-  nc_close(nc)
-  
-  # modify time variables
-  df.model <- df.model %>%
-    mutate(
-      mcdate = ymd(mcdate),
-      year = year(mcdate),
-      month = month(mcdate),
-      date = as.Date(mcdate),
-      doy = yday(mcdate)
-    )
-  
-  }
-
-# combine flux data and model output
-df.model = df.model[df.model$year >=2001, ] # please change to the start year of flux measurement for you study site
-df.combined = left_join(df.model, df.flux)
-
-names(df.combined)
+# # read flux data
+# {
+#   # please modify to your own local working directory
+#   project_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/")
+#   setwd(paste0(project_dir, "AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6"))
+#   # read in daily flux data
+#   df.flux = fread("AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv")
+#   # covert -9999 to NA
+#   df.flux <- df.flux %>%
+#     mutate(across(everything(), ~na_if(. , -9999)))
+#   df.flux <- df.flux %>% # add more time variables
+#     mutate(
+#       TIMESTAMP = ymd(TIMESTAMP),
+#       year = year(TIMESTAMP),
+#       month = month(TIMESTAMP),
+#       date = as.Date(TIMESTAMP),
+#       doy = yday(TIMESTAMP)
+#     )
+# }
+# 
+# # read model output
+# {
+#   setwd(project_dir)
+#   # Open the NetCDF file
+#   nc <- nc_open("ELM_output_US_Syv.nc")
+#   
+#   # Extract time (mcdate)
+#   mcdate <- ncvar_get(nc, "mcdate")
+#   data_list <- lapply(vars_to_extract, function(var) ncvar_get(nc, var))
+#   
+#   # Combine into data frame
+#   df.model <- data.frame(mcdate = mcdate)
+#   for (i in seq_along(vars_to_extract)) {
+#     df.model[[vars_to_extract[i]]] <- data_list[[i]]
+#   }
+#   
+#   # Close NetCDF file
+#   nc_close(nc)
+#   
+#   # modify time variables
+#   df.model <- df.model %>%
+#     mutate(
+#       mcdate = ymd(mcdate),
+#       year = year(mcdate),
+#       month = month(mcdate),
+#       date = as.Date(mcdate),
+#       doy = yday(mcdate)
+#     )
+#   
+#   }
+# 
+# # combine flux data and model output
+# df.model = df.model[df.model$year >=2001, ] # please change to the start year of flux measurement for you study site
+# df.combined = left_join(df.model, df.flux)
+# 
+# names(df.combined)
 ```
 # Read data on Google drive 
 ```{r}
