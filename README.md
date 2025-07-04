@@ -89,7 +89,7 @@ This package includes functions for post-processing half-hourly flux data:
 
 
 # 🔍 Tutorial 3: Flux model comparison 
-- Script: flux-model-comparison.rmd;
+- Script: `flux-model-comparison.rmd`;
 - FLUXNET data and ELM output for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - We use data for `US-Syv` for demonstration in the R script;
   
