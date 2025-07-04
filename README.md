@@ -23,7 +23,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 - 📝 Any edits you make inside Binder (e.g., to code or files) exist only in that temporary environment
 - ⏳ When the session ends, all changes are lost
 
-💾 In order to save your changes, please download files manually from the Binder file browser:
+💾 Luckily, you can save files with your edits manually from the Binder file browser:
 1.	📁 In the Files pane (usually lower-right corner), navigate to the file or folder you want
 2.	☑️ Check the box next to the file
 3.	⚙️ Click the More button (gear icon), then select Export...
@@ -31,7 +31,7 @@ Then you will see Binder launching a virtual computing environment, as shown in 
 
 ![Description](image/save_binder.png)
 
-💡 Please note: We will use Binder for Tutorial 1. For Tutorials 2 and 3, you can also run the scripts using Binder, but since you will be working with different study sites, you are encouraged to work locally.
+💡 Please note: We will use Binder for Tutorial 1, as it takes > 20 mins to install `REddyProc`. For Tutorials 2 and 3, you may run the scripts either using Binder or locally on your own machine.
 
 ________________________________________
 ## 📚 Three tutorials are included here:
