@@ -80,7 +80,7 @@ This package includes functions for post-processing half-hourly flux data:
 
 ### 📘 Tutorial Guide
 - Script: `FLUXNET.rmd`;
-- Data for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
+- Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
 - You are free to use other programming language you feel comfortable for plotting;
 - Required task (4 taskes): Explore temporal trends (long-term annual sums, daily average) for meteorological and flux data;
@@ -90,7 +90,7 @@ This package includes functions for post-processing half-hourly flux data:
 
 # 🔍 Tutorial 3: Flux model comparison 
 - Script: flux-model-comparison.rmd;
-- FLUXNET data and ELM output for different study sites can be found [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
+- FLUXNET data and ELM output for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - We use data for `US-Syv` for demonstration in the R script;
   
 ---
