@@ -76,8 +76,7 @@ site_name = "US-Syv"
 #   )
 
 # If you do not have an account, you can directly start from here
-tmp_dir <- tempdir(); setwd("~/") 
-setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test")
+tmp_dir <- tempdir(); setwd("~/") # the working directory when use Binder
 
 floc =  "AMF_US-Syv_BASE-BADM_29-5.zip"
 base <- amf_read_base(file = floc,
