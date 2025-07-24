@@ -13,11 +13,12 @@
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
 With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. 
 
-**Please click on the icon (link) below**:
+**Please click on the badge below**:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/YujieLiu666/FCC_workshop_flux_test/main?urlpath=rstudio&reset=1&fake=129)
 
-Then you will see Binder launching a virtual computing environment, as shown in the images below. Typically, it takes > 5 mins to launch. If it is still loading after 3 mins, please refresh the browser page.
+Then you will see a virtual computing environment, as shown in the images below. Typically, it takes > 5 mins to launch. If it is still loading after 3 mins, please refresh the browser page.
+
 ![Description](image/launching_binder.png)
 ![Description](image/Rstudio.png)
 
@@ -84,7 +85,6 @@ This package includes functions for post-processing half-hourly flux data:
 - Script: `FLUXNET.rmd`;
 - Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
-- You are free to use other programming language you feel comfortable for plotting;
 - Required task (4 taskes): Explore temporal trends (long-term annual sums, daily average) for meteorological and flux data;
 - Bonus task (3 tasks): **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 1–3 of them within your group.
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
