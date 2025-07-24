@@ -212,9 +212,9 @@ library(googledrive)
 ```{r}
 # create upper and lower bounds
 # NEE_VUT_REF_RANDUNC
-df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
+df.YY$NEE_upper <- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC 
 df.YY$NEE_lower <- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
-ylab = expression("NEE" ~ "(" * gC ~ m^{-2} ~ year^{-1} * ")")
+ylab = expression("NEE" ~ "(" * gC ~ m^{-2} ~ year^{-1} * ")") # YY: sum from daily data
 
 # plot annual sums of NEE across years
 ggplot(df.YY, aes(x = year)) +
