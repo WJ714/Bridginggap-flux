@@ -102,6 +102,7 @@ This package includes functions for post-processing half-hourly flux data:
 - 📺 [FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
 - ❓ [FAQ for REddyProc](https://www.bgc-jena.mpg.de/5629512/FAQ)
 - 📚 [EGU 2019 Short Course Materials (REddyProc)](https://github.com/bgctw/EGU19EddyCourse/tree/master)
+- 🐾 [Gapfilling flux data using a machine learning model](https://github.com/YujieLiu666/NEON_gapfill_test/tree/main)
 - 🌫️ [Correcting RH-dependent water flux underestimation under high RH conditions](https://github.com/WJ714/HRHC_mpi_bgc)
 ### ⚡ Working with high-frequency data:
 - 🔬 [EcoFlux Lab: High-Frequency Data Processing Documentation](https://ecoflux-lab.github.io/PipelineDocumentation/PipelineDocumentation.html)
