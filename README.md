@@ -99,7 +99,7 @@ This package includes functions for post-processing half-hourly flux data:
 
 # Other learning resources
 ### ⏳ Working with half-hourly data:  
-- 📺 [FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
+- 📺 [Youtube: FLUXNET-ECN Workshop – Thomas Wutzler](https://www.youtube.com/watch?v=-b0vc4u8kls)
 - ❓ [FAQ for REddyProc](https://www.bgc-jena.mpg.de/5629512/FAQ)
 - 📚 [EGU 2019 Short Course Materials (REddyProc)](https://github.com/bgctw/EGU19EddyCourse/tree/master)
 - 🐾 [Gapfilling flux data using a machine learning model](https://github.com/YujieLiu666/NEON_gapfill_test/tree/main)
