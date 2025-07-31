@@ -66,7 +66,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Application: working on one typical workflow using REddyProc;
 
 ### 📘 Tutorial Guide
-- Script: `REddyProc.rmd`;
+- Script: `01_REddyProc.rmd`;
 - Data: AmeriFlux BASE data for `US-Syv`;
 - We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
 - If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
@@ -82,7 +82,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Analysis: Explore temporal trends in meteorological and flux data for your study site; 
 
 ### 📘 Tutorial Guide
-- Script: `FLUXNET.rmd`;
+- Script: `02_FLUXNET.rmd`;
 - Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - In the R script, we provide examples to plot FLUXNET data for `US-Syv`. You can use the examples as a starting point, discuss with your group, and explore other ways of plotting to better understand your own study site;
 - Required task (4 taskes): Explore temporal trends (long-term annual sums, daily average) for meteorological and flux data;
@@ -97,7 +97,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Analysis: Determine the level of agreement between flux tower data and ELM outputs across years with available data
   
 ### 📘 Tutorial Guide
-- Script: `flux-model-comparison.rmd`;
+- Script: `02_flux-model-comparison.rmd`;
 - Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI)
 - In this tutorial, we will compare the FLUXNET data with the ELM outputs. There are 10 overlapping variables that we can compare between the two data sets. Check the [crosswalk  table](https://docs.google.com/spreadsheets/d/12qbzWilQ1WBcUz0q1-D1wOT822uZzNirDPYTNFZSlWc/edit?usp=drive_link) for these variables, units, and conversion factors. 
 - There are 4 parts to this tutorial. Parts 1 to 3 will create time-series graphs for comparing environmental variables, energy exchange variables, and carbon flux variables. In Part 4, we use a simple tool to discern the level of agreement between flux tower data and ELM output. 

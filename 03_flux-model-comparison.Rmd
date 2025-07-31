@@ -59,7 +59,7 @@ elm_url <- "https://drive.google.com/file/d/1eCR99plnQQpqqQ0Y1h6YZlVA-8fBfgJ0/vi
   elm_adj_url <- "https://drive.google.com/file/d/1Xxv2Z8MF3pbo6e0mm_s5SkyTTpTGX1xE/view?usp=drive_link"
   
 #starting year of flux tower data
-start_year <- 2003
+start_year <- 2001
   
 # Selected variables from ELM output to be compared with flux measurement
 vars_to_extract <- c(
@@ -717,6 +717,9 @@ for (variable_run in variable_list) {
   
   # Overall score
   S <- (domain_S_bias + 2 * S_rmse + S_corr) / 4
+
+  # Skip if all metrics are NA
+  if (is.na(S)) next
   
   # Summary metrics
   metric <- c("tower mean", "tower SD","model mean", "model SD", "SD norm.", "bias", "RMSE", 
