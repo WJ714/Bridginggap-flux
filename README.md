@@ -1,6 +1,6 @@
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - Flux tutorials!
 
-Authors: Yujie Liu, Roel Ruzol, Sreenath Paleri, Md Shamsuzzaman
+Authors: Yujie Liu, Roel Ruzol, Sreenath Paleri, Md Shamsuzzaman, Bailey Murphy
 
 # Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
