@@ -1,7 +1,6 @@
-🤝 If there is any interest in testing or further contributions for the tutorials before end of July, please take a look at the checklist here: https://docs.google.com/document/d/1ko_-WazFPBJvMSIA_i455ifez3q5B459/edit?tab=t.0. Thanks!
-
-
 👋 Welcome to the Bridging the Gap: Flux Data Meets Land Surface Models - Flux tutorials!
+
+Authors: Yujie Liu, Roel Ruzol, Sreenath Paleri, Md Shamsuzzaman
 
 # Things to do before workshop 
 - Create an account: https://amfcdn.lbl.gov/create
