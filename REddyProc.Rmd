@@ -77,6 +77,7 @@ site_name = "US-Syv"
 
 # If you do not have an account, you can directly start from here
 tmp_dir <- tempdir(); setwd("~/") # the working directory when use Binder
+setwd("C:/Users/yl763/Documents/GitHub/FCC_workshop_flux_test")
 
 floc =  "AMF_US-Syv_BASE-BADM_29-5.zip"
 base <- amf_read_base(file = floc,
@@ -134,7 +135,7 @@ base_df = data.frame(
   'DoY' = base$DOY,
   'NEE' = base$FC,
   'LE' = base$LE,
-  'H' = base$H,
+  'H' = base$H_1_1_1,
   'Rg' = ifelse(base$PPFD_IN_PI_F_1_1_1 < 0, 0, PPFD.to.Rg(base$PPFD_IN_PI_F_1_1_1)),
   'Tair' = base$TA_1_1_1,
   'Tsoil' = base$TS_1_1_1,
