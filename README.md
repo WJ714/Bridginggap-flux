@@ -90,10 +90,17 @@ This package includes functions for post-processing half-hourly flux data:
 - Please take time to interpret the figures with your group and include them in your [group presentation](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
-# 🔍 Tutorial 3: Flux model comparison 
+# 🔍 Tutorial 3: Comparing FLUXNET data and ELM output
+### 🎯 Tutorial outcomes
+- Comprehension: Time-series comparison of observed vs model data
+- Application: Work in groups to utilize FLUXNET data and ELM outputs (default and adjusted runs)
+- Analysis: Determine the level of agreement between flux tower data and ELM outputs across years with available data
+- 
+### 📘 Tutorial Guide
 - Script: `flux-model-comparison.rmd`;
-- FLUXNET data and ELM output for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
-- We use data for `US-Syv` for demonstration in the R script;
+- Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI)
+- In this tutorial, we will compare the FLUXNET data with the ELM outputs. There are 10 overlapping variables that we can compare between the two data sets. Check the [crosswalk  table](https://docs.google.com/spreadsheets/d/12qbzWilQ1WBcUz0q1-D1wOT822uZzNirDPYTNFZSlWc/edit?usp=drive_link) for these variables, units, and conversion factors. 
+- There are 4 parts to this tutorial. Parts 1 to 3 will create time-series graphs for comparing environmental variables, energy exchange variables, and carbon flux variables. In Part 4, we use a simple tool to discern the level of agreement between flux tower data and ELM output. 
   
 ---
 
