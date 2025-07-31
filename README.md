@@ -95,7 +95,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Comprehension: Time-series comparison of observed vs model data
 - Application: Work in groups to utilize FLUXNET data and ELM outputs (default and adjusted runs)
 - Analysis: Determine the level of agreement between flux tower data and ELM outputs across years with available data
-- 
+  
 ### 📘 Tutorial Guide
 - Script: `flux-model-comparison.rmd`;
 - Data for different study sites can be found in the data folder [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI)
