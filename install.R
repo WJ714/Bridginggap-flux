@@ -1,4 +1,4 @@
-# Install necessary R packages
+# Install R packages
 install.packages(c("amerifluxr", "REddyProc", "lubridate", "tidyverse", "dplyr", 
                    "bigleaf", "data.table", "ggplot2", "ggpubr", "Kendall", 
                    "googledrive", "ncdf4"))
