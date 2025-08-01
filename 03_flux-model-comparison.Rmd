@@ -56,7 +56,7 @@ flux_url <- "https://drive.google.com/file/d/1kGu2JTe5afS_6ly9p3xgVFtTVtpmc__4/v
 elm_url <- "https://drive.google.com/file/d/1eCR99plnQQpqqQ0Y1h6YZlVA-8fBfgJ0/view?usp=drive_link"
 
 # adjusted ELM output URL here
-  elm_adj_url <- "https://drive.google.com/file/d/1Xxv2Z8MF3pbo6e0mm_s5SkyTTpTGX1xE/view?usp=drive_link"
+  elm_adj_url <- "https://drive.google.com/file/d/1eCR99plnQQpqqQ0Y1h6YZlVA-8fBfgJ0/view?usp=drive_link"
   
 #starting year of flux tower data
 start_year <- 2001
@@ -275,6 +275,7 @@ for (i in seq(1, length(all_years), by = 4)) {
   df_subset <- df_long %>% filter(year.x %in% years_to_plot)
 
   p <- ggplot(df_subset, aes(x = doy.x, y = .data[[compare_name]], color = source)) +
+    geom_point(alpha = 0.3, size = 0.7) +
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
@@ -386,6 +387,7 @@ for (i in seq(1, length(all_years), by = 4)) {
   df_subset <- df_long %>% filter(year.x %in% years_to_plot)
 
   p <- ggplot(df_subset, aes(x = doy.x, y = .data[[compare_name]], color = source)) +
+    geom_point(alpha = 0.3, size = 0.7) +
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
@@ -497,6 +499,7 @@ for (i in seq(1, length(all_years), by = 4)) {
   df_subset <- df_long %>% filter(year.x %in% years_to_plot)
 
   p <- ggplot(df_subset, aes(x = doy.x, y = .data[[compare_name]], color = source)) +
+    geom_point(alpha = 0.3, size = 0.7) +
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
@@ -537,7 +540,7 @@ df_cumsum <- df.combined_new %>%
 
 # Plot cumulative sum for all years
 ggplot(df.cumulative, aes(x = TIMESTAMP)) +
-  geom_line(aes(y = cum_flux, color = "Flux")) +
+  geom_line(aes(y = cum_flux, color = "Flux Tower")) +
   geom_line(aes(y = cum_model, color = "Model")) +
   labs(
     title = paste0("Cumulative ", compare_name),
