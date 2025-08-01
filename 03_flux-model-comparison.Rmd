@@ -278,10 +278,11 @@ for (i in seq(1, length(all_years), by = 4)) {
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
+    xlab("DOY") +
     ylab(time_series_label) +
     scale_color_manual(
       values = setNames(c("red", "blue"), c(flux_col, model_col)),
-      labels = c("Flux", "Model")
+      labels = c("Flux Tower", "Model")
     ) +
    ylim(y_limits) +
     labs(title = paste0(compare_name, " Comparison")) +
@@ -304,10 +305,10 @@ convert_model_units <- function(x) x  # Set equation if needed
 selected_years <- list(2001:2015) #change years to plot; it can handle several batches (ex: list(2001:2005, 2010:20015))
 
 compare_name <- "Latent heat flux"   # variable being compared
-flux_label <- expression(LE[flux]~(W/m2)) #change label name and units as needed
-model_label <- expression(LE[model]~(W/m2)) #change label name and units as needed
+flux_label <- expression(LE[flux]~(W/m^2)) #change label name and units as needed
+model_label <- expression(LE[model]~(W/m^2)) #change label name and units as needed
 plot_title <- "Latent Heat Flux Comparison" #change plot title as needed
-time_series_label <- expression(LE_flux~(W/m2)) # change label name and units as needed
+time_series_label <- expression(LE_flux~(W/m^2)) # change label name and units as needed
 
 
 # =============================================================================
@@ -388,10 +389,11 @@ for (i in seq(1, length(all_years), by = 4)) {
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
+    xlab("DOY") +
     ylab(time_series_label) +
     scale_color_manual(
       values = setNames(c("red", "blue"), c(flux_col, model_col)),
-      labels = c("Flux", "Model")
+      labels = c("Flux Tower", "Model")
     ) +
    ylim(y_limits) +
     labs(title = paste0(compare_name, " Comparison")) +
@@ -415,10 +417,10 @@ convert_model_units <- function(x) x * 86400 # Set equation if needed
 selected_years <- list(2001:2015) #change years to plot; it can handle several batches (ex: list(2001:2005, 2010:20015))
 
 compare_name <- "Net Ecosystem Exchange"   # variable being compared
-flux_label <- expression(NEE[flux]~(gC/m2/day)) #change label name and units as needed
-model_label <- expression(NEE[model]~(gC/m2/day)) #change label name and units as needed
+flux_label <- expression(NEE[flux]~(gC/m^2/day)) #change label name and units as needed
+model_label <- expression(NEE[model]~(gC/m^2/day)) #change label name and units as needed
 plot_title <- "NEE Comparison" #change plot title as needed
-time_series_label <- expression(NEE~(gC/m2/day)) # change label name and units as needed
+time_series_label <- expression(NEE~(gC/m^2/day)) # change label name and units as needed
 
 
 # =============================================================================
@@ -498,6 +500,7 @@ for (i in seq(1, length(all_years), by = 4)) {
     geom_smooth(se = FALSE, method = "loess", span = 0.2) +
     geom_hline(yintercept = 0, linetype = "dashed") +
     facet_wrap(~ year.x, ncol = 2) +
+    xlab("DOY") +
     ylab(time_series_label) +
     scale_color_manual(
       values = setNames(c("red", "blue"), c(flux_col, model_col)),
@@ -542,7 +545,7 @@ ggplot(df.cumulative, aes(x = TIMESTAMP)) +
     y = expression(gC/m^2),
     color = "Source"
   ) +
-  scale_color_manual(values = c("Flux" = "red", "Model" = "blue")) +
+  scale_color_manual(values = c("Flux Tower" = "red", "Model" = "blue")) +
   my_theme
 
 
@@ -554,10 +557,11 @@ for (i in seq(1, length(all_years), by = 4)) {
   p_cumsum <- ggplot(df_subset, aes(x = doy.x, y = cumulative_value, color = source)) +
     geom_line(size = 1) +
     facet_wrap(~ year.x, ncol = 2) +
+    xlab("DOY") +
     ylab(expression(gC/m^2)) +
     scale_color_manual(
       values = setNames(c("red", "blue"), c(flux_col, model_col)),
-      labels = c("Flux", "Model")
+      labels = c("Flux Tower", "Model")
     ) +
     labs(title = paste0("Cumulative ", compare_name, " Comparison")) +
     my_theme
