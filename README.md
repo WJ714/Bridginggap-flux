@@ -68,8 +68,8 @@ This package includes functions for post-processing half-hourly flux data:
 - Script: `01_REddyProc.rmd`;
 - Data: AmeriFlux BASE data for `US-Syv`;
 - We use data from `US-Syv` for demonstration. Please do not change to other sites if you are using REddyProc for the first time;
-- If you have experience with this package, please try to explore 'Bonus training' suggested in the R script;
-- If you want to use REddyProc for your own study sites, we have a helf session after the turtorial.
+- If you extra time, please explore 'Bonus training' suggested in the R script;
+- If you want to use REddyProc for your own study sites, we have a help session after the turtorial.
   
 # 🌐 Tutorial 2: FLUXNET data application
 ### 🔗 What is FLUXNET?
