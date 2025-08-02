@@ -37,9 +37,9 @@ Then you will see a virtual computing environment, as shown in the images below.
 
 ________________________________________
 ## 📚 Three tutorials are included here:
-1. 📦 REddyProc workflow (day 1: 75 mins)
-2. 🌐 FLUXNET data application (day 1: 75 mins)
-3. 🔍 Flux model comparison (day 3: 60 mins)
+1. 📦 REddyProc workflow (day 1)
+2. 🌐 FLUXNET data application (day 1)
+3. 🔍 Flux model comparison (day 3)
 
 
 
