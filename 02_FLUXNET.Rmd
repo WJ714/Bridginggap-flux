@@ -260,7 +260,7 @@ df.MM <- df.MM %>%
 # Pivot data for easier plotting
 df.MM_long <- df.MM %>%
   mutate(GPP_NT_VUT_REF = -GPP_NT_VUT_REF) %>%  # make GPP negative
-  select(date, year, GPP_NT_VUT_REF, RECO_NT_VUT_REF, NEE_VUT_REF) %>%
+  dplyr::select(date, year, GPP_NT_VUT_REF, RECO_NT_VUT_REF, NEE_VUT_REF) %>%
   pivot_longer(cols = c(GPP_NT_VUT_REF, RECO_NT_VUT_REF), names_to = "variable", values_to = "value")
 
 # Create the plot
@@ -386,7 +386,7 @@ checked?
 
 # Bonus task
 
-## Task 1: Light use efficiency
+## Task 1: Light response curve
 
 The light response curve describes how **Net Ecosystem Exchange (NEE)**
 responds to incoming light (PPFD – photosynthetic photon flux density).

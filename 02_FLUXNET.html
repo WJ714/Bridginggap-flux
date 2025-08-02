@@ -379,62 +379,62 @@ you wish to save figures locally, you can use functions like
 </div>
 <div id="read-data-from-local-drive" class="section level1">
 <h1>Read data from local drive</h1>
-<pre class="r"><code># please modify the data_dir to your own local working directory
-data_dir = (&quot;G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/&quot;); setwd(data_dir)
-
-# read YY data
-{
-  filename = &quot;AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv&quot;
-  setwd(data_dir); df.YY = fread(filename)
-  df.YY$year = as.numeric(df.YY$TIMESTAMP)
-  df.YY &lt;- df.YY %&gt;%
-    mutate(across(everything(), ~na_if(. , -9999)))
-}
-
-# read MM data
-{
-  df.MM = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_MM_2001-2023_4-6.csv&quot;))
-  # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
-  df.MM &lt;- df.MM %&gt;%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMM. We need to change it to a readable timestamp format.
-  df.MM$TIMESTAMP &lt;- ym(as.character(df.MM$TIMESTAMP))
-  
-  # Create columns of year
-  df.MM &lt;- df.MM %&gt;%
-    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
-}
-
-# read DD data
-{
-  df.DD = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv&quot;)) 
-  # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
-  df.DD &lt;- df.DD %&gt;%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMMDD. We need to change it to a readable timestamp format.
-  df.DD$TIMESTAMP &lt;- ymd(as.character(df.DD$TIMESTAMP))
-  
-  # Create columns of year and month
-  df.DD &lt;- df.DD %&gt;%
-    mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
-}
-
-# read HH data
-{
-  setwd(data_dir); df.HH = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv&quot;)) 
-  # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
-  df.HH &lt;- df.HH %&gt;%
-    mutate(across(everything(), ~na_if(. , -9999)))
-  
-  # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
-  df.HH$TIMESTAMP_END &lt;- ymd_hm(as.character(df.HH$TIMESTAMP_END))
-  
-  # Create columns of year and month
-  df.HH &lt;- df.HH %&gt;%
-    mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
-}</code></pre>
+<pre class="r"><code># # please modify the data_dir to your own local working directory
+# data_dir = (&quot;G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/&quot;); setwd(data_dir)
+# 
+# # read YY data
+# {
+#   filename = &quot;AMF_US-Syv_FLUXNET_SUBSET_YY_2001-2023_4-6.csv&quot;
+#   setwd(data_dir); df.YY = fread(filename)
+#   df.YY$year = as.numeric(df.YY$TIMESTAMP)
+#   df.YY &lt;- df.YY %&gt;%
+#     mutate(across(everything(), ~na_if(. , -9999)))
+# }
+# 
+# # read MM data
+# {
+#   df.MM = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_MM_2001-2023_4-6.csv&quot;))
+#   # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
+#   df.MM &lt;- df.MM %&gt;%
+#     mutate(across(everything(), ~na_if(. , -9999)))
+#   
+#   # Timestamp column of flux data is formatted as YYYYMM. We need to change it to a readable timestamp format.
+#   df.MM$TIMESTAMP &lt;- ym(as.character(df.MM$TIMESTAMP))
+#   
+#   # Create columns of year
+#   df.MM &lt;- df.MM %&gt;%
+#     mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+# }
+# 
+# # read DD data
+# {
+#   df.DD = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_DD_2001-2023_4-6.csv&quot;)) 
+#   # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
+#   df.DD &lt;- df.DD %&gt;%
+#     mutate(across(everything(), ~na_if(. , -9999)))
+#   
+#   # Timestamp column of flux data is formatted as YYYYMMDD. We need to change it to a readable timestamp format.
+#   df.DD$TIMESTAMP &lt;- ymd(as.character(df.DD$TIMESTAMP))
+#   
+#   # Create columns of year and month
+#   df.DD &lt;- df.DD %&gt;%
+#     mutate(year = year(TIMESTAMP), month = month(TIMESTAMP))
+# }
+# 
+# # read HH data
+# {
+#   setwd(data_dir); df.HH = fread(paste0(&quot;AMF_US-Syv_FLUXNET_SUBSET_HH_2001-2023_4-6.csv&quot;)) 
+#   # FLUXNET data uses &quot;-9999&quot; as placeholder for missing data. Replace -9999 with NA across all columns
+#   df.HH &lt;- df.HH %&gt;%
+#     mutate(across(everything(), ~na_if(. , -9999)))
+#   
+#   # Timestamp column of flux data is formatted as YYYYMMDDHHMM. We need to change it to a readable timestamp format.
+#   df.HH$TIMESTAMP_END &lt;- ymd_hm(as.character(df.HH$TIMESTAMP_END))
+#   
+#   # Create columns of year and month
+#   df.HH &lt;- df.HH %&gt;%
+#     mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
+# }</code></pre>
 </div>
 <div id="read-data-on-google-drive" class="section level1">
 <h1>Read data on google drive</h1>
@@ -525,9 +525,9 @@ analysis is repeated for each time aggregation.</p></li>
 </ul>
 <pre class="r"><code># create upper and lower bounds
 # NEE_VUT_REF_RANDUNC
-df.YY$NEE_upper &lt;- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC
+df.YY$NEE_upper &lt;- df.YY$NEE_VUT_REF + df.YY$NEE_VUT_REF_RANDUNC 
 df.YY$NEE_lower &lt;- df.YY$NEE_VUT_REF - df.YY$NEE_VUT_REF_RANDUNC
-ylab = expression(&quot;NEE&quot; ~ &quot;(&quot; * gC ~ m^{-2} ~ year^{-1} * &quot;)&quot;)
+ylab = expression(&quot;NEE&quot; ~ &quot;(&quot; * gC ~ m^{-2} ~ year^{-1} * &quot;)&quot;) # YY: sum from daily data
 
 # plot annual sums of NEE across years
 ggplot(df.YY, aes(x = year)) +
@@ -571,7 +571,7 @@ df.MM &lt;- df.MM %&gt;%
 # Pivot data for easier plotting
 df.MM_long &lt;- df.MM %&gt;%
   mutate(GPP_NT_VUT_REF = -GPP_NT_VUT_REF) %&gt;%  # make GPP negative
-  select(date, year, GPP_NT_VUT_REF, RECO_NT_VUT_REF, NEE_VUT_REF) %&gt;%
+  dplyr::select(date, year, GPP_NT_VUT_REF, RECO_NT_VUT_REF, NEE_VUT_REF) %&gt;%
   pivot_longer(cols = c(GPP_NT_VUT_REF, RECO_NT_VUT_REF), names_to = &quot;variable&quot;, values_to = &quot;value&quot;)
 
 # Create the plot
@@ -694,8 +694,8 @@ checked?</p>
 </div>
 <div id="bonus-task" class="section level1">
 <h1>Bonus task</h1>
-<div id="task-1-light-use-efficiency" class="section level2">
-<h2>Task 1: Light use efficiency</h2>
+<div id="task-1-light-response-curve" class="section level2">
+<h2>Task 1: Light response curve</h2>
 <p>The light response curve describes how <strong>Net Ecosystem Exchange
 (NEE)</strong> responds to incoming light (PPFD – photosynthetic photon
 flux density). It is a key tool for quantifying ecosystem carbon uptake
