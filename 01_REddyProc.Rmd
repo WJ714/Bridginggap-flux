@@ -45,8 +45,8 @@ some examples:
 
 -   BASE Publish: After passing the Data QA/QC assessment, AMP formats
     the submitted flux/met data in the FP Standard format, bundles them
-    with BADM\*, and versions and publishes the resulting BASE-BADM data
-    with a DOI
+    with BADM, and versions and publishes the resulting BASE-BADM data
+    with a DOI.
     (<https://ameriflux.lbl.gov/data/flux-data-products/base-publish/>)
 -   AmeriFlux BASE data pipeline:
     <https://doi.org/10.1038/s41597-023-02531-2>
@@ -70,7 +70,7 @@ site_name = "US-Syv"
 #     data_policy = "CCBY4.0",
 #     agree_policy = TRUE,
 #     intended_use = "other",
-#     intended_use_text = "Flux-LSM_workshop",
+#     intended_use_text = "FLUXNET_workshop",
 #     verbose = TRUE,
 #     out_dir = tmp_dir
 #   )
@@ -111,7 +111,7 @@ amf_plot_datayear(site_set = site_name,
 # subset data for two years
 base = base[base$YEAR %in% c(2020,2021), ]
 
-# Recreate other time variables using TIMESTAMP (This is just because I sometimes get error messages in the next step "Intialize EProc" when using the default time variables.)
+# Recreate other time variables using TIMESTAMP (This is just because I sometimes get error messages in the next step "Intialize EProc" when using the default time variables)
 recreate_time_vars <- function(df) {
   df %>%
     mutate(
@@ -125,6 +125,7 @@ recreate_time_vars <- function(df) {
     )
 }
 base <- recreate_time_vars(base)
+
 # format the data to be used as input for REddyProc
 base_df = data.frame(
   'Year' = base$YEAR,
@@ -377,12 +378,11 @@ There are three approaches to partition FCO₂ available in REddyProc:
     in the light (Keenan 2019).
 
 ```{r}
-# TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), without daytime saving. This is a site-specific input. 
-EProc$sSetLocationInfo(LatDeg = 46.2420, LongDeg =-89.3477, TimeZoneHour = -6) 
+EProc$sSetLocationInfo(LatDeg = 46.2420, LongDeg =-89.3477, TimeZoneHour = -6) # TimeZoneHour: time zone offset from UTC (Coordinated Universal Time), local time without daytime saving. This is a site-specific input. 
 EProc$sFillVPDFromDew() # fill longer gaps still present in VPD_f
 EProc$sMRFluxPartitionUStarScens("NEE") # night-time
 
-# If you want to expolore day-time or night-time partitioning
+# If you want to explore day-time or night-time partitioning
 # EProc$sGLFluxPartitionUStarScens() # day-time
 # EProc$sTKFluxPartitionUStarScens() # modified day-time
 names(EProc$sTEMP)
@@ -431,6 +431,7 @@ Bonus training: gap-fill H or LE, and plot the diurnal patterns.
 
 # References
 
+-   REddyProc Q&A: https://www.bgc-jena.mpg.de/5629512/FAQ 
 -   Wutzler, Thomas, et al. "Basic and extensible post-processing of
     eddy covariance flux data with REddyProc." Biogeosciences 15.16
     (2018): 5015–5030.
