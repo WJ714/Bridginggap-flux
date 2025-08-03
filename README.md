@@ -84,7 +84,7 @@ This package includes functions for post-processing half-hourly flux data:
 - Script: `02_FLUXNET.rmd`;
 - Working in group for different study sites, and data for different study sites can be downloaded here [here](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI);
 - We provide example figures using FLUXNET data for US-Syv. Feel free to use these as a starting point, discuss them with your group, and create additional figures to deepen your understanding of your own study site;
-- Required task (4 tasks): Explore temporal trends (long-term annual sums, daily average) for meteorological and flux data;
+- Required task (4 tasks): Explore temporal trends (annual sums, monthly average and qualify flags) for meteorological and flux data;
 - Bonus task (3 tasks): **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 1–3 of them within your group.
 - Please take time to interpret the figures with your group and drop them in your [group slides](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
