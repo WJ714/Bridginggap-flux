@@ -35,7 +35,6 @@ my_theme <- theme_light(base_size = 14) +
   )
 ```
 
-
 # FLUXNET data
 
 -   Variables quick start guide:
@@ -62,6 +61,7 @@ some examples:
 ```
 
 # Read data from local drive
+
 ```{r}
 # # please modify the data_dir to your own local working directory
 # data_dir = ("G:/My Drive/FLUX-LSM workshop/US-Syv/AMF_US-Syv_FLUXNET_SUBSET_2001-2023_4-6/"); setwd(data_dir)
@@ -121,7 +121,8 @@ some examples:
 # }
 ```
 
-# Read data on google drive 
+# Read data on google drive
+
 ```{r}
 # You can also download data from Google drive, if you have a Google account
 library(googledrive)
@@ -192,6 +193,7 @@ library(googledrive)
     mutate(year = year(TIMESTAMP_END), month = month(TIMESTAMP_END))
 }
 ```
+
 # Required task
 
 ## Task 1: annual sums of NEE
@@ -242,9 +244,9 @@ Where to go from here:
 
 -   Interpret the figure and include it in your group presentation.
 
--   Plot annual sums of LE and H (value + uncertainty).
+-   Optional: Plot annual sums of LE and H (value + uncertainty).
 
--   Explore the qualify flags for annual sums of LE and H.
+-   Optinal: Explore the qualify flags for annual sums of LE and H.
 
 ## Task 2: monthly average NEE, GPP, RECO
 
@@ -278,8 +280,8 @@ Where to go from here:
 
 -   Interpret the figures and include them in your group presentation;
 
--   You can also create your own figures, e.g. monthly anomalies, or
-    diurnal patterns;
+-   Optional: You can also create your own figures, e.g. monthly
+    anomalies, or diurnal patterns;
 
 ## Task 3: qualify flags for half-hourly data
 
@@ -380,9 +382,10 @@ ggplot() +
   my_theme
 ```
 
-Please check: - Is the data consistent? Are there any noticeable
-outliers? - what other important meteorological variables should be
-checked?
+Please check:
+
+-   Is the data consistent? Are there any noticeable outliers?
+-   what other important meteorological variables should be checked?
 
 # Bonus task
 
@@ -393,19 +396,15 @@ responds to incoming light (PPFD – photosynthetic photon flux density).
 It is a key tool for quantifying ecosystem carbon uptake
 characteristics.A light response curve can provide indicators of:
 
-
-
-
-    -   `PPFD`: Photosynthetic photon flux density (μmol m⁻² s⁻¹)
-    -   `Amax`: Maximum photosynthetic rate at light saturation (μmol
-        m⁻² s⁻¹)
-    -   `alpha`: Curvature parameter describing how quickly
-        photosynthesis saturates (unitless)
-    -   `Rd`: Dark respiration rate (μmol m⁻² s⁻¹)
-    -   A2000: Because of the trade-off of Amax and alpha, we could use A2000 as the proxy for max photosynthesis capacity.
-    
-    
-    
+```         
+-   `PPFD`: Photosynthetic photon flux density (μmol m⁻² s⁻¹)
+-   `Amax`: Maximum photosynthetic rate at light saturation (μmol
+    m⁻² s⁻¹)
+-   `alpha`: Curvature parameter describing how quickly
+    photosynthesis saturates (unitless)
+-   `Rd`: Dark respiration rate (μmol m⁻² s⁻¹)
+-   A2000: Because of the trade-off of Amax and alpha, we could use A2000 as the proxy for max photosynthesis capacity.
+```
 
 ```{r}
 data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to focus on
@@ -499,7 +498,7 @@ Where to go from here:
 
 -   Interpret the figures and include them in your group presentation.
 
--   Explore the seasonal pattern of A2000.
+-   Optional: explore the seasonal pattern of A2000.
 
 -   Group discussion: What parameters used in land surface models relate
     to light use and photosynthesis?
@@ -524,7 +523,8 @@ Where to go from here:
 
 ET is derived from latent heat flux (LE) using the formula:
 
-The **evapotranspiration (ET)** is derived from latent heat flux (LE) using the following equation:
+The **evapotranspiration (ET)** is derived from latent heat flux (LE)
+using the following equation:
 
 $$
 ET = \frac{LE}{\rho_w \cdot \lambda}
@@ -532,11 +532,10 @@ $$
 
 Where:
 
-- $ET$: Evapotranspiration *(m s⁻¹ or mm s⁻¹)*
-- $LE$: Latent heat flux *(W m⁻² = J s⁻¹ m⁻²)*
-- $\rho_w$: Density of water = 1000 kg m⁻³
-- $\lambda$: Latent heat of vaporization = 2.26 × 10⁶ J kg⁻¹
-
+-   $ET$: Evapotranspiration *(m s⁻¹ or mm s⁻¹)*
+-   $LE$: Latent heat flux *(W m⁻² = J s⁻¹ m⁻²)*
+-   $\rho_w$: Density of water = 1000 kg m⁻³
+-   $\lambda$: Latent heat of vaporization = 2.26 × 10⁶ J kg⁻¹
 
 ```{r}
 # Constants
@@ -602,8 +601,9 @@ ggplot(annual_summary, aes(x = year, y = ET_over_P)) +
 
 ```
 
-Where to go from here: - Interpret the figure and include it in your
-group presentation.
+Where to go from here:
+
+-   Interpret the figure and include it in your group presentation.
 
 ## Task 3: Energy balance closure
 
