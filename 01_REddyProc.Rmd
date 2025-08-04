@@ -313,7 +313,7 @@ EProc$sGetUstarScenarios()
 Bonus training: create a figure comparing u\* threshold determined using
 different aggregationMode.
 
-# 06: MDS: gapfil NEE
+# 06: MDS: gapfill NEE
 
 -   The MDS combines two gap-filling techniques: the “look-up” table
     (LUT) and the “mean diurnal course” (MDC).
