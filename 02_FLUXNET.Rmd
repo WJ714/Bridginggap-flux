@@ -391,9 +391,10 @@ checked?
 The light response curve describes how **Net Ecosystem Exchange (NEE)**
 responds to incoming light (PPFD – photosynthetic photon flux density).
 It is a key tool for quantifying ecosystem carbon uptake
-characteristics.
+characteristics.A light response curve can provide indicators of:
 
--   Where**:**
+
+
 
     -   `PPFD`: Photosynthetic photon flux density (μmol m⁻² s⁻¹)
     -   `Amax`: Maximum photosynthetic rate at light saturation (μmol
@@ -401,6 +402,10 @@ characteristics.
     -   `alpha`: Curvature parameter describing how quickly
         photosynthesis saturates (unitless)
     -   `Rd`: Dark respiration rate (μmol m⁻² s⁻¹)
+    -   A2000: Because of the trade-off of Amax and alpha, we could use A2000 as the proxy for max photosynthesis capacity.
+    
+    
+    
 
 ```{r}
 data_filtered = df.HH[df.HH$month == 7, ] # specify the period you want like to focus on
