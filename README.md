@@ -124,9 +124,9 @@ This package includes functions for post-processing half-hourly flux data:
 - 🔸 Liu et al., 2025: [https://doi.org/10.1016/j.agrformet.2025.110438](https://doi.org/10.1016/j.agrformet.2025.110438)
 
 # Acknowledgement
-- Andrew D. Richardson: critical suggestions for the analysis
-- Thomas Wutzler: sharing knowledge about REddyProc
-- Darby Bergl: sharing experience of building up binder
-- Brian Wang and Weijie Zhang: reviewing the codes
-- Oscar Zimmerman: being the first audience for the tutorials
+Andrew Richardson: providing critical suggestions for the analysis
+Thomas Wutzler: sharing knowledge about REddyProc
+Darby Bergl: sharing experience in building Binder
+Brian Wang and Weijie Zhang: reviewing the code
+Oscar Zimmerman: serving as the first audience for the tutorials
 
