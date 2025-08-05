@@ -86,7 +86,7 @@ This package includes functions for post-processing half-hourly flux data:
 - We provide example figures using FLUXNET data for US-Syv. Feel free to use these as a starting point, discuss them with your group, and create additional figures to deepen your understanding of your own study site;
 - Required task (4 tasks): Explore temporal trends (annual sums, monthly average and qualify flags) for meteorological and flux data;
 - Bonus task (3 tasks): **ecosystem water budget**, **light use efficiency**, and **energy balance closure**. Please explore 1–3 of them within your group.
-- Please take time to interpret the figures with your group and drop them in your [group slides](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
+- Please keep records of your figures and discussion notes in [group slides](https://drive.google.com/drive/folders/19XyadKuvngJOKJHWAuCEHk5Et7oZf5VI?usp=drive_link).
 
 
 # 🔍 Tutorial 3: Comparing FLUXNET data and ELM output
