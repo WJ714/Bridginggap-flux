@@ -2,12 +2,6 @@
 
 Authors: Yujie Liu, Roel Ruzol, Sreenath Paleri, Md Shamsuzzaman, Bailey Murphy
 
-# Things to do before workshop 
-- Create an account: https://amfcdn.lbl.gov/create
-- Learn how to download FLUXNET data for `US-Ha1` or `BR-Sa1`, following `GUIDE ON HOW TO DOWNLOAD FLUXNET DATA PRODUCTS.pdf`
-- Please download the GitHub repository shortly before the workshop; Install basic data manipulation and plotting packages on your computer (R users should have dplyr, tidyverse, ggplot2, ncdf4, data.table, and ggpubr. Python users should have pandas, numpy, netCDF4, matplotlib, seaborn, scipy)
-- 🌸 (Important) Test if you can launch Binder by following the instructions below:
-
 ### 🔗 What is Binder?
 [Binder](https://mybinder.org/) is an open-source service that makes GitHub repositories interactive.
 With just one click, users can launch a virtual compute environment with all dependencies installed. It is especially useful for teaching, code demonstrations, and sharing reproducible research. 
