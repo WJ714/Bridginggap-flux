@@ -75,10 +75,6 @@ time_series_label <- expression(AirTemp~(degC)) # change label name and units as
 
 # =============================================================================
 
-```
-
-
-```{r}
 year_range <- unlist(selected_years)
 
 # ==== Derived comparison columns ====
@@ -187,10 +183,6 @@ time_series_label <- expression(LE_flux~(W/m^2)) # change label name and units a
 
 # =============================================================================
 
-```
-
-
-```{r}
 year_range <- unlist(selected_years)
 
 # ==== Derived comparison columns ====
@@ -289,7 +281,7 @@ flux_var <- "NEE_VUT_REF"     # Flux variable name
 model_var <- "NEE"     # Model variable name
 convert_model_units <- function(x) x * 86400 # Set equation if needed
 
-selected_years <- list(2001:2015) #change years to plot; it can handle several batches (ex: list(2001:2005, 2010:20015))
+selected_years <- list(2004:2015) #change years to plot; it can handle several batches (ex: list(2001:2005, 2010:20015))
 
 compare_name <- "Net Ecosystem Exchange"   # variable being compared
 flux_label <- expression(NEE[flux]~(gC/m^2/day)) #change label name and units as needed
@@ -299,13 +291,8 @@ time_series_label <- expression(NEE~(gC/m^2/day)) # change label name and units 
 
 
 # =============================================================================
-```
-
-```{r}
-
 year_range <- unlist(selected_years)
 
-# ==== Derived comparison columns ====
 flux_col <- paste0(compare_name, "_flux")
 model_col <- paste0(compare_name, "_model")
 
@@ -435,6 +422,8 @@ for (i in seq(1, length(all_years), by = 4)) {
 
 
 # Plot cumulative sum for all years
+df.cumulative <- df.cumulative %>%
+  mutate(TIMESTAMP = as.POSIXct(TIMESTAMP))
 ggplot(df.cumulative, aes(x = TIMESTAMP)) +
   geom_line(aes(y = cum_flux, color = "Flux Tower")) +
   geom_line(aes(y = cum_model, color = "Model")) +
@@ -467,11 +456,6 @@ reco_model <- "ER"
 selected_years <- list(2001:2015) #change years to plot; it can handle several batches (ex: list(2001:2005, 2010:20015))
 # =============================================================================
 
-```
-
-
-
-```{r}
 year_range <- unlist(selected_years)
 
 
