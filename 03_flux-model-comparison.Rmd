@@ -310,6 +310,7 @@ flux_col <- paste0(compare_name, "_flux")
 model_col <- paste0(compare_name, "_model")
 
 df.combined_new <- df.combined %>%
+  filter(!is.na(NEE_VUT_REF_QC)) %>%
   mutate(
     !!flux_col := .data[[flux_var]],
     !!model_col := convert_model_units(.data[[model_var]])
@@ -397,7 +398,6 @@ df.cumulative <- df.combined_new %>%
     cum_model = cumsum(replace_na(.data[[model_col]], 0))
   )
 
-
 # Create cumulative sum data
 df_cumsum <- df.combined_new %>%
   select(TIMESTAMP, year.x, doy.x, all_of(c(flux_col, model_col))) %>%
@@ -411,18 +411,6 @@ df_cumsum <- df.combined_new %>%
   mutate(cumulative_value = cumsum(replace_na(value, 0))) %>%
   ungroup()
 
-# Plot cumulative sum for all years
-ggplot(df.cumulative, aes(x = TIMESTAMP)) +
-  geom_line(aes(y = cum_flux, color = "Flux Tower")) +
-  geom_line(aes(y = cum_model, color = "Model")) +
-  labs(
-    title = paste0("Cumulative ", compare_name),
-    x = "Date",
-    y = expression(gC/m^2),
-    color = "Source"
-  ) +
-  scale_color_manual(values = c("Flux Tower" = "red", "Model" = "blue")) +
-  my_theme
 
 
 # Cumulative sum plot in chunks of 4 years
@@ -444,6 +432,21 @@ for (i in seq(1, length(all_years), by = 4)) {
 
   print(p_cumsum)
 }
+
+
+# Plot cumulative sum for all years
+ggplot(df.cumulative, aes(x = TIMESTAMP)) +
+  geom_line(aes(y = cum_flux, color = "Flux Tower")) +
+  geom_line(aes(y = cum_model, color = "Model")) +
+  labs(
+    title = paste0("Cumulative ", compare_name),
+    x = "Date",
+    y = expression(gC/m^2),
+    color = "Source"
+  ) +
+  scale_color_manual(values = c("Flux Tower" = "red", "Model" = "blue")) +
+  my_theme
+
 
 ```
 
