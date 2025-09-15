@@ -1,1 +1,8 @@
 libnetcdf-dev
+libproj22
+proj-data
+libproj-dev
+gdal-bin
+libgdal-dev
+libgeos-dev
+libudunits2-dev
