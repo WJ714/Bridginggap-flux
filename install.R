@@ -10,3 +10,5 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 
 # Install amerifluxr from GitHub
 devtools::install_github("chuhousen/amerifluxr")
+install.packages(c("remotes","terra"))
+remotes::install_github("valentinitnelav/plotbiomes")
